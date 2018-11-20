@@ -6,7 +6,7 @@ entity ex_mem is
   port(clk: in std_logic;
        rst: in std_logic;
 
-       stall: in std_logic;
+       stall: in std_logic_vector(5 downto 0);
        flush: in std_logic;
 
        ex_mem_addr_i: in std_logic_vector(15 downto 0);

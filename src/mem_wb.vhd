@@ -6,7 +6,7 @@ entity mem_wb is
   port(clk: in std_logic;
        rst: in std_logic;
 
-       stall: in std_logic;
+       stall: in std_logic_vector(5 downto 0);
        flush: in std_logic;
 
        mem_wd_i: in std_logic_vector(3 downto 0);

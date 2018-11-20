@@ -6,7 +6,7 @@ entity id_ex is
   port(clk: in std_logic;
        rst: in std_logic;
 
-       stall: in std_logic;
+       stall: in std_logic_vector(5 downto 0);
        flush: in std_logic;
 
        id_aluop_i: in std_logic_vector(7 downto 0);

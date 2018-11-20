@@ -6,7 +6,7 @@ entity if_id is
   port(clk: in std_logic;
        rst: in std_logic;
 
-       stall: in std_logic;
+       stall: in std_logic_vector(5 downto 0);
        flush: in std_logic;
 
        if_pc_i: in std_logic_vector(15 downto 0);
@@ -18,5 +18,21 @@ entity if_id is
 end if_id;
 
 architecture bhv of if_id is
+
+  signal id_pc: std_logic_vector(15 downto 0);
+  signal id_inst: std_logic_vector(15 downto 0);
   begin
-  end bhv;
+    id_pc_o <= id_pc;
+    id_inst_o <= id_inst;
+
+    process(clk)
+    begin
+      if (rst = Enable) then
+        id_pc <= Zeroword;
+        id_inst <= Zeroword;
+      else
+        id_pc <= if_pc_i;
+        id_inst <= if_inst_i;
+      end if;
+    end process;
+end bhv;

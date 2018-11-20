@@ -10,7 +10,7 @@ entity ctrl is
        stallreq_from_ex_i: in std_logic;
        stallreq_from_id_i: in std_logic;
 
-       stall: out std_logic;
+       stall: out std_logic_vector(5 downto 0);
        flush: out std_logic
        );
 end ctrl;
