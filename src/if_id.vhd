@@ -1,6 +1,8 @@
+-- args: --ieee=synopsys -fexplicit
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.define.all;
 
 entity if_id is
   port(clk: in std_logic;

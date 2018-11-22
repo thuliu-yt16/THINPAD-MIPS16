@@ -1,6 +1,9 @@
+-- args: --ieee=synopsys -fexplicit
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.all;
+use work.define.all;
 
 -- input ports: rst, pc_i, inst_i,
 -- ex_aluop_i, ex_wreg_i, ex_wd_i, ex_wdata_i
@@ -64,5 +67,83 @@ entity id is
 end id;
 
 architecture bhv of id is
+  signal reg1_re, reg2_re, instvalid: std_logic; -- instuction is valid or not
+  signal reg1_data, reg2_data, imm: std_logic_vector(15 downto 0);
+  signal imm8: std_logic_vector(7 downto 0);
+  signal rx, ry, rz: std_logic_vector(3 downto 0);
+  signal op: std_logic_vector(15 downto 11);
   begin
+
+    inst_o <= inst_i;
+    reg1_re_o <= reg1_re;
+    reg2_re_o <= reg2_re;
+    reg1_data <= reg1_data_i;
+    reg2_data <= reg2_data_i;
+
+    ID_PROCESS: process(rst, pc_i, inst_i)
+    begin
+      if (rst = Enable) then
+        aluop_o <= EXE_NOP_OP;
+        alusel_o <= EXE_RES_NOP;
+        instvalid <= Disable;
+        we_o <= Disable;
+        reg1_re <= Disable;
+        reg2_re <= Disable;
+        wd_o  <= RegAddrZero;
+        reg1_rd_o <= RegAddrZero;
+        reg2_rd_o <= RegAddrZero;
+        imm <= ZeroWord;
+      else
+        aluop_o <= EXE_NOP_OP;
+        alusel_o <= EXE_RES_NOP;
+        instvalid <= Disable;
+        we_o <= Disable;
+        reg1_re <= Disable;
+        reg2_re <= Disable;
+        wd_o <= RegAddrZero;
+        rx <= "0"&inst_i(10 downto 8);
+        ry <= "0"&inst_i(7 downto 5);
+        rz <= "0"&inst_i(4 downto 2);
+        imm <= ZeroWord;
+
+        case op is
+          when "01101" => -- LI
+            aluop_o <= EXE_LI_OP;
+            alusel_o <= EXE_RES_LOGIC;
+            instvalid <= Enable;
+            we_o <= Enable;
+            reg1_re <= Disable;
+            reg2_re <= Disable;
+            wd_o <= rx;
+            imm <= EXT(imm8, 16);
+          when others =>
+        end case;
+      end if;
+    end process;
+
+    REG1_PROCESS: process(rst, imm, reg1_data, reg1_re)
+    begin
+      if (rst = Enable) then
+        reg1_data_o <= ZeroWord;
+      elsif (reg1_re = Enable) then
+        reg1_data_o <= reg1_data;
+      elsif (reg1_re = Disable) then
+        reg1_data_o <= imm;
+      else
+        reg1_data_o <= ZeroWord;
+      end if;
+    end process;
+
+    REG2_PROCESS: process(rst, imm, reg2_data, reg2_re)
+    begin
+      if (rst = Enable) then
+        reg2_data_o <= ZeroWord;
+      elsif (reg1_re = Enable) then
+        reg2_data_o <= reg2_data;
+      elsif (reg1_re = Disable) then
+        reg2_data_o <= imm;
+      else
+        reg2_data_o <= ZeroWord;
+      end if;
+    end process;
   end bhv;

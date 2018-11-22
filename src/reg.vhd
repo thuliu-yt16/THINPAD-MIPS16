@@ -1,7 +1,9 @@
+-- args: --ieee=synopsys -fexplicit
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.define.all;
+use ieee.std_logic_unsigned.all;
 
 -- input ports: re1, raddr1, re2, raddr2,
 -- waddr, we, wdata, clk, RST
@@ -27,7 +29,7 @@ architecture bhv of reg is
   type RegArray is array (0 to 15) of STD_LOGIC_VECTOR(15 downto 0);
   signal regs: RegArray := (others => ZeroWord);
   signal rdata1: std_logic_vector(15 downto 0);
-  signal rdata2: std_logic_vector(15 downto 0)
+  signal rdata2: std_logic_vector(15 downto 0);
 
   begin
     rdata1_o <= rdata1;
@@ -36,7 +38,7 @@ architecture bhv of reg is
     WRITE_PROCESS: process(clk)
     begin
       if (rst = Disable) then
-        if (we = Enable) then
+        if (we_i = Enable) then
           regs(conv_integer(wd_i)) <= wdata_i;
         end if;
       end if;
@@ -49,7 +51,7 @@ architecture bhv of reg is
       elsif (re1_i = Disable) then
         rdata1 <= Zeroword;
       elsif ((rd1_i = wd_i) and (we_i = Enable)) then
-        rdata1 <= wdata;
+        rdata1 <= wdata_i;
       else
         rdata1 <= ZeroWord;
       end if;
@@ -62,7 +64,7 @@ architecture bhv of reg is
       elsif (re1_i = Disable) then
         rdata2 <= Zeroword;
       elsif ((rd1_i = wd_i) and (we_i = Enable)) then
-        rdata2 <= wdata;
+        rdata2 <= wdata_i;
       else
         rdata2 <= ZeroWord;
       end if;
