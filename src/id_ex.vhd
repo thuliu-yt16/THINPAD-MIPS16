@@ -1,6 +1,7 @@
+-- args: --ieee=synopsys -fexplicit
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+use work.define.all;
 
 entity id_ex is
   port(clk: in std_logic;
@@ -40,4 +41,22 @@ end id_ex;
 
 architecture bhv of id_ex is
   begin
+    process(clk)
+    begin
+      if (rst = Enable) then
+        ex_aluop_o <= EXE_NOP_OP;
+        ex_alusel_o <= EXE_RES_NOP;
+        ex_reg1_data_o <= ZeroWord;
+        ex_reg2_data_o <= ZeroWord;
+        ex_wd_o <= RegAddrZero;
+        ex_we_o <= Disable;
+      else
+        ex_aluop_o <= id_aluop_i;
+        ex_alusel_o <= id_alusel_i;
+        ex_reg1_data_o <= id_reg1_data_i;
+        ex_reg2_data_o <= id_reg2_data_i;
+        ex_wd_o <= id_wd_i;
+        ex_we_o <= id_we_i;
+      end if;
+    end process;
   end bhv;

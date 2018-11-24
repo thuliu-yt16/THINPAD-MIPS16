@@ -1,6 +1,8 @@
+-- args: --ieee=synopsys -fexplicit
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.define.all;
 
 entity mem_wb is
   port(clk: in std_logic;
@@ -20,5 +22,17 @@ entity mem_wb is
 end mem_wb;
 
 architecture bhv of mem_wb is
+begin
+  process(clk)
   begin
-  end bhv;
+    if (rst = Enable) then
+      wb_wd_o <= RegAddrZero;
+      wb_we_o <= Disable;
+      wb_wdata_o <= ZeroWord;
+    else
+      wb_wd_o <= mem_wd_i;
+      wb_we_o <= mem_we_i;
+      wb_wdata_o <= mem_wdata_i;
+    end if;
+  end process;
+end bhv;
