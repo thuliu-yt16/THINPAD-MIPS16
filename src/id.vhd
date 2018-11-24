@@ -62,8 +62,8 @@ entity id is
   reg2_rd_o: out std_logic_vector(3 downto 0);
 
   stallreq: out std_logic;
-  branch_flag_o: out std_logic;
-  branch_target_address_o: out std_logic_vector(15 downto 0) );
+  branch_flag_o: out std_logic; -- Diable -- Enable
+  branch_target_address_o: out std_logic_vector(15 downto 0));
 end id;
 
 architecture bhv of id is
@@ -93,6 +93,9 @@ architecture bhv of id is
         reg1_rd_o <= RegAddrZero;
         reg2_rd_o <= RegAddrZero;
         imm <= ZeroWord;
+        branch_flag_o <= Disable;
+        branch_target_address_o <= ZeroWord;
+
       else
         aluop_o <= EXE_NOP_OP;
         alusel_o <= EXE_RES_NOP;
@@ -101,9 +104,9 @@ architecture bhv of id is
         reg1_re <= Disable;
         reg2_re <= Disable;
         wd_o <= RegAddrZero;
-        rx <= "0"&inst_i(10 downto 8);
-        ry <= "0"&inst_i(7 downto 5);
-        rz <= "0"&inst_i(4 downto 2);
+        rx <= "0" & inst_i(10 downto 8);
+        ry <= "0" & inst_i(7 downto 5);
+        rz <= "0" & inst_i(4 downto 2);
         imm <= ZeroWord;
 
         case op is
