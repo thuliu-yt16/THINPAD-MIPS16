@@ -16,10 +16,13 @@ entity reg is
       rd1_i: in std_logic_vector(3 downto 0);
       re2_i: in std_logic;
       rd2_i: in std_logic_vector(3 downto 0);
+
+      -- 来自 WB
       we_i: in std_logic;
       wd_i: in std_logic_vector(3 downto 0);
       wdata_i: in std_logic_vector(15 downto 0);
 
+      -- ID 用
       rdata1_o: out std_logic_vector(15 downto 0);
       rdata2_o: out std_logic_vector(15 downto 0)
       );

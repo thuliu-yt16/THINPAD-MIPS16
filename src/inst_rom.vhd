@@ -15,6 +15,7 @@ architecture bhv of inst_rom is
 type InstructionArray is array(0 to 1000) of std_logic_vector(15 downto 0);
 signal insts: InstructionArray := (
      -- 写一些可供测试的指令
+     "0110100101010101",
      others => NopInst
     );
  begin
