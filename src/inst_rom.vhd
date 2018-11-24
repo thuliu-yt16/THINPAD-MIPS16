@@ -26,4 +26,5 @@ signal insts: InstructionArray := (
             inst_o <= NopInst;
         end if;
     end process;
+
 end bhv;
