@@ -31,7 +31,7 @@ architecture bhv of if_id is
     begin
       if (rst = Enable) then
         id_pc <= Zeroword;
-        id_inst <= Zeroword;
+        id_inst <= NopInst; -- rst就 nop
       else
         id_pc <= if_pc_i;
         id_inst <= if_inst_i;

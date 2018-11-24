@@ -25,45 +25,52 @@ use work.define.all;
 
 entity id is
   port(rst: in std_logic;
-  pc_i: in std_logic_vector(15 downto 0);
-  inst_i: in std_logic_vector(15 downto 0);
+  pc_i: in std_logic_vector(15 downto 0); --当前pc 地址
+  inst_i: in std_logic_vector(15 downto 0); -- 当前指令
   -- load command needs ex op
   ex_aluop_i: in std_logic_vector(7 downto 0);
-  -- panglu
+  -- TODO panglu
   ex_we_i: in std_logic;
   ex_wd_i: in std_logic_vector(3 downto 0);
   ex_wdata_i: in std_logic_vector(15 downto 0);
+
   mem_we_i: in std_logic;
   mem_wd_i: in std_logic_vector(3 downto 0);
   mem_wdata_i: in std_logic_vector(15 downto 0);
   -- is_in_delayslot_i is previously deleted.
-  reg1_data_i: in std_logic_vector(15 downto 0);
-  reg2_data_i: in std_logic_vector(15 downto 0);
 
-  aluop_o: out std_logic_vector(7 downto 0);
+  reg1_data_i: in std_logic_vector(15 downto 0); --  从reg1读的数据
+  reg2_data_i: in std_logic_vector(15 downto 0); --  从reg1读的数据
+
+  -- ID/EX 用
+  aluop_o: out std_logic_vector(7 downto 0); -- alu 执行的操作
   -- nop control signals
-  alusel_o: out std_logic_vector(2 downto 0);
+  alusel_o: out std_logic_vector(2 downto 0); -- alu 执行操作的种类
 
-  reg1_data_o: out std_logic_vector(15 downto 0);
-  reg2_data_o: out std_logic_vector(15 downto 0);
+  reg1_data_o: out std_logic_vector(15 downto 0); -- 从reg1读的数据
+  reg2_data_o: out std_logic_vector(15 downto 0); -- 从reg2读的数据
 
-  wd_o: out std_logic_vector(3 downto 0);
-  we_o: out std_logic;
+  wd_o: out std_logic_vector(3 downto 0); -- 要写入的目的寄存器索引
+  we_o: out std_logic; -- 是否要写入目的寄存器
 
-  inst_o: out std_logic_vector(15 downto 0);
+  inst_o: out std_logic_vector(15 downto 0); -- 传递指令内容
   -- current_inst_address_o is previously deleted.
   -- is_in_delayslot_o is previously deleted.
   -- link_addr_o is previously deleted.
   -- next_inst_in_delayslot_o is previously deleted.
 
+  -- 寄存器堆用
   reg1_re_o: out std_logic;
   reg1_rd_o: out std_logic_vector(3 downto 0);
   reg2_re_o: out std_logic;
   reg2_rd_o: out std_logic_vector(3 downto 0);
 
+  -- 控制用
   stallreq: out std_logic;
-  branch_flag_o: out std_logic;
-  branch_target_address_o: out std_logic_vector(15 downto 0) );
+
+  -- PC 用
+  branch_flag_o: out std_logic; -- Diable -- Enable
+  branch_target_address_o: out std_logic_vector(15 downto 0));
 end id;
 
 architecture bhv of id is
@@ -93,6 +100,9 @@ architecture bhv of id is
         reg1_rd_o <= RegAddrZero;
         reg2_rd_o <= RegAddrZero;
         imm <= ZeroWord;
+        branch_flag_o <= Disable;
+        branch_target_address_o <= ZeroWord;
+
       else
         aluop_o <= EXE_NOP_OP;
         alusel_o <= EXE_RES_NOP;
@@ -101,9 +111,9 @@ architecture bhv of id is
         reg1_re <= Disable;
         reg2_re <= Disable;
         wd_o <= RegAddrZero;
-        rx <= "0"&inst_i(10 downto 8);
-        ry <= "0"&inst_i(7 downto 5);
-        rz <= "0"&inst_i(4 downto 2);
+        rx <= "0" & inst_i(10 downto 8);
+        ry <= "0" & inst_i(7 downto 5);
+        rz <= "0" & inst_i(4 downto 2);
         imm <= ZeroWord;
 
         case op is
