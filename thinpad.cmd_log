@@ -1,0 +1,13 @@
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+xst -intstyle ise -ifn "D:/THINPAD-MIPS16/thinpad.xst" -ofn "D:/THINPAD-MIPS16/thinpad.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -i -p xc3s1200e-fg320-4 thinpad.ngc thinpad.ngd  

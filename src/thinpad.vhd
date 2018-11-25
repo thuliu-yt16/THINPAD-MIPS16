@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
-use work.defines.all;
+use work.define.all;
 
 entity thinpad is
 port(
@@ -21,6 +21,7 @@ port(
 end thinpad;
 
 architecture bhv of thinpad is
+signal rst_reversed: std_logic;
 signal rom_ready_i: std_logic; -- if ready or not.
 signal rom_data_i: std_logic_vector(15 downto 0);
 
@@ -42,10 +43,10 @@ component cpu
         led : out std_logic_vector(15 downto 0);
 
         rom_ready_i : in std_logic; -- if ready or not.
-        rom_data_i : in std_logic_vector(15 downto 0); -- È¡µÃÖ¸Áî
+        rom_data_i : in std_logic_vector(15 downto 0); -- È¡ï¿½ï¿½Ö¸ï¿½ï¿½
 
-        rom_addr_o : out std_logic_vector(15 downto 0); -- Ö¸ÁîµØÖ·
-        rom_ce_o : out std_logic; -- Ö¸Áî´æ´¢Æ÷Ê¹ÄÜ
+        rom_addr_o : out std_logic_vector(15 downto 0); -- Ö¸ï¿½ï¿½ï¿½ï¿½Ö·
+        rom_ce_o : out std_logic; -- Ö¸ï¿½ï¿½ï¿½æ´¢ï¿½ï¿½Ê¹ï¿½ï¿½
 
         ram_ready_i : in std_logic;
         ram_rdata_i : in std_logic_vector(15 downto 0);
@@ -59,9 +60,9 @@ component cpu
         );
 end component;
 component inst_rom
-  port(addr_i: in std_logic_vector(15 downto 0); -- ÒªÈ¡Ö¸ÁîµÄµØÖ·
-       ce_i: in std_logic; -- Ð¾Æ¬Ê¹ÄÜ
-       inst_o: out std_logic_vector(15 downto 0)); -- ËùÈ¡Ö¸Áî
+  port(addr_i: in std_logic_vector(15 downto 0); -- ÒªÈ¡Ö¸ï¿½ï¿½ï¿½Äµï¿½Ö·
+       ce_i: in std_logic; -- Ð¾Æ¬Ê¹ï¿½ï¿½
+       inst_o: out std_logic_vector(15 downto 0)); -- ï¿½ï¿½È¡Ö¸ï¿½ï¿½
 end component;
 
 component ram
@@ -83,9 +84,10 @@ component ram
 
 end component;
 begin
+    rst_reversed <= not(rst);
     mcpu: cpu port map(
         clk => clk,
-        rst => rst,
+        rst => rst_reversed,
         led => led,
 
         rom_ready_i => rom_ready_i,
@@ -104,7 +106,7 @@ begin
         ce_i => rom_ce_o,
         inst_o => rom_data_i);
     mram: ram port map(
-        rst => rst,
+        rst => rst_reversed,
         clk => clk,
         we_i => ram_we_o,
         ce_i => ram_ce_o,

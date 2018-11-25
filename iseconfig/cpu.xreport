@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2018-11-25T16:24:55</DateModified>
+  <DateModified>2018-11-25T23:10:25</DateModified>
   <ModuleName>cpu</ModuleName>
   <SummaryTimeStamp>Unknown</SummaryTimeStamp>
   <SavedFilePath>D:/THINPAD-MIPS16/iseconfig/cpu.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>D:/THINPAD-MIPS16</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>D:/THINPAD-MIPS16\</ImplementationReportsDirectory>
   <DateInitialized>2018-11-25T16:24:54</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

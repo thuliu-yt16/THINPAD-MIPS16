@@ -1,6 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+use work.define.all;
 
 -- input ports: addr, ce;
 -- output ports: inst;
@@ -22,7 +25,7 @@ signal insts: InstructionArray := (
     READ_INST: process(ce_i, addr_i)
     begin
         if(ce_i = Enable) then
-            inst_o <= insts(addr_i);
+            inst_o <= insts(conv_integer(addr_i));
         else
             inst_o <= NopInst;
         end if;
