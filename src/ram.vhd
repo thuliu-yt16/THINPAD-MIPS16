@@ -6,8 +6,8 @@ entity ram is
   port(rst: in std_logic;
         clk: in std_logic;
 
-       we_i: in std_logic; -- 0 : è¯»  1: å†™
-       ce_i: in std_logic; -- ram ä½¿èƒ½
+       we_i: in std_logic; -- 0 : ¶Á  1: Ð´
+       ce_i: in std_logic; -- ram Ê¹ÄÜ
        addr_i: in std_logic_vector(15 downto 0);
        data_i: in std_logic_vector(15 downto 0);
        -- sel_i: in std_logic_vector(2 downto 0);
@@ -24,9 +24,9 @@ end ram;
 architecture bhv of ram is
 begin
     ram2_addr <= "00" & addr_i;
-    ram2_we <= clk or not(we_i); -- åœ¨ä¸‹é™æ²¿åˆ°ç¬¬äºŒä¸ªä¸Šå‡æ²¿å†™
+    ram2_we <= clk or not(we_i); -- ÔÚÏÂ½µÑØµ½µÚ¶þ¸öÉÏÉýÑØÐ´
     ram2_oe <= we_i;
-    ram2_en <= '0'; -- å§‹ç»ˆä½¿èƒ½
+    ram2_en <= '0'; -- Ê¼ÖÕÊ¹ÄÜ
 
     WRITE: process(clk)
     begin

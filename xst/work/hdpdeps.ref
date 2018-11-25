@@ -1,0 +1,5 @@
+V3 3
+FL D:/THINPAD-MIPS16/src/cpu.vhd 2018/11/25.16:25:51 P.20131013
+EN work/cpu 1543134525 FL D:/THINPAD-MIPS16/src/cpu.vhd PB ieee/std_logic_1164 1381692176
+AR work/cpu/bhv 1543134526 \
+      FL D:/THINPAD-MIPS16/src/cpu.vhd EN work/cpu 1543134525

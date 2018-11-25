@@ -25,50 +25,50 @@ use work.define.all;
 
 entity id is
   port(rst: in std_logic;
-  pc_i: in std_logic_vector(15 downto 0); --å½“å‰pc åœ°å€
-  inst_i: in std_logic_vector(15 downto 0); -- å½“å‰æŒ‡ä»¤
+  pc_i: in std_logic_vector(15 downto 0); --µ±Ç°pc µØÖ·
+  inst_i: in std_logic_vector(15 downto 0); -- µ±Ç°Ö¸Áî
   -- load command needs ex op
-  ex_aluop_i: in std_logic_vector(7 downto 0);
-  -- TODO panglu
-  ex_we_i: in std_logic;
-  ex_wd_i: in std_logic_vector(3 downto 0);
-  ex_wdata_i: in std_logic_vector(15 downto 0);
+      -- TODO panglu
+      ex_aluop_i: in std_logic_vector(7 downto 0);
+      ex_we_i: in std_logic;
+      ex_wd_i: in std_logic_vector(3 downto 0);
+      ex_wdata_i: in std_logic_vector(15 downto 0);
 
-  mem_we_i: in std_logic;
-  mem_wd_i: in std_logic_vector(3 downto 0);
-  mem_wdata_i: in std_logic_vector(15 downto 0);
+      mem_we_i: in std_logic;
+      mem_wd_i: in std_logic_vector(3 downto 0);
+      mem_wdata_i: in std_logic_vector(15 downto 0);
   -- is_in_delayslot_i is previously deleted.
 
-  reg1_data_i: in std_logic_vector(15 downto 0); --  ä»reg1è¯»çš„æ•°æ®
-  reg2_data_i: in std_logic_vector(15 downto 0); --  ä»reg1è¯»çš„æ•°æ®
+  reg1_data_i: in std_logic_vector(15 downto 0); --  ´Óreg1¶ÁµÄÊı¾İ
+  reg2_data_i: in std_logic_vector(15 downto 0); --  ´Óreg1¶ÁµÄÊı¾İ
 
-  -- ID/EX ç”¨
-  aluop_o: out std_logic_vector(7 downto 0); -- alu æ‰§è¡Œçš„æ“ä½œ
+  -- ID/EX ÓÃ
+  aluop_o: out std_logic_vector(7 downto 0); -- alu Ö´ĞĞµÄ²Ù×÷
   -- nop control signals
-  alusel_o: out std_logic_vector(2 downto 0); -- alu æ‰§è¡Œæ“ä½œçš„ç§ç±»
+  alusel_o: out std_logic_vector(2 downto 0); -- alu Ö´ĞĞ²Ù×÷µÄÖÖÀà
 
-  reg1_data_o: out std_logic_vector(15 downto 0); -- ä»reg1è¯»çš„æ•°æ®
-  reg2_data_o: out std_logic_vector(15 downto 0); -- ä»reg2è¯»çš„æ•°æ®
+  reg1_data_o: out std_logic_vector(15 downto 0); -- ´Óreg1¶ÁµÄÊı¾İ
+  reg2_data_o: out std_logic_vector(15 downto 0); -- ´Óreg2¶ÁµÄÊı¾İ
 
-  wd_o: out std_logic_vector(3 downto 0); -- è¦å†™å…¥çš„ç›®çš„å¯„å­˜å™¨ç´¢å¼•
-  we_o: out std_logic; -- æ˜¯å¦è¦å†™å…¥ç›®çš„å¯„å­˜å™¨
+  wd_o: out std_logic_vector(3 downto 0); -- ÒªĞ´ÈëµÄÄ¿µÄ¼Ä´æÆ÷Ë÷Òı
+  we_o: out std_logic; -- ÊÇ·ñÒªĞ´ÈëÄ¿µÄ¼Ä´æÆ÷
 
-  inst_o: out std_logic_vector(15 downto 0); -- ä¼ é€’æŒ‡ä»¤å†…å®¹
+  inst_o: out std_logic_vector(15 downto 0); -- ´«µİÖ¸ÁîÄÚÈİ
   -- current_inst_address_o is previously deleted.
   -- is_in_delayslot_o is previously deleted.
   -- link_addr_o is previously deleted.
   -- next_inst_in_delayslot_o is previously deleted.
 
-  -- å¯„å­˜å™¨å †ç”¨
+  -- ¼Ä´æÆ÷¶ÑÓÃ
   reg1_re_o: out std_logic;
   reg1_rd_o: out std_logic_vector(3 downto 0);
   reg2_re_o: out std_logic;
   reg2_rd_o: out std_logic_vector(3 downto 0);
 
-  -- æ§åˆ¶ç”¨
+  -- ¿ØÖÆÓÃ
   stallreq: out std_logic;
 
-  -- PC ç”¨
+  -- PC ÓÃ
   branch_flag_o: out std_logic; -- Diable -- Enable
   branch_target_address_o: out std_logic_vector(15 downto 0));
 end id;

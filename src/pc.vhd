@@ -30,7 +30,7 @@ architecture bhv of pc is
         ce_o <= ce;
         pc_o <= pc;
 
-        -- TODO æ·»åŠ è·³è½¬
+        -- TODO Ìí¼ÓÌø×ª
         PC_PROCESS: process(clk)
         begin
             if (ce = Disable) then

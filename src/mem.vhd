@@ -6,7 +6,9 @@ use work.define.all;
 
 entity mem is
   port(rst: in std_logic;
+        -- À´×Ô ram
        mem_data_i: in std_logic_vector(15 downto 0);
+       -- À´×Ô ex/mem
        mem_addr_i: in std_logic_vector(15 downto 0);
        reg2_data_i: in std_logic_vector(15 downto 0);
        wd_i: in std_logic_vector(3 downto 0);
@@ -16,14 +18,14 @@ entity mem is
        -- current_inst_address_i is previously deleted.
        -- is_in_delayslot_i is previously deleted.
 
-       -- mem/wb ç”¨
+       -- mem/wb ÓÃ
        wd_o: out std_logic_vector(3 downto 0);
        we_o: out std_logic;
        wdata_o: out std_logic_vector(15 downto 0);
        -- current_inst_address_i is previously deleted.
        -- is_in_delayslot_i is previously deleted.
 
-       -- RAM ç”¨
+       -- RAM ÓÃ
        mem_we_o: out std_logic;
        mem_ce_o: out std_logic;
        mem_data_o: out std_logic_vector(15 downto 0);

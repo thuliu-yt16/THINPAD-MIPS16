@@ -11,12 +11,12 @@ entity ex_mem is
        stall: in std_logic_vector(5 downto 0);
        flush: in std_logic;
 
-       ex_mem_addr_i: in std_logic_vector(15 downto 0); -- memé˜¶æ®µè¯»å†…å­˜åœ°å€
-       ex_reg2_data_i: in std_logic_vector(15 downto 0); -- ç¬¬äºŒä¸ªå¯„å­˜å™¨çš„å†…å®¹
-       ex_wd_i: in std_logic_vector(3 downto 0); -- å†™å›é˜¶æ®µç›®æ ‡å¯„å­˜å™¨ç´¢å¼•
-       ex_we_i: in std_logic; -- å†™å›é˜¶æ®µæ˜¯å¦å†™å›
-       ex_wdata_i: in std_logic_vector(15 downto 0); -- å†™å›é˜¶æ®µçš„å†™å›æ•°æ®
-       ex_aluop_i: in std_logic_vector(7 downto 0); -- aluæ“ä½œ ?
+       ex_mem_addr_i: in std_logic_vector(15 downto 0); -- mem½×¶Î¶ÁÄÚ´æµØÖ·
+       ex_reg2_data_i: in std_logic_vector(15 downto 0); -- µÚ¶ş¸ö¼Ä´æÆ÷µÄÄÚÈİ
+       ex_wd_i: in std_logic_vector(3 downto 0); -- Ğ´»Ø½×¶ÎÄ¿±ê¼Ä´æÆ÷Ë÷Òı
+       ex_we_i: in std_logic; -- Ğ´»Ø½×¶ÎÊÇ·ñĞ´»Ø
+       ex_wdata_i: in std_logic_vector(15 downto 0); -- Ğ´»Ø½×¶ÎµÄĞ´»ØÊı¾İ
+       ex_aluop_i: in std_logic_vector(7 downto 0); -- alu²Ù×÷ ?
        -- ex_current_inst_address is previously deleted.
        -- ex_is_in_delayslot is previously deleted.
 

@@ -31,7 +31,7 @@ entity id_ex is
     ex_wd_o: out std_logic_vector(3 downto 0);
     ex_we_o: out std_logic;
 
-    ex_inst_o: in std_logic_vector(15 downto 0)
+    ex_inst_o: out std_logic_vector(15 downto 0)
     -- ex_current_inst_addr is previously deleted.
     -- ex_is_in_delayslot is previously deleted.
     -- ex_link_addr is previously deleted.
@@ -40,25 +40,30 @@ entity id_ex is
 end id_ex;
 
 architecture bhv of id_ex is
-    -- TODO æ·»åŠ å¯¹stall å’Œ flush çš„åˆ¤æ–­
-    -- TODO æ·»åŠ å¦å¤–çš„ä¸€äº›æœªçŸ¥ä¿¡å· ??
+    -- TODO Ìí¼Ó¶Ôstall ºÍ flush µÄÅĞ¶Ï
+    -- TODO Ìí¼ÓÁíÍâµÄÒ»Ğ©Î´ÖªĞÅºÅ ??
 
     begin
-        if(rst = Enable) then
-            ex_alusel_o <= EXE_RES_NOP;
-            ex_aluop_o <= EXE_NOP_OP;
-            ex_reg1_data_o <= ZeroWord;
-            ex_reg2_data_o <= ZeroWord;
-            ex_wd_o <= RegAddrZero;
-            ex_we_o <= Disable;
-            ex_inst_o <= NopInst;
-        else
-            ex_aluop_o <= id_aluop_i;
-            ex_alusel_o <= id_alusel_i;
-            ex_reg1_data_o <= id_reg1_data_i;
-            ex_reg2_data_o <= id_reg2_data_i;
-            ex_wd_o <= id_wd_i;
-            ex_we_o <= id_we_i;
-            ex_inst_o <= id_inst_i;
-        end if;
+        process(clk)
+        begin
+            if(clk'event and clk = Enable) then
+                if(rst = Enable) then
+                    ex_alusel_o <= EXE_RES_NOP;
+                    ex_aluop_o <= EXE_NOP_OP;
+                    ex_reg1_data_o <= ZeroWord;
+                    ex_reg2_data_o <= ZeroWord;
+                    ex_wd_o <= RegAddrZero;
+                    ex_we_o <= Disable;
+                    ex_inst_o <= NopInst;
+                else
+                    ex_aluop_o <= id_aluop_i;
+                    ex_alusel_o <= id_alusel_i;
+                    ex_reg1_data_o <= id_reg1_data_i;
+                    ex_reg2_data_o <= id_reg2_data_i;
+                    ex_wd_o <= id_wd_i;
+                    ex_we_o <= id_we_i;
+                    ex_inst_o <= id_inst_i;
+                end if;
+            end if;
+    end process;
     end bhv;

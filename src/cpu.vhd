@@ -5,23 +5,111 @@ use ieee.std_logic_1164.all;
 entity cpu is
 port(clk: in std_logic;
     rst: in std_logic;
-    LED : out STD_LOGIC_VECTOR(15 downto 0);
-    rom_ready_i : in STD_LOGIC; -- if ready or not.
-    rom_data_i : in STD_LOGIC_VECTOR(15 downto 0); -- å–å¾—æŒ‡ä»¤
-    rom_addr_o : out STD_LOGIC_VECTOR(15 downto 0); -- æŒ‡ä»¤åœ°å€
-    rom_ce_o : out STD_LOGIC; -- æŒ‡ä»¤å­˜å‚¨å™¨ä½¿èƒ½
 
-    ram_ready_i : in STD_LOGIC;
-    ram_rdata_i : in STD_LOGIC_VECTOR(15 downto 0);
-    ram_read_o : out STD_LOGIC;
-    ram_write_o : out STD_LOGIC;
-    ram_addr_o : out STD_LOGIC_VECTOR(15 downto 0);
-    ram_wdata_o : out STD_LOGIC_VECTOR(15 downto 0);
-    ram_ce_o : out STD_LOGIC
+    led : out std_logic_vector(15 downto 0);
+
+    rom_ready_i : in std_logic; -- if ready or not.
+    rom_data_i : in std_logic_vector(15 downto 0); -- È¡µÃÖ¸Áî
+
+    rom_addr_o : out std_logic_vector(15 downto 0); -- Ö¸ÁîµØÖ·
+    rom_ce_o : out std_logic; -- Ö¸Áî´æ´¢Æ÷Ê¹ÄÜ
+
+    ram_ready_i : in std_logic;
+    ram_rdata_i : in std_logic_vector(15 downto 0);
+
+    ram_we_o: out std_logic;
+    -- ram_read_o : out STD_LOGIC;
+    -- ram_write_o : out STD_LOGIC;
+    ram_addr_o : out std_logic_vector(15 downto 0);
+    ram_wdata_o : out std_logic_vector(15 downto 0);
+    ram_ce_o : out std_logic
     );
 end cpu;
 
 architecture bhv of cpu is
+
+-- pc -> if/id
+signal ifid_pc_o: std_logic_vector(15 downto 0); -- if_pc_i
+
+-- if/id -> id
+signal id_pc_o: std_logic_vector(15 downto 0); -- pc_i
+signal id_inst_o: std_logic_vector(15 downto 0); -- inst_i
+
+-- id -> id/ex
+signal idex_aluop_o: std_logic_vector(7 downto 0); -- id_aluop_i
+signal idex_alusel_o: std_logic_vector(2 downto 0); -- id_alusel_i
+signal idex_reg1_data_o: std_logic_vector(15 downto 0); -- id_reg1_i
+signal idex_reg2_data_o: std_logic_vector(15 downto 0); -- id_reg2_i
+signal idex_wd_o: std_logic_vector(3 downto 0); -- id_wd_i
+signal idex_we_o: std_logic; -- id_we_i
+signal idex_inst_o: std_logic_vector(15 downto 0); -- id_inst_i
+
+-- id/ex -> ex
+signal ex_aluop_o: std_logic_vector(7 downto 0); -- aluop_i
+signal ex_alusel_o: std_logic_vector(2 downto 0); -- alusel_i
+signal ex_reg1_data_o: std_logic_vector(15 downto 0);-- re1_data_i
+signal ex_reg2_data_o: std_logic_vector(15 downto 0);-- reg2_data_i
+signal ex_wd_o: std_logic_vector(3 downto 0); -- wd_i
+signal ex_we_o: std_logic; -- we_i
+signal ex_inst_o: std_logic_vector(15 downto 0); -- inst_i
+
+-- ex -> ex/mem
+signal exmem_mem_addr_o: std_logic_vector(15 downto 0); --ex_mem_addr_i
+signal exmem_reg2_data_o: std_logic_vector(15 downto 0); --ex_reg2_data_i
+signal exmem_wd_o: std_logic_vector(3 downto 0); -- ex_wd_i
+signal exmem_we_o: std_logic;  -- ex_we_i
+signal exmem_wdata_o: std_logic_vector(15 downto 0); -- ex_wdata_i
+signal exmem_aluop_o: std_logic_vector(7 downto 0);  -- ex_aluop_i
+
+-- ex/mem -> mem
+signal mem_mem_addr_o: std_logic_vector(15 downto 0); -- mem_addr_i
+signal mem_reg2_data_o: std_logic_vector(15 downto 0); -- reg2_data_i
+signal mem_wd_o: std_logic_vector(3 downto 0); -- wd_i
+signal mem_we_o: std_logic; -- we_i
+signal mem_wdata_o: std_logic_vector(15 downto 0); -- wdata_i
+signal mem_aluop_o: std_logic_vector(7 downto 0); -- aluop_i
+
+-- mem -> mem/wb
+signal memwb_wd_o: std_logic_vector(3 downto 0); -- mem_wd_i
+signal memwb_we_o: std_logic; -- mem_we_i
+signal memwb_wdata_o: std_logic_vector(15 downto 0); -- mem_wdata_i
+
+-- mem/wb -> reg
+signal reg_we_o: std_logic; -- we_i
+signal reg_wd_o: std_logic_vector(3 downto 0); -- wd_i
+signal reg_wdata_o: std_logic_vector(15 downto 0); -- wdata_i
+
+-- id -> reg
+signal reg_reg1_re_o: std_logic; -- re1_i
+signal reg_reg1_rd_o: std_logic_vector(3 downto 0); -- rd1_i
+signal reg_reg2_re_o: std_logic; -- re2_i
+signal reg_reg2_rd_o: std_logic_vector(3 downto 0); -- rd2_i
+
+-- reg -> id
+signal id_rdata1_o: std_logic_vector(15 downto 0); -- reg1_data_i
+signal id_rdata2_o: std_logic_vector(15 downto 0); -- reg2_data_i
+
+-- ex -> id  ÅÔÂ·
+--signal exmem_wd_o: std_logic_vector(3 downto 0); -- ex_wd_i
+--signal exmem_we_o: std_logic;  -- ex_we_i
+--signal exmem_wdata_o: std_logic_vector(15 downto 0); -- ex_wdata_i
+--signal exmem_aluop_o: std_logic_vector(7 downto 0);  -- ex_aluop_i
+
+--signal id_wd_o: std_logic_vector(3 downto 0); -- ex_wd_i
+--signal id_we_o: std_logic; -- ex_we_i
+--signal id_aluop_o: std_logic_vector(7 downto 0); -- ex_aluop_i
+--signal id_wdata_o: std_logic_vector(15 downto 0); -- ex_wdata_i
+-- mem -> idÅÔÂ·
+
+-- id -> pc
+signal pc_branch_flag_o: std_logic; -- branch_flag_i
+signal pc_branch_target_address_o: std_logic_vector(15 downto 0)); -- branch_target_address_i
+
+--ctrl
+signal stallreq_from_ex_i: std_logic;
+signal stallreq_from_id_i: std_logic;
+signal stall: std_logic;
+signal flush: std_logic;
 
 component pc
     port (stall: in std_logic_vector(5 downto 0);
@@ -56,48 +144,49 @@ end component;
 
 component id
   port(rst: in std_logic;
-  pc_i: in std_logic_vector(15 downto 0); --å½“å‰pc åœ°å€
-  inst_i: in std_logic_vector(15 downto 0); -- å½“å‰æŒ‡ä»¤
+  pc_i: in std_logic_vector(15 downto 0); --µ±Ç°pc µØÖ·
+  inst_i: in std_logic_vector(15 downto 0); -- µ±Ç°Ö¸Áî
   -- load command needs ex op
-  ex_aluop_i: in std_logic_vector(7 downto 0);
-  -- TODO æ—è·¯
-  ex_we_i: in std_logic;
-  ex_wd_i: in std_logic_vector(3 downto 0);
-  ex_wdata_i: in std_logic_vector(15 downto 0);
-  mem_we_i: in std_logic;
-  mem_wd_i: in std_logic_vector(3 downto 0);
-  mem_wdata_i: in std_logic_vector(15 downto 0);
+      -- TODO ÅÔÂ·
+      ex_we_i: in std_logic;
+      ex_wd_i: in std_logic_vector(3 downto 0);
+      ex_wdata_i: in std_logic_vector(15 downto 0);
+      ex_aluop_i: in std_logic_vector(7 downto 0);
+
+      mem_we_i: in std_logic;
+      mem_wd_i: in std_logic_vector(3 downto 0);
+      mem_wdata_i: in std_logic_vector(15 downto 0);
   -- is_in_delayslot_i is previously deleted.
-  reg1_data_i: in std_logic_vector(15 downto 0); --  ä»reg1è¯»çš„æ•°æ®
-  reg2_data_i: in std_logic_vector(15 downto 0); --  ä»reg1è¯»çš„æ•°æ®
+  reg1_data_i: in std_logic_vector(15 downto 0); --  ´Óreg1¶ÁµÄÊı¾İ
+  reg2_data_i: in std_logic_vector(15 downto 0); --  ´Óreg2¶ÁµÄÊı¾İ
 
-  -- ID/EX ç”¨
-  aluop_o: out std_logic_vector(7 downto 0); -- alu æ‰§è¡Œçš„æ“ä½œ
+  -- ID/EX ÓÃ
+  aluop_o: out std_logic_vector(7 downto 0); -- alu Ö´ĞĞµÄ²Ù×÷
   -- nop control signals
-  alusel_o: out std_logic_vector(2 downto 0); -- alu æ‰§è¡Œæ“ä½œçš„ç§ç±»
+  alusel_o: out std_logic_vector(2 downto 0); -- alu Ö´ĞĞ²Ù×÷µÄÖÖÀà
 
-  reg1_data_o: out std_logic_vector(15 downto 0); -- ä»reg1è¯»çš„æ•°æ®
-  reg2_data_o: out std_logic_vector(15 downto 0); -- ä»reg2è¯»çš„æ•°æ®
+  reg1_data_o: out std_logic_vector(15 downto 0); -- ´Óreg1¶ÁµÄÊı¾İ
+  reg2_data_o: out std_logic_vector(15 downto 0); -- ´Óreg2¶ÁµÄÊı¾İ
 
-  wd_o: out std_logic_vector(3 downto 0); -- è¦å†™å…¥çš„ç›®çš„å¯„å­˜å™¨ç´¢å¼•
-  we_o: out std_logic; -- æ˜¯å¦è¦å†™å…¥ç›®çš„å¯„å­˜å™¨
+  wd_o: out std_logic_vector(3 downto 0); -- ÒªĞ´ÈëµÄÄ¿µÄ¼Ä´æÆ÷Ë÷Òı
+  we_o: out std_logic; -- ÊÇ·ñÒªĞ´ÈëÄ¿µÄ¼Ä´æÆ÷
 
-  inst_o: out std_logic_vector(15 downto 0); -- ä¼ é€’æŒ‡ä»¤å†…å®¹
+  inst_o: out std_logic_vector(15 downto 0); -- ´«µİÖ¸ÁîÄÚÈİ
   -- current_inst_address_o is previously deleted.
   -- is_in_delayslot_o is previously deleted.
   -- link_addr_o is previously deleted.
   -- next_inst_in_delayslot_o is previously deleted.
 
-  -- å¯„å­˜å™¨å †ç”¨
+  -- ¼Ä´æÆ÷¶ÑÓÃ
   reg1_re_o: out std_logic;
   reg1_rd_o: out std_logic_vector(3 downto 0);
   reg2_re_o: out std_logic;
   reg2_rd_o: out std_logic_vector(3 downto 0);
 
-  -- æ§åˆ¶ç”¨
+  -- ¿ØÖÆÓÃ
   stallreq: out std_logic;
 
-  -- PC ç”¨
+  -- PC ÓÃ
   branch_flag_o: out std_logic; -- Diable -- Enable
   branch_target_address_o: out std_logic_vector(15 downto 0));
 end component;
@@ -111,12 +200,12 @@ component reg
       re2_i: in std_logic;
       rd2_i: in std_logic_vector(3 downto 0);
 
-      -- æ¥è‡ª WB
+      -- À´×Ô WB
       we_i: in std_logic;
       wd_i: in std_logic_vector(3 downto 0);
       wdata_i: in std_logic_vector(15 downto 0);
 
-      -- ID ç”¨
+      -- ID ÓÃ
       rdata1_o: out std_logic_vector(15 downto 0);
       rdata2_o: out std_logic_vector(15 downto 0)
       );
@@ -149,13 +238,14 @@ component id_ex
     ex_reg2_data_o: out std_logic_vector(15 downto 0);
     ex_wd_o: out std_logic_vector(3 downto 0);
     ex_we_o: out std_logic;
-    ex_inst_o: in std_logic_vector(15 downto 0)
+    ex_inst_o: out std_logic_vector(15 downto 0)
     -- ex_current_inst_addr is previously deleted.
     -- ex_is_in_delayslot is previously deleted.
     -- ex_link_addr is previously deleted.
     -- is_in_delayslot_o is previously deleted.
     );
 end component;
+
 component ex
     port(aluop_i: in std_logic_vector(7 downto 0);
     alusel_i: in std_logic_vector(2 downto 0);
@@ -170,8 +260,10 @@ component ex
     -- is_in_delayslot_i is previously deleted.
     -- link_address_i is previously deleted.
 
+    -- ex/mem ÓÃ
     mem_addr_o: out std_logic_vector(15 downto 0);
     reg2_data_o: out std_logic_vector(15 downto 0);
+    -- idÒ²ÓÃ ÅÔÂ·
     wd_o: out std_logic_vector(3 downto 0);
     we_o: out std_logic;
     aluop_o: out std_logic_vector(7 downto 0);
@@ -182,6 +274,7 @@ component ex
     stallreq: out std_logic
     );
 end component;
+
 component ex_mem
   port(clk: in std_logic;
        rst: in std_logic;
@@ -189,12 +282,12 @@ component ex_mem
        stall: in std_logic_vector(5 downto 0);
        flush: in std_logic;
 
-       ex_mem_addr_i: in std_logic_vector(15 downto 0); -- memé˜¶æ®µè¯»å†…å­˜åœ°å€
-       ex_reg2_data_i: in std_logic_vector(15 downto 0); -- ç¬¬äºŒä¸ªå¯„å­˜å™¨çš„å†…å®¹
-       ex_wd_i: in std_logic_vector(3 downto 0); -- å†™å›é˜¶æ®µç›®æ ‡å¯„å­˜å™¨ç´¢å¼•
-       ex_we_i: in std_logic; -- å†™å›é˜¶æ®µæ˜¯å¦å†™å›
-       ex_wdata_i: in std_logic_vector(15 downto 0); -- å†™å›é˜¶æ®µçš„å†™å›æ•°æ®
-       ex_aluop_i: in std_logic_vector(7 downto 0); -- aluæ“ä½œ ?
+       ex_mem_addr_i: in std_logic_vector(15 downto 0); -- mem½×¶Î¶ÁÄÚ´æµØÖ·
+       ex_reg2_data_i: in std_logic_vector(15 downto 0); -- µÚ¶ş¸ö¼Ä´æÆ÷µÄÄÚÈİ
+       ex_wd_i: in std_logic_vector(3 downto 0); -- Ğ´»Ø½×¶ÎÄ¿±ê¼Ä´æÆ÷Ë÷Òı
+       ex_we_i: in std_logic; -- Ğ´»Ø½×¶ÎÊÇ·ñĞ´»Ø
+       ex_wdata_i: in std_logic_vector(15 downto 0); -- Ğ´»Ø½×¶ÎµÄĞ´»ØÊı¾İ
+       ex_aluop_i: in std_logic_vector(7 downto 0); -- alu²Ù×÷ ?
        -- ex_current_inst_address is previously deleted.
        -- ex_is_in_delayslot is previously deleted.
 
@@ -208,9 +301,11 @@ component ex_mem
        -- mem_is_in_delayslot is previously deleted.
        );
 end component;
+
 component mem
   port(rst: in std_logic;
        mem_data_i: in std_logic_vector(15 downto 0);
+
        mem_addr_i: in std_logic_vector(15 downto 0);
        reg2_data_i: in std_logic_vector(15 downto 0);
        wd_i: in std_logic_vector(3 downto 0);
@@ -220,14 +315,14 @@ component mem
        -- current_inst_address_i is previously deleted.
        -- is_in_delayslot_i is previously deleted.
 
-       -- mem/wb ç”¨
+       -- mem/wb ÓÃ idÒ²ÓÃ ÅÔÂ·
        wd_o: out std_logic_vector(3 downto 0);
        we_o: out std_logic;
        wdata_o: out std_logic_vector(15 downto 0);
        -- current_inst_address_i is previously deleted.
        -- is_in_delayslot_i is previously deleted.
 
-       -- RAM ç”¨
+       -- RAM ÓÃ
        mem_we_o: out std_logic;
        mem_ce_o: out std_logic;
        mem_data_o: out std_logic_vector(15 downto 0);
@@ -235,6 +330,7 @@ component mem
        -- mem_sel_o: out std_logic_vector(2 downto 0)
        );
 end component;
+
 component mem_wb
   port(clk: in std_logic;
        rst: in std_logic;
@@ -263,8 +359,173 @@ component ctrl
        );
 end component;
 
-
-
 begin
+    rom_addr_o <= ifid_pc_o;
+    pc_component: pc port map(
+        stall => stall,
+        flush => flush,
+
+        clk => clk,
+        rst => rst,
+
+        branch_flag_i => pc_branch_flag_o,
+        branch_target_address_i => pc_branch_target_address_o,
+
+        pc_o => ifid_pc_o,
+        ce_o => rom_ce_o);
+    if_id_component: if_id port map(
+        clk => clk,
+        rst => rst,
+
+        stall => stall,
+        flush => flush,
+
+        if_pc_i => ifid_pc_o,
+        if_inst_i => rom_data_i
+
+        id_pc_o => id_pc_o,
+        id_inst_o => id_inst_o);
+    id_component: id port map(
+        rst => rst,
+        pc_i => id_pc_o,
+        inst_i => id_inst_o,
+
+        ex_aluop_i => exmem_aluop_o,
+        ex_we_i => exmem_we_o,
+        ex_wd_i => exmem_wd_o,
+        ex_wdata_i => exmem_wdata_o,
+        mem_we_i => memwb_we_o,
+        mem_wd_i => memwb_wd_o,
+        mem_wdata_i => memwb_wdata_o
+
+        reg1_data_i => id_rdata1_o,
+        reg2_data_i => id_rdata2_o,
+
+        aluop_o => idex_aluop_o,
+        alulsel_o => idex_alusel_o,
+        reg1_data_o => idex_reg1_data_o,
+        reg2_data_o => idex_reg2_data_o,
+        wd_o => idex_wd_o,
+        we_o => idex_we_o,
+        inst_o => idex_inst_o,
+
+        reg1_re_o => reg_reg1_re_o,
+        reg1_rd_o => reg_reg1_rd_o,
+        reg2_re_o => reg_reg2_re_o,
+        reg2_rd_o => reg_reg2_rd_o,
+
+        stallreq => stallreq_from_id_i,
+
+        branch_flag_o => pc_branch_flag_o,
+        branch_target_address_o => pc_branch_target_address_o);
+    id_ex_component: id_ex port map(
+        clk => clk,
+        rst => rst,
+        stall => stall,
+        flush => flush,
+        id_aluop_i => idex_aluop_o,
+        id_alusel_i => idex_alusel_o,
+        id_reg1_data_i => idex_reg1_data_o,
+        id_reg2_data_i => idex_reg2_data_o,
+        id_wd_i => idex_wd_o,
+        id_we_i => idex_we_o,
+        id_inst_i => idex_inst_o,
+
+        ex_aluop_o => ex_aluop_o,
+        ex_alusel_o => ex_alusel_o,
+        ex_reg1_data_o => ex_reg1_data_o,
+        ex_reg2_data_o => ex_reg2_data_o,
+        ex_wd_o => ex_wd_o,
+        ex_we_o => ex_we_o,
+        ex_inst_o => ex_inst_o);
+    ex_component: ex port map(
+        aluop_i => ex_aluop_o,
+        alusel_i => ex_alusel_o,
+        reg1_data_i => ex_reg1_data_o,
+        reg2_data_i => ex_reg2_data_o,
+        wd_i => ex_wd_o,
+        we_i => ex_we_o,
+        inst_i => ex_inst_o,
+
+        mem_addr_o => exmem_mem_addr_o,
+        reg2_data_o => exmem_reg2_data_o,
+        wd_o => exmem_wd_o,
+        we_o => exmem_we_o,
+        aluop_o => exmem_aluop_o,
+        wdata_o => exmem_wdata_o,
+
+        stallreq => stallreq_from_ex_i);
+    ex_mem_component: ex_mem port map(
+        clk => clk,
+        rst => clk,
+        stall => stall,
+        flush => flush,
+
+        ex_mem_addr_i => exmem_mem_addr_o,
+        ex_reg2_data_i => exmem_reg2_data_o,
+
+        ex_wd_i => exmem_wd_o,
+        ex_we_i => exmem_we_o,
+        ex_wdata_i => exmem_wdata_o,
+        ex_aluop_i => exmem_aluop_o,
+
+        mem_mem_addr_o => mem_mem_addr_o,
+        mem_reg2_data_o => mem_reg2_data_o,
+        mem_wd_o => mem_wd_o,
+        mem_we_o => mem_we_o,
+        mem_wdata_o => mem_wdata_o,
+        mem_aluop_o => mem_aluop_o);
+    mem_component: mem port map(
+        rst => rst,
+        mem_data_i => ram_rdata_i,
+
+        mem_addr_i => mem_mem_addr_o,
+        reg2_data_i => mem_reg2_data_o,
+        wd_i => mem_wd_o,
+        we_i => mem_we_o,
+        wdata_i => mem_wdata_o,
+        aluop_i => mem_aluop_o,
+
+        wd_o => memwb_wd_o,
+        we_o => memwb_we_o,
+        wdata_o => memwb_wdata_o,
+
+        mem_we_o => ram_we_o,
+        mem_ce_o => ram_ce_o,
+        mem_data_o => ram_wdata_o,
+        mem_addr_o => ram_addr_o);
+    mem_wb_component: mem_wb port map(
+        clk => clk,
+        rst => rst,
+        stall => stall,
+        flush => flush,
+
+        mem_wd_i => memwb_wd_o,
+        mem_we_i => memwb_we_o,
+        mem_wdata_i => memwb_wdata_o,
+
+        wb_wd_o => reg_wd_o,
+        wb_we_o => reg_we_o,
+        wb_wdata_o => reg_wdata_o);
+    ctrl_component: ctrl port map(
+        rst => rst,
+        stallreq_from_ex_i => stallreq_from_ex_i,
+        stallreq_from_id_i => stallreq_from_id_i,
+        stall => stall,
+        flush => flush);
+    reg_component: reg port map(
+        clk => clk,
+        rst => rst,
+        re1_i => reg_reg1_re_o,
+        rd1_i => reg_reg1_rd_o,
+        re2_i => reg_reg2_re_o,
+        rd2_i => reg_reg2_rd_o,
+
+        we_i => reg_we_o,
+        we_o => reg_wd_o,
+        wdata_i => reg_wdata_o,
+
+        rdata1_o => id_rdata1_o,
+        rdata2_o => id_rdata2_o);
 
 end bhv;

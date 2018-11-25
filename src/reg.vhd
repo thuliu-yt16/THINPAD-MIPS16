@@ -17,19 +17,19 @@ entity reg is
       re2_i: in std_logic;
       rd2_i: in std_logic_vector(3 downto 0);
 
-      -- æ¥è‡ª WB
+      -- À´×Ô WB
       we_i: in std_logic;
       wd_i: in std_logic_vector(3 downto 0);
       wdata_i: in std_logic_vector(15 downto 0);
 
-      -- ID ç”¨
+      -- ID ÓÃ
       rdata1_o: out std_logic_vector(15 downto 0);
       rdata2_o: out std_logic_vector(15 downto 0)
       );
 end reg;
 
 architecture bhv of reg is
-  type RegArray is array (0 to 15) of STD_LOGIC_VECTOR(15 downto 0);
+  type RegArray is array (0 to 15) of std_logic_vector(15 downto 0);
   signal regs: RegArray := (others => ZeroWord);
   signal rdata1: std_logic_vector(15 downto 0);
   signal rdata2: std_logic_vector(15 downto 0);
