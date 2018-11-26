@@ -1,0 +1,29 @@
+Command line:
+   thinpad_isim_beh.exe
+     -simmode  gui
+     -simrunnum  0
+     -socket  10508
+
+Mon Nov 26 20:33:45 2018
+
+
+ Elaboration Time: 0.0625 sec
+
+ Current Memory Usage: 5348.06 Meg
+
+ Total Signals          : 246
+ Total Nets             : 16994
+ Total Signal Drivers   : 79
+ Total Blocks           : 19
+ Total Primitive Blocks : 17
+ Total Processes        : 35
+ Total Traceable Variables  : 25
+ Total Scalar Nets and Variables : 17558
+Total Line Count : 150
+
+ Total Simulation Time: 0.34375 sec
+
+ Current Memory Usage: 4718.92 Meg
+
+Mon Nov 26 20:50:46 2018
+

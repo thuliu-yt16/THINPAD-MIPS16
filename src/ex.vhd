@@ -54,15 +54,15 @@ architecture bhv of ex is
             end if;
         end process;
 
-        RESULT_PROCESS: process(alusel_i)
+        RESULT_PROCESS: process(wd_i, we_i, alusel_i, logicout)
         begin
             wd_o <= wd_i;
             we_o <= we_i;
             case alusel_i is
                 when EXE_RES_LOGIC =>
-                wdata_o <= logicout;
+						wdata_o <= logicout;
                 when others =>
-                wdata_o <= ZeroWord;
+						wdata_o <= ZeroWord;
             end case;
         end process;
     end bhv;

@@ -22,6 +22,10 @@
   <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="thinpad.xise"/>
 
   <files xmlns="http://www.xilinx.com/XMLSchema">
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="LI_test_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="LI_test_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="LI_test_isim_beh.wdb"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="LI_test_stx_beh.prj"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="_ngo"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
@@ -36,6 +40,12 @@
     <file xil_pn:fileType="FILE_HTML" xil_pn:name="cpu_summary.html"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="cpu_vhdl.prj"/>
     <file xil_pn:fileType="FILE_XRPT" xil_pn:name="cpu_xst.xrpt"/>
+    <file xil_pn:fileType="FILE_LOG" xil_pn:name="fuse.log"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="id_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="id_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_CMD" xil_pn:name="isim.cmd"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_LOG" xil_pn:name="isim.log"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGDBUILD_LOG" xil_pn:name="thinpad.bld"/>
     <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="thinpad.cmd_log"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_LSO" xil_pn:name="thinpad.lso"/>
@@ -45,15 +55,93 @@
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_STX" xil_pn:name="thinpad.stx"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="thinpad.syr"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="thinpad.xst"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="thinpad_envsettings.html"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="thinpad_isim_beh.exe"/>
     <file xil_pn:fileType="FILE_XRPT" xil_pn:name="thinpad_ngdbuild.xrpt"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="thinpad_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="thinpad_summary.html"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="thinpad_vhdl.prj"/>
     <file xil_pn:fileType="FILE_XRPT" xil_pn:name="thinpad_xst.xrpt"/>
     <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xlnx_auto_0_xdb"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
   </files>
 
   <transforms xmlns="http://www.xilinx.com/XMLSchema">
+    <transform xil_pn:end_ts="1543234870" xil_pn:name="TRAN_copyInitialToAbstractSimulation" xil_pn:start_ts="1543234870">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1543238581" xil_pn:in_ck="3500825483261555367" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1543238581">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="src/cpu.vhd"/>
+      <outfile xil_pn:name="src/ctrl.vhd"/>
+      <outfile xil_pn:name="src/define.vhd"/>
+      <outfile xil_pn:name="src/ex.vhd"/>
+      <outfile xil_pn:name="src/ex_mem.vhd"/>
+      <outfile xil_pn:name="src/id.vhd"/>
+      <outfile xil_pn:name="src/id_ex.vhd"/>
+      <outfile xil_pn:name="src/if_id.vhd"/>
+      <outfile xil_pn:name="src/inst_rom.vhd"/>
+      <outfile xil_pn:name="src/mem.vhd"/>
+      <outfile xil_pn:name="src/mem_wb.vhd"/>
+      <outfile xil_pn:name="src/pc.vhd"/>
+      <outfile xil_pn:name="src/ram.vhd"/>
+      <outfile xil_pn:name="src/reg.vhd"/>
+      <outfile xil_pn:name="src/thinpad.vhd"/>
+      <outfile xil_pn:name="test/LI_test.vhd"/>
+    </transform>
+    <transform xil_pn:end_ts="1543237220" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="-8583183345879780236" xil_pn:start_ts="1543237220">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1543237220" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="2853232512614969782" xil_pn:start_ts="1543237220">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1543234870" xil_pn:name="TRAN_regenerateCoresSim" xil_pn:prop_ck="-7602487068388333394" xil_pn:start_ts="1543234870">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1543238584" xil_pn:in_ck="3500825483261555367" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1543238584">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="src/cpu.vhd"/>
+      <outfile xil_pn:name="src/ctrl.vhd"/>
+      <outfile xil_pn:name="src/define.vhd"/>
+      <outfile xil_pn:name="src/ex.vhd"/>
+      <outfile xil_pn:name="src/ex_mem.vhd"/>
+      <outfile xil_pn:name="src/id.vhd"/>
+      <outfile xil_pn:name="src/id_ex.vhd"/>
+      <outfile xil_pn:name="src/if_id.vhd"/>
+      <outfile xil_pn:name="src/inst_rom.vhd"/>
+      <outfile xil_pn:name="src/mem.vhd"/>
+      <outfile xil_pn:name="src/mem_wb.vhd"/>
+      <outfile xil_pn:name="src/pc.vhd"/>
+      <outfile xil_pn:name="src/ram.vhd"/>
+      <outfile xil_pn:name="src/reg.vhd"/>
+      <outfile xil_pn:name="src/thinpad.vhd"/>
+      <outfile xil_pn:name="test/LI_test.vhd"/>
+    </transform>
+    <transform xil_pn:end_ts="1543238589" xil_pn:in_ck="3500825483261555367" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="2178058850537474432" xil_pn:start_ts="1543238584">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="LI_test_beh.prj"/>
+      <outfile xil_pn:name="LI_test_isim_beh.exe"/>
+      <outfile xil_pn:name="fuse.log"/>
+      <outfile xil_pn:name="isim"/>
+      <outfile xil_pn:name="isim.log"/>
+      <outfile xil_pn:name="xilinxsim.ini"/>
+    </transform>
+    <transform xil_pn:end_ts="1543238589" xil_pn:in_ck="5209681229149931670" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-6017918884269594077" xil_pn:start_ts="1543238589">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="LI_test_isim_beh.wdb"/>
+      <outfile xil_pn:name="isim.cmd"/>
+      <outfile xil_pn:name="isim.log"/>
+    </transform>
     <transform xil_pn:end_ts="1543134517" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1543134517">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -82,10 +170,12 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1543159971" xil_pn:in_ck="-9206093914408839724" xil_pn:name="TRANEXT_xstsynthesize_spartan3e" xil_pn:prop_ck="8230370981874835777" xil_pn:start_ts="1543159958">
+    <transform xil_pn:end_ts="1543237143" xil_pn:in_ck="-9206093914408839724" xil_pn:name="TRANEXT_xstsynthesize_spartan3e" xil_pn:prop_ck="8230370981874835777" xil_pn:start_ts="1543237131">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="InputChanged"/>
       <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
       <outfile xil_pn:name="cpu.ngr"/>
       <outfile xil_pn:name="thinpad.lso"/>
@@ -95,6 +185,7 @@
       <outfile xil_pn:name="thinpad.stx"/>
       <outfile xil_pn:name="thinpad.syr"/>
       <outfile xil_pn:name="thinpad.xst"/>
+      <outfile xil_pn:name="thinpad_stx_beh.prj"/>
       <outfile xil_pn:name="thinpad_vhdl.prj"/>
       <outfile xil_pn:name="thinpad_xst.xrpt"/>
       <outfile xil_pn:name="webtalk_pn.xml"/>
@@ -104,9 +195,10 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1543159981" xil_pn:in_ck="2574761827351223836" xil_pn:name="TRANEXT_ngdbuild_FPGA" xil_pn:prop_ck="8533060437633364561" xil_pn:start_ts="1543159971">
+    <transform xil_pn:end_ts="1543237659" xil_pn:in_ck="2574761827351223836" xil_pn:name="TRANEXT_ngdbuild_FPGA" xil_pn:prop_ck="8533060437633364561" xil_pn:start_ts="1543237653">
       <status xil_pn:value="FailedRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="_ngo"/>
       <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
       <outfile xil_pn:name="thinpad.bld"/>

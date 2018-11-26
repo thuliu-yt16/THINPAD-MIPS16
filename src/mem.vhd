@@ -36,7 +36,7 @@ end mem;
 
 architecture bhv of mem is
 begin
-  process(rst)
+  process(rst, mem_data_i, mem_addr_i, reg2_data_i, wd_i, we_i, wdata_i, aluop_i)
   begin
     if (rst = Enable) then
       wd_o <= RegAddrZero;
@@ -50,7 +50,6 @@ begin
     else
       wd_o <= wd_i;
       we_o <= we_i;
-      wdata_o <= wdata_i;
-    end if;
+      wdata_o <= wdata_i;    end if;
   end process;
 end bhv;

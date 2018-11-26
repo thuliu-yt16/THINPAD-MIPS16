@@ -73,12 +73,12 @@ entity id is
   branch_target_address_o: out std_logic_vector(15 downto 0));
 end id;
 
-architecture bhv of id is
+ architecture bhv of id is
   signal reg1_re, reg2_re, instvalid: std_logic; -- instuction is valid or not
   signal reg1_data, reg2_data, imm: std_logic_vector(15 downto 0);
-  signal imm8: std_logic_vector(7 downto 0);
   signal rx, ry, rz: std_logic_vector(3 downto 0);
   signal op: std_logic_vector(15 downto 11);
+
   begin
 
     inst_o <= inst_i;
@@ -88,6 +88,10 @@ architecture bhv of id is
     reg2_data <= reg2_data_i;
 
     ID_PROCESS: process(rst, pc_i, inst_i)
+    variable op: std_logic_vector(4 downto 0);
+    variable rx, ry, rz : STD_LOGIC_VECTOR(3 downto 0);
+    variable imm8: std_logic_vector(7 downto 0);
+
     begin
       if (rst = Enable) then
         aluop_o <= EXE_NOP_OP;
@@ -111,11 +115,14 @@ architecture bhv of id is
         reg1_re <= Disable;
         reg2_re <= Disable;
         wd_o <= RegAddrZero;
-        rx <= "0" & inst_i(10 downto 8);
-        ry <= "0" & inst_i(7 downto 5);
-        rz <= "0" & inst_i(4 downto 2);
         imm <= ZeroWord;
 
+        rx := "0" & inst_i(10 downto 8);
+        ry := "0" & inst_i(7 downto 5);
+        rz := "0" & inst_i(4 downto 2);
+        
+        op := inst_i(15 downto 11);
+        imm8:= inst_i(7 downto 0);
         case op is
           when "01101" => -- LI
             aluop_o <= EXE_LI_OP;

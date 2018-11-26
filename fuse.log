@@ -1,0 +1,51 @@
+Running: E:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -o D:/THINPAD-MIPS16/LI_test_isim_beh.exe -prj D:/THINPAD-MIPS16/LI_test_beh.prj work.LI_test 
+ISim P.20131013 (signature 0x7708f090)
+Number of CPUs detected in this system: 8
+Turning on mult-threading, number of parallel sub-compilation jobs: 16 
+Determining compilation order of HDL files
+WARNING:Simulator:1010 - One or more environment variables have been detected which affect the operation of the C compiler. These are typically not set in standard installations and are not tested by Xilinx, however they may be appropriate for your system, so the flow will attempt to continue.  If errors occur, try running fuse with the "-mt off -v 1" switches to see more information from the C compiler. The following environment variables have been detected:
+Parsing VHDL file "D:/THINPAD-MIPS16/src/define.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/reg.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/pc.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/mem_wb.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/mem.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/if_id.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/id_ex.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/id.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/ex_mem.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/ex.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/ctrl.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/ram.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/inst_rom.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/cpu.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/src/thinpad.vhd" into library work
+Parsing VHDL file "D:/THINPAD-MIPS16/test/LI_test.vhd" into library work
+Starting static elaboration
+Completed static elaboration
+Compiling package standard
+Compiling package std_logic_1164
+Compiling package std_logic_arith
+Compiling package std_logic_unsigned
+Compiling package define
+Compiling package numeric_std
+Compiling architecture bhv of entity pc [pc_default]
+Compiling architecture bhv of entity if_id [if_id_default]
+Compiling architecture bhv of entity id [id_default]
+Compiling architecture bhv of entity id_ex [id_ex_default]
+Compiling architecture bhv of entity ex [ex_default]
+Compiling architecture bhv of entity ex_mem [ex_mem_default]
+Compiling architecture bhv of entity mem [mem_default]
+Compiling architecture bhv of entity mem_wb [mem_wb_default]
+Compiling architecture bhv of entity ctrl [ctrl_default]
+Compiling architecture bhv of entity reg [reg_default]
+Compiling architecture bhv of entity cpu [cpu_default]
+Compiling architecture bhv of entity inst_rom [inst_rom_default]
+Compiling architecture bhv of entity ram [ram_default]
+Compiling architecture bhv of entity thinpad [thinpad_default]
+Compiling architecture behavior of entity li_test
+Time Resolution for simulation is 1ps.
+Waiting for 4 sub-compilation(s) to finish...
+Compiled 35 VHDL Units
+Built simulation executable D:/THINPAD-MIPS16/LI_test_isim_beh.exe
+Fuse Memory Usage: 38300 KB
+Fuse CPU Usage: 1046 ms

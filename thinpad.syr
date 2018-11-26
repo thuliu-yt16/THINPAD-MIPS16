@@ -4,13 +4,13 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.14 secs
+Total CPU time to Xst completion: 0.13 secs
  
 --> Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.14 secs
+Total CPU time to Xst completion: 0.13 secs
  
 --> Reading design: thinpad.prj
 
@@ -110,7 +110,8 @@ Architecture bhv of Entity pc is up to date.
 Compiling vhdl file "D:/THINPAD-MIPS16/src/if_id.vhd" in Library work.
 Architecture bhv of Entity if_id is up to date.
 Compiling vhdl file "D:/THINPAD-MIPS16/src/id.vhd" in Library work.
-Architecture bhv of Entity id is up to date.
+Entity <id> compiled.
+Entity <id> (Architecture <bhv>) compiled.
 Compiling vhdl file "D:/THINPAD-MIPS16/src/id_ex.vhd" in Library work.
 Architecture bhv of Entity id_ex is up to date.
 Compiling vhdl file "D:/THINPAD-MIPS16/src/ex.vhd" in Library work.
@@ -132,8 +133,7 @@ Architecture bhv of Entity inst_rom is up to date.
 Compiling vhdl file "D:/THINPAD-MIPS16/src/ram.vhd" in Library work.
 Architecture bhv of Entity ram is up to date.
 Compiling vhdl file "D:/THINPAD-MIPS16/src/thinpad.vhd" in Library work.
-Entity <thinpad> compiled.
-Entity <thinpad> (Architecture <bhv>) compiled.
+Architecture bhv of Entity thinpad is up to date.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
@@ -172,8 +172,7 @@ Analyzing Entity <thinpad> in library <work> (Architecture <bhv>).
 Entity <thinpad> analyzed. Unit <thinpad> generated.
 
 Analyzing Entity <cpu> in library <work> (Architecture <bhv>).
-WARNING:Xst:752 - "D:/THINPAD-MIPS16/src/cpu.vhd" line 441: Unconnected input port 'rst' of component 'ex' is tied to default value.
-WARNING:Xst:2211 - "D:/THINPAD-MIPS16/src/cpu.vhd" line 510: Instantiating black box module <ctrl>.
+WARNING:Xst:2211 - "D:/THINPAD-MIPS16/src/cpu.vhd" line 513: Instantiating black box module <ctrl>.
 Entity <cpu> analyzed. Unit <cpu> generated.
 
 Analyzing Entity <pc> in library <work> (Architecture <bhv>).
@@ -189,8 +188,6 @@ WARNING:Xst:819 - "D:/THINPAD-MIPS16/src/if_id.vhd" line 30: One or more signals
 Entity <if_id> analyzed. Unit <if_id> generated.
 
 Analyzing Entity <id> in library <work> (Architecture <bhv>).
-WARNING:Xst:819 - "D:/THINPAD-MIPS16/src/id.vhd" line 90: One or more signals are missing in the process sensitivity list. To enable synthesis of FPGA/CPLD hardware, XST will assume that all necessary signals are present in the sensitivity list. Please note that the result of the synthesis may differ from the initial design specification. The missing signals are:
-   <op>, <imm8>
 INFO:Xst:2679 - Register <reg1_rd_o> in unit <id> has a constant value of 0000 during circuit operation. The register is replaced by logic.
 INFO:Xst:2679 - Register <reg2_rd_o> in unit <id> has a constant value of 0000 during circuit operation. The register is replaced by logic.
 INFO:Xst:2679 - Register <branch_flag_o> in unit <id> has a constant value of 0 during circuit operation. The register is replaced by logic.
@@ -296,15 +293,13 @@ WARNING:Xst:647 - Input <mem_we_i> is never used. This port will be preserved an
 WARNING:Xst:647 - Input <mem_wdata_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <ex_we_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:1305 - Output <stallreq> is never assigned. Tied to value 0.
-WARNING:Xst:646 - Signal <rz> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:646 - Signal <ry> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <rz> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <ry> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <rx> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <reg2_data> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <reg1_data> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:653 - Signal <op> is used but never assigned. This sourceless signal will be automatically connected to value 00000.
+WARNING:Xst:1780 - Signal <op> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <instvalid> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:653 - Signal <imm8> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
-WARNING:Xst:737 - Found 4-bit latch for signal <rx>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
-    Using one-hot encoding for signal <op>.
 Unit <id> synthesized.
 
 
@@ -420,9 +415,8 @@ Macro Statistics
  3-bit register                                        : 1
  4-bit register                                        : 1
  8-bit register                                        : 1
-# Latches                                              : 20
+# Latches                                              : 19
  16-bit latch                                          : 18
- 4-bit latch                                           : 1
  8-bit latch                                           : 1
 # Comparators                                          : 1
  4-bit comparator equal                                : 1
@@ -485,12 +479,22 @@ Macro Statistics
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
-INFO:Xst:2261 - The FF/Latch <ex_aluop_o_1> in Unit <id_ex> is equivalent to the following 3 FFs/Latches, which will be removed : <ex_aluop_o_5> <ex_aluop_o_6> <ex_aluop_o_7> 
-INFO:Xst:2261 - The FF/Latch <ex_wd_o_0> in Unit <id_ex> is equivalent to the following 39 FFs/Latches, which will be removed : <ex_wd_o_1> <ex_wd_o_2> <ex_wd_o_3> <ex_we_o> <ex_reg1_data_o_0> <ex_reg1_data_o_1> <ex_reg1_data_o_2> <ex_reg1_data_o_3> <ex_reg1_data_o_4> <ex_reg1_data_o_5> <ex_reg1_data_o_6> <ex_reg1_data_o_7> <ex_reg1_data_o_8> <ex_reg1_data_o_9> <ex_reg1_data_o_10> <ex_reg1_data_o_11> <ex_reg1_data_o_12> <ex_reg1_data_o_13> <ex_reg1_data_o_14> <ex_reg1_data_o_15> <ex_reg2_data_o_0> <ex_reg2_data_o_1> <ex_reg2_data_o_2> <ex_reg2_data_o_3> <ex_reg2_data_o_4> <ex_reg2_data_o_5> <ex_reg2_data_o_6> <ex_reg2_data_o_7> <ex_reg2_data_o_8> <ex_reg2_data_o_9> <ex_reg2_data_o_10> <ex_reg2_data_o_11> <ex_reg2_data_o_12> <ex_reg2_data_o_13> <ex_reg2_data_o_14> <ex_reg2_data_o_15> <ex_alusel_o_0> <ex_alusel_o_1> <ex_alusel_o_2> 
-INFO:Xst:2261 - The FF/Latch <ex_aluop_o_0> in Unit <id_ex> is equivalent to the following 3 FFs/Latches, which will be removed : <ex_aluop_o_2> <ex_aluop_o_3> <ex_aluop_o_4> 
-WARNING:Xst:1710 - FF/Latch <ex_wd_o_0> (without init value) has a constant value of 0 in block <id_ex>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_4> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_4> 
+INFO:Xst:2261 - The FF/Latch <ex_aluop_o_2> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_aluop_o_3> 
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_5> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_5> 
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_0> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_0> 
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_6> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_6> 
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_1> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_1> 
+INFO:Xst:2261 - The FF/Latch <ex_aluop_o_5> in Unit <id_ex> is equivalent to the following 2 FFs/Latches, which will be removed : <ex_aluop_o_6> <ex_aluop_o_7> 
+INFO:Xst:2261 - The FF/Latch <ex_wd_o_3> in Unit <id_ex> is equivalent to the following 18 FFs/Latches, which will be removed : <ex_reg1_data_o_8> <ex_reg1_data_o_9> <ex_reg1_data_o_10> <ex_reg1_data_o_11> <ex_reg1_data_o_12> <ex_reg1_data_o_13> <ex_reg1_data_o_14> <ex_reg1_data_o_15> <ex_reg2_data_o_8> <ex_reg2_data_o_9> <ex_reg2_data_o_10> <ex_reg2_data_o_11> <ex_reg2_data_o_12> <ex_reg2_data_o_13> <ex_reg2_data_o_14> <ex_reg2_data_o_15> <ex_alusel_o_1> <ex_alusel_o_2> 
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_7> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_7> 
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_2> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_2> 
+INFO:Xst:2261 - The FF/Latch <ex_we_o> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_alusel_o_0> 
+INFO:Xst:2261 - The FF/Latch <ex_reg1_data_o_3> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_reg2_data_o_3> 
+INFO:Xst:2261 - The FF/Latch <ex_aluop_o_0> in Unit <id_ex> is equivalent to the following FF/Latch, which will be removed : <ex_aluop_o_4> 
+WARNING:Xst:1710 - FF/Latch <ex_wd_o_3> (without init value) has a constant value of 0 in block <id_ex>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <ex_aluop_o_0> (without init value) has a constant value of 1 in block <id_ex>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <ex_aluop_o_1> (without init value) has a constant value of 0 in block <id_ex>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <ex_aluop_o_5> (without init value) has a constant value of 0 in block <id_ex>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1710 - FF/Latch <mem_aluop_o_7> (without init value) has a constant value of 0 in block <ex_mem>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <mem_aluop_o_6> (without init value) has a constant value of 0 in block <ex_mem>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <mem_aluop_o_5> (without init value) has a constant value of 0 in block <ex_mem>. This FF/Latch will be trimmed during the optimization process.
@@ -773,21 +777,21 @@ WARNING:Xst:2677 - Node <regs_0_14> of sequential type is unconnected in block <
 WARNING:Xst:2677 - Node <regs_0_15> of sequential type is unconnected in block <reg>.
 WARNING:Xst:524 - All outputs of the instance <id_ex_component> of the block <id_ex> are unconnected in block <cpu>.
    This instance will be removed from the design along with all underlying logic
-WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<0>, Madd_pc_addsub0000_cy<7>, Madd_pc_addsub0000_cy<13>, Madd_pc_addsub0000_cy<4>, Madd_pc_addsub0000_cy<14>, Madd_pc_addsub0000_cy<8>, Madd_pc_addsub0000_cy<0>, pc_addsub0000<0>, Madd_pc_addsub0000_cy<12>, pc_addsub0000<15>, Madd_pc_addsub0000_lut<0>, Madd_pc_addsub0000_cy<5>, Madd_pc_addsub0000_cy<6>, pc<15>, Madd_pc_addsub0000_cy<11>, Madd_pc_addsub0000_cy<2>, Madd_pc_addsub0000_cy<3>, Madd_pc_addsub0000_cy<10>, Madd_pc_addsub0000_cy<1>, Madd_pc_addsub0000_cy<9>.
+WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: Madd_pc_addsub0000_cy<2>, Madd_pc_addsub0000_cy<8>, Madd_pc_addsub0000_cy<11>, Madd_pc_addsub0000_cy<10>, Madd_pc_addsub0000_cy<13>, pc_addsub0000<0>, Madd_pc_addsub0000_cy<9>, Madd_pc_addsub0000_cy<1>, pc<15>, Madd_pc_addsub0000_cy<6>, Madd_pc_addsub0000_cy<12>, Madd_pc_addsub0000_cy<5>, Madd_pc_addsub0000_cy<4>, pc<0>, Madd_pc_addsub0000_cy<3>, Madd_pc_addsub0000_cy<7>, pc_addsub0000<15>, Madd_pc_addsub0000_lut<0>, Madd_pc_addsub0000_cy<0>, Madd_pc_addsub0000_cy<14>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<14>, pc<14>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<13>, pc<13>.
-WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<12>, pc<12>.
-WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<11>, pc<11>.
+WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<12>, pc_addsub0000<12>.
+WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<11>, pc_addsub0000<11>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<10>, pc<10>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<9>, pc_addsub0000<9>.
-WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<8>, pc_addsub0000<8>.
+WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<8>, pc<8>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<7>, pc_addsub0000<7>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<6>, pc_addsub0000<6>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<5>, pc<5>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<4>, pc_addsub0000<4>.
 WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<3>, pc<3>.
-WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<2>, pc_addsub0000<2>.
-WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<1>, pc<1>.
+WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc_addsub0000<2>, pc<2>.
+WARNING:Xst:2170 - Unit pc : the following signal(s) form a combinatorial loop: pc<1>, pc_addsub0000<1>.
 
 Optimizing unit <thinpad> ...
 
@@ -932,14 +936,14 @@ Delay:               2.342ns (Levels of Logic = 2)
 =========================================================================
 
 
-Total REAL time to Xst completion: 10.00 secs
-Total CPU time to Xst completion: 10.29 secs
+Total REAL time to Xst completion: 9.00 secs
+Total CPU time to Xst completion: 8.83 secs
  
 --> 
 
-Total memory usage is 4600236 kilobytes
+Total memory usage is 4600268 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  423 (   0 filtered)
-Number of infos    :   12 (   0 filtered)
+Number of warnings :  420 (   0 filtered)
+Number of infos    :   22 (   0 filtered)
 

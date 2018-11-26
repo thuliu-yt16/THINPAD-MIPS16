@@ -247,7 +247,9 @@ component id_ex
 end component;
 
 component ex
-    port(aluop_i: in std_logic_vector(7 downto 0);
+    port(
+	 rst: in std_logic;
+	 aluop_i: in std_logic_vector(7 downto 0);
     alusel_i: in std_logic_vector(2 downto 0);
 
     reg1_data_i: in std_logic_vector(15 downto 0);
@@ -439,6 +441,7 @@ begin
         ex_we_o => ex_we_o,
         ex_inst_o => ex_inst_o);
     ex_component: ex port map(
+		  rst => rst,
         aluop_i => ex_aluop_o,
         alusel_i => ex_alusel_o,
         reg1_data_i => ex_reg1_data_o,
