@@ -73,14 +73,10 @@ _xmsgs/
 isim/
 *.*
 !*.vhd
-!CPU.xise
+!*.png
 !*.wcfg
 !*.program
 !Assembler/*
 !charset/*
 !.gitignore
-Assembler/*_o.s
-Assembler/*.bak
-Assembler/*_o.bin
-Assembler/test.s
 !Final/*
