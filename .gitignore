@@ -74,6 +74,7 @@ isim/
 *.*
 !*.vhd
 !*.png
+!*.xlsx
 !*.wcfg
 !*.program
 !Assembler/*
