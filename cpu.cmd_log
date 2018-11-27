@@ -1,1 +1,0 @@
-xst -intstyle ise -ifn "D:/THINPAD-MIPS16/cpu.xst" -ofn "D:/THINPAD-MIPS16/cpu.syr" 
