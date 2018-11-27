@@ -35,6 +35,7 @@ signal ram_we_o: std_logic;
 signal ram_addr_o: std_logic_vector(15 downto 0);
 signal ram_wdata_o: std_logic_vector(15 downto 0);
 signal ram_ce_o: std_logic;
+signal ram_re_o: std_logic;
 
 component cpu
     port(clk: in std_logic;
@@ -52,6 +53,7 @@ component cpu
         ram_rdata_i : in std_logic_vector(15 downto 0);
 
         ram_we_o: out std_logic;
+        ram_re_o: out std_logic;
         -- ram_read_o : out STD_LOGIC;
         -- ram_write_o : out STD_LOGIC;
         ram_addr_o : out std_logic_vector(15 downto 0);
@@ -69,6 +71,7 @@ component ram
   port(rst: in std_logic;
         clk: in std_logic;
        we_i: in std_logic;
+       re_i: in std_logic;
        ce_i: in std_logic;
        addr_i: in std_logic_vector(15 downto 0);
        data_i: in std_logic_vector(15 downto 0);
@@ -98,6 +101,7 @@ begin
         ram_ready_i => ram_ready_i,
         ram_rdata_i => ram_rdata_i,
         ram_we_o => ram_we_o,
+        ram_re_o => ram_re_o,
         ram_addr_o => ram_addr_o,
         ram_wdata_o => ram_wdata_o,
         ram_ce_o => ram_ce_o);
@@ -109,6 +113,7 @@ begin
         rst => rst_reversed,
         clk => clk,
         we_i => ram_we_o,
+        re_i => ram_re_o,
         ce_i => ram_ce_o,
         addr_i => ram_addr_o,
         data_i => ram_wdata_o,

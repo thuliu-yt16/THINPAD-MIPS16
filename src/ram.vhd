@@ -7,7 +7,8 @@ entity ram is
   port(rst: in std_logic;
         clk: in std_logic;
 
-       we_i: in std_logic; -- 0 : ¶Á  1: Ð´
+       we_i: in std_logic;
+       re_i: in std_logic;
        ce_i: in std_logic; -- ram Ê¹ÄÜ
        addr_i: in std_logic_vector(15 downto 0);
        data_i: in std_logic_vector(15 downto 0);
@@ -40,11 +41,11 @@ begin
         end if;
     end process;
 
-    READ: process(rst, we_i, addr_i, ram2_data)
+    READ: process(rst, re_i, addr_i, ram2_data)
     begin
         if(rst = Enable) then
             data_o <= Zeroword;
-        elsif(we_i = Enable) then
+        elsif(re_i = Disable) then
             data_o <= ZeroWord;
         else
             data_o <= ram2_data;

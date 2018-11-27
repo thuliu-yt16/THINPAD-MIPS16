@@ -9,68 +9,70 @@ use ieee.std_logic_unsigned.all;
 -- waddr, we, wdata, clk, RST
 -- output ports: rdata1, rdata2;
 entity reg is
-  port(clk: in std_logic;
-      rst: in std_logic;
+    port(clk: in std_logic;
+    rst: in std_logic;
 
-      re1_i: in std_logic;
-      rd1_i: in std_logic_vector(3 downto 0);
-      re2_i: in std_logic;
-      rd2_i: in std_logic_vector(3 downto 0);
+    re1_i: in std_logic;
+    rd1_i: in std_logic_vector(3 downto 0);
+    re2_i: in std_logic;
+    rd2_i: in std_logic_vector(3 downto 0);
 
-      -- À´×Ô WB
-      we_i: in std_logic;
-      wd_i: in std_logic_vector(3 downto 0);
-      wdata_i: in std_logic_vector(15 downto 0);
+    -- ï¿½ï¿½ï¿½ï¿½ WB
+    we_i: in std_logic;
+    wd_i: in std_logic_vector(3 downto 0);
+    wdata_i: in std_logic_vector(15 downto 0);
 
-      -- ID ÓÃ
-      rdata1_o: out std_logic_vector(15 downto 0);
-      rdata2_o: out std_logic_vector(15 downto 0)
-      );
+    -- ID ï¿½ï¿½
+    rdata1_o: out std_logic_vector(15 downto 0);
+    rdata2_o: out std_logic_vector(15 downto 0)
+    );
 end reg;
 
 architecture bhv of reg is
-  type RegArray is array (0 to 15) of std_logic_vector(15 downto 0);
-  signal regs: RegArray := (others => ZeroWord);
-  signal rdata1: std_logic_vector(15 downto 0);
-  signal rdata2: std_logic_vector(15 downto 0);
+    type RegArray is array (0 to 15) of std_logic_vector(15 downto 0);
+    signal regs: RegArray := (others => ZeroWord);
+    signal rdata1: std_logic_vector(15 downto 0);
+    signal rdata2: std_logic_vector(15 downto 0);
 
-  begin
-    rdata1_o <= rdata1;
-    rdata2_o <= rdata2;
-
-    WRITE_PROCESS: process(clk)
     begin
-      if (rst = Disable) then
-        if (we_i = Enable) then
-          regs(conv_integer(wd_i)) <= wdata_i;
-        end if;
-      end if;
-    end process;
+        rdata1_o <= rdata1;
+        rdata2_o <= rdata2;
 
-    READ1_PROCESS: process(rst, re1_i, rd1_i, we_i, wd_i, wdata_i)
-    begin
-      if (rst = Enable) then
-        rdata1 <= ZeroWord;
-      elsif (re1_i = Disable) then
-        rdata1 <= Zeroword;
-      elsif ((rd1_i = wd_i) and (we_i = Enable)) then
-        rdata1 <= wdata_i;
-      else
-        rdata1 <= ZeroWord;
-      end if;
-    end process;
+        WRITE_PROCESS: process(clk)
+        begin
+            if(clk'event and clk = Enable) then
+                if (rst = Disable) then
+                    if (we_i = Enable) then
+                        regs(conv_integer(wd_i)) <= wdata_i;
+                    end if;
+                end if;
+            end if;
+        end process;
 
-    READ2_PROCESS: process(rst, re2_i, rd2_i, we_i, wd_i, wdata_i)
-    begin
-      if (rst = Enable) then
-        rdata2 <= ZeroWord;
-      elsif (re1_i = Disable) then
-        rdata2 <= Zeroword;
-      elsif ((rd1_i = wd_i) and (we_i = Enable)) then
-        rdata2 <= wdata_i;
-      else
-        rdata2 <= ZeroWord;
-      end if;
-    end process;
+        READ1_PROCESS: process(rst, re1_i, rd1_i, we_i, wd_i, wdata_i)
+        begin
+            if (rst = Enable) then
+                rdata1 <= ZeroWord;
+            elsif (re1_i = Disable) then
+                rdata1 <= Zeroword;
+            elsif ((rd1_i = wd_i) and (we_i = Enable)) then
+                rdata1 <= wdata_i;
+            else
+                rdata1 <= ZeroWord;
+            end if;
+        end process;
 
-end bhv;
+        READ2_PROCESS: process(rst, re2_i, rd2_i, we_i, wd_i, wdata_i)
+        begin
+            if (rst = Enable) then
+                rdata2 <= ZeroWord;
+            elsif (re1_i = Disable) then
+                rdata2 <= Zeroword;
+            elsif ((rd1_i = wd_i) and (we_i = Enable)) then
+                rdata2 <= wdata_i;
+            else
+                rdata2 <= ZeroWord;
+            end if;
+        end process;
+
+    end bhv;
