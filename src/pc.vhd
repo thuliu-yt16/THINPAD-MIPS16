@@ -30,24 +30,28 @@ architecture bhv of pc is
         ce_o <= ce;
         pc_o <= pc;
 
-        -- TODO Ìí¼ÓÌø×ª
+        -- TODO ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
         PC_PROCESS: process(clk)
         begin
-            if (ce = Disable) then
-                pc <= Zeroword;
-            elsif (branch_flag_i = Enable) then
-                pc <= branch_target_address_i;
-            else
-                pc <= pc + 1;
+            if(clk'event and clk = Enable) then
+                if (ce = Disable) then
+                    pc <= Zeroword;
+                elsif (branch_flag_i = Enable) then
+                    pc <= branch_target_address_i;
+                else
+                    pc <= pc + 1;
+                end if;
             end if;
         end process;
 
         CE_PROCESS: process(clk)
         begin
-            if (rst = Enable) then
-                ce <= Disable;
-            else
-                ce <= Enable;
+            if(clk'event and clk = Enable) then
+                if (rst = Enable) then
+                    ce <= Disable;
+                else
+                    ce <= Enable;
+                end if;
             end if;
         end process;
     end bhv;

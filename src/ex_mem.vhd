@@ -5,47 +5,68 @@ use ieee.numeric_std.all;
 use work.define.all;
 
 entity ex_mem is
-  port(clk: in std_logic;
-       rst: in std_logic;
+    port(clk: in std_logic;
+    rst: in std_logic;
 
-       stall: in std_logic_vector(5 downto 0);
-       flush: in std_logic;
+    stall: in std_logic_vector(5 downto 0);
+    flush: in std_logic;
 
-       ex_mem_addr_i: in std_logic_vector(15 downto 0); -- mem½×¶Î¶ÁÄÚ´æµØÖ·
-       ex_reg2_data_i: in std_logic_vector(15 downto 0); -- µÚ¶þ¸ö¼Ä´æÆ÷µÄÄÚÈÝ
-       ex_wd_i: in std_logic_vector(3 downto 0); -- Ð´»Ø½×¶ÎÄ¿±ê¼Ä´æÆ÷Ë÷Òý
-       ex_we_i: in std_logic; -- Ð´»Ø½×¶ÎÊÇ·ñÐ´»Ø
-       ex_wdata_i: in std_logic_vector(15 downto 0); -- Ð´»Ø½×¶ÎµÄÐ´»ØÊý¾Ý
-       ex_aluop_i: in std_logic_vector(7 downto 0); -- alu²Ù×÷ ?
-       -- ex_current_inst_address is previously deleted.
-       -- ex_is_in_delayslot is previously deleted.
+    ex_mem_addr_i: in std_logic_vector(15 downto 0); -- memï¿½×¶Î¶ï¿½ï¿½Ú´ï¿½ï¿½ï¿½Ö·
+    ex_mem_ce_i: in std_logic;
+    ex_mem_we_i: in std_logic;
+    ex_mem_re_i: in std_logic;
+    ex_mem_wdata_i: in std_logic_vector(15 downto 0);
+    -- ex_reg2_data_i: in std_logic_vector(15 downto 0); -- ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-       mem_mem_addr_o: out std_logic_vector(15 downto 0);
-       mem_reg2_data_o: out std_logic_vector(15 downto 0);
-       mem_wd_o: out std_logic_vector(3 downto 0);
-       mem_we_o: out std_logic;
-       mem_wdata_o: out std_logic_vector(15 downto 0);
-       mem_aluop_o: out std_logic_vector(7 downto 0)
-       -- mem_current_inst_address is previously deleted.
-       -- mem_is_in_delayslot is previously deleted.
-       );
+    ex_wd_i: in std_logic_vector(3 downto 0); -- Ð´ï¿½Ø½×¶ï¿½Ä¿ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    ex_we_i: in std_logic; -- Ð´ï¿½Ø½×¶ï¿½ï¿½Ç·ï¿½Ð´ï¿½ï¿½
+    ex_wdata_i: in std_logic_vector(15 downto 0); -- Ð´ï¿½Ø½×¶Îµï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    ex_aluop_i: in std_logic_vector(7 downto 0);
+    -- ex_current_inst_address is previously deleted.
+    -- ex_is_in_delayslot is previously deleted.
+
+    mem_mem_addr_o: out std_logic_vector(15 downto 0);
+    mem_mem_ce_o: out std_logic;
+    mem_mem_we_o: out std_logic;
+    mem_mem_re_o: out std_logic;
+    mem_mem_wdata_o: out std_logic_vector(15 downto 0);
+    -- mem_reg2_data_o: out std_logic_vector(15 downto 0);
+
+    mem_wd_o: out std_logic_vector(3 downto 0);
+    mem_we_o: out std_logic;
+    mem_wdata_o: out std_logic_vector(15 downto 0);
+    mem_aluop_o: out std_logic_vector(7 downto 0)
+    -- mem_current_inst_address is previously deleted.
+    -- mem_is_in_delayslot is previously deleted.
+    );
 end ex_mem;
 
 architecture bhv of ex_mem is
-  begin
-    process(clk)
     begin
-      if (rst = Enable) then
-        mem_wd_o <= RegAddrZero;
-        mem_we_o <= Disable;
-        mem_wdata_o <= ZeroWord;
-      else
-        mem_mem_addr_o <= ex_mem_addr_i;
-        mem_reg2_data_o <= ex_reg2_data_i;
-        mem_wd_o <= ex_wd_i;
-        mem_we_o <= ex_we_i;
-        mem_wdata_o <= ex_wdata_i;
-        mem_aluop_o <= ex_aluop_i;
-      end if;
-    end process;
-end bhv;
+        process(clk)
+        begin
+            if(clk'event and clk = Enable) then
+                if (rst = Enable) then
+                    mem_wd_o <= RegAddrZero;
+                    mem_we_o <= Disable;
+                    mem_wdata_o <= ZeroWord;
+                    mem_mem_addr_o <= ZeroWord;
+                    mem_mem_ce_o <= Disable;
+                    mem_mem_re_o <= Disable;
+                    mem_mem_we_o <= Disable;
+                    mem_mem_wdata_o <= ZeroWord;
+                    mem_aluop_o <= EXE_NOP_OP;
+                else
+                    mem_wd_o <= ex_wd_i;
+                    mem_we_o <= ex_we_i;
+                    mem_wdata_o <= ex_wdata_i;
+                    mem_mem_addr_o <= ex_mem_addr_i;
+                    mem_mem_ce_o <= ex_mem_ce_i;
+                    mem_mem_re_o <= ex_mem_re_i;
+                    mem_mem_we_o <= ex_mem_we_i;
+                    mem_mem_wdata_o <= ex_mem_wdata_i;
+                    mem_aluop_o <= ex_aluop_i;
+                end if;
+            end if;
+        end process;
+    end bhv;
