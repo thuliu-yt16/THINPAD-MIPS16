@@ -44,4 +44,9 @@ package define is
   constant EXE_SW_OP : std_logic_vector(7 downto 0) := "00101010";
   constant EXE_SW_RS_OP : std_logic_vector(7 downto 0) := "00101011";
   constant EXE_SW_SP_OP : std_logic_vector(7 downto 0) := "00101100";
+
+  constant REG_SP: std_logic_vector(3 downto 0):= "1000";
+  constant REG_IH: std_logic_vector(3 downto 0):= "1001";
+  constant REG_RA: std_logic_vector(3 downto 0):= "1010";
+  constant REG_T: std_logic_vector(3 downto 0):= "1011";
 end define;
