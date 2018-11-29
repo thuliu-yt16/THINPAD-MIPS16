@@ -192,7 +192,7 @@ architecture bhv of id is
                                 imm <= SXT(imm8, 16);
                                 reg1_re <= Enable;
                                 reg1_rd <= REG_SP;
-                            when "000" => --BTEQZ
+                            when "000" => -- BTEQZ
                                 instvalid <= Enable;
                                 reg1_re <= Enable;
                                 reg1_rd <= REG_T;
@@ -265,7 +265,7 @@ architecture bhv of id is
                                 reg2_re <= Enable;
                                 reg1_rd <= rx;
                                 reg2_rd <= ry;
-                            when "00000" => 
+                            when "00000" =>
                                 case func7_5 is
                                     when "000" => -- JR
                                         instvalid <= Enable;
