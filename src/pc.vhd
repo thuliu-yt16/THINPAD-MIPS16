@@ -24,8 +24,8 @@ entity pc is
 end pc;
 
 architecture bhv of pc is
-    signal pc: std_logic_vector(15 downto 0);
-    signal ce: std_logic;
+    signal pc: std_logic_vector(15 downto 0) := ZeroWord;
+    signal ce: std_logic := Enable;
     begin
         ce_o <= ce;
         pc_o <= pc;

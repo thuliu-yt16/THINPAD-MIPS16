@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="D:/THINPAD-MIPS16/inst_test_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="define" />
+            <top_module name="inst_test" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="35" />
+   <wvobject fp_name="/inst_test/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram2_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ram2_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ram2_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/led" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">led[15:0]</obj_property>
+      <obj_property name="ObjectShortName">led[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram2_oe" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ram2_oe</obj_property>
+      <obj_property name="ObjectShortName">ram2_oe</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram2_we" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ram2_we</obj_property>
+      <obj_property name="ObjectShortName">ram2_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram2_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ram2_en</obj_property>
+      <obj_property name="ObjectShortName">ram2_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram2_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ram2_addr[17:0]</obj_property>
+      <obj_property name="ObjectShortName">ram2_addr[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/clk_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/pc_component/pc_o" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">pc_o[15:0]</obj_property>
+      <obj_property name="ObjectShortName">pc_o[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/if_id_component/if_inst_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">if_inst_i[15:0]</obj_property>
+      <obj_property name="ObjectShortName">if_inst_i[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/pc_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">pc_i[15:0]</obj_property>
+      <obj_property name="ObjectShortName">pc_i[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/inst_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">inst_i[15:0]</obj_property>
+      <obj_property name="ObjectShortName">inst_i[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/aluop_o" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">aluop_o[7:0]</obj_property>
+      <obj_property name="ObjectShortName">aluop_o[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/alusel_o" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">alusel_o[2:0]</obj_property>
+      <obj_property name="ObjectShortName">alusel_o[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mrom/addr_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">addr_i[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_i[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mrom/ce_i" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ce_i</obj_property>
+      <obj_property name="ObjectShortName">ce_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mrom/inst_o" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">inst_o[15:0]</obj_property>
+      <obj_property name="ObjectShortName">inst_o[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg1_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">reg1_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg1_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg2_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">reg2_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg2_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg1_rd" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">reg1_rd[3:0]</obj_property>
+      <obj_property name="ObjectShortName">reg1_rd[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg2_rd" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">reg2_rd[3:0]</obj_property>
+      <obj_property name="ObjectShortName">reg2_rd[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/wd_o" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">wd_o[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wd_o[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/we_o" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">we_o</obj_property>
+      <obj_property name="ObjectShortName">we_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg1_re" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reg1_re</obj_property>
+      <obj_property name="ObjectShortName">reg1_re</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg2_re" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reg2_re</obj_property>
+      <obj_property name="ObjectShortName">reg2_re</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg1_data_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">reg1_data_i[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg1_data_i[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg2_data_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">reg2_data_i[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg2_data_i[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/reg_component/re1_i" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">re1_i</obj_property>
+      <obj_property name="ObjectShortName">re1_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/reg_component/rd1_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rd1_i[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rd1_i[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/reg_component/re2_i" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">re2_i</obj_property>
+      <obj_property name="ObjectShortName">re2_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/reg_component/rd2_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rd2_i[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rd2_i[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/mcpu/id_component/imm" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">imm[15:0]</obj_property>
+      <obj_property name="ObjectShortName">imm[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group63" type="group">
+      <obj_property name="label">id_o</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg2_data_o" type="array" db_ref_id="1">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">reg2_data_o[15:0]</obj_property>
+         <obj_property name="ObjectShortName">reg2_data_o[15:0]</obj_property>
+         <obj_property name="label">reg2_data_o[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/inst_test/uut/mcpu/id_component/reg1_data_o" type="array" db_ref_id="1">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">reg1_data_o[15:0]</obj_property>
+         <obj_property name="ObjectShortName">reg1_data_o[15:0]</obj_property>
+         <obj_property name="label">reg1_data_o[15:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group65" type="group">
+      <obj_property name="label">ex</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/inst_test/uut/mcpu/ex_component/aluop_o" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">aluop_o[7:0]</obj_property>
+         <obj_property name="ObjectShortName">aluop_o[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/inst_test/uut/mcpu/ex_component/wdata_o" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">wdata_o[15:0]</obj_property>
+         <obj_property name="ObjectShortName">wdata_o[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/inst_test/uut/mcpu/ex_component/logicout" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">logicout[15:0]</obj_property>
+         <obj_property name="ObjectShortName">logicout[15:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

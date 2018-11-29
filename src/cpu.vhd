@@ -526,7 +526,7 @@ begin
     stallreq => stallreq_from_ex_i);
     ex_mem_component: ex_mem port map(
     clk => clk,
-    rst => clk,
+    rst => rst,
     stall => stall,
     flush => flush,
 
