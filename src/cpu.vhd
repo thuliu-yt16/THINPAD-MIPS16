@@ -36,6 +36,11 @@ architecture bhv of cpu is
     signal id_pc_o: std_logic_vector(15 downto 0); -- pc_i
     signal id_inst_o: std_logic_vector(15 downto 0); -- inst_i
 
+    -- if/id -> id/ex
+    signal idex_stallsignal_o: std_logic;
+    -- if/id -> ctrl
+    signal ifid_ctrl_stallreq_o: std_logic;
+
     -- id -> id/ex
     signal idex_aluop_o: std_logic_vector(7 downto 0); -- id_aluop_i
     signal idex_alusel_o: std_logic_vector(2 downto 0); -- id_alusel_i
@@ -53,6 +58,11 @@ architecture bhv of cpu is
     signal ex_wd_o: std_logic_vector(3 downto 0); -- wd_i
     signal ex_we_o: std_logic; -- we_i
     signal ex_inst_o: std_logic_vector(15 downto 0); -- inst_i
+
+    -- id/ex -> ex/mem
+    signal exmem_stallsignal_o: std_logic;
+    -- id/ex -> ctrl
+    signal idex_ctrl_stallreq_o: std_logic;
 
     -- ex -> ex/mem
     signal exmem_mem_addr_o: std_logic_vector(15 downto 0); --ex_mem_addr_i
@@ -77,6 +87,9 @@ architecture bhv of cpu is
     signal mem_we_o: std_logic; -- we_i
     signal mem_wdata_o: std_logic_vector(15 downto 0); -- wdata_i
     signal mem_aluop_o: std_logic_vector(7 downto 0); -- aluop_i
+
+    -- ex/mem -> ctrl
+    signal exmem_ctrl_stallreq_o: std_logic;
 
     -- mem -> mem/wb
     signal memwb_wd_o: std_logic_vector(3 downto 0); -- mem_wd_i
@@ -115,6 +128,9 @@ architecture bhv of cpu is
     signal pc_branch_target_address_o: std_logic_vector(15 downto 0); -- branch_target_address_i
 
     --ctrl
+    signal stallreq_from_if_id_i: std_logic;
+    signal stallreq_from_id_ex_i: std_logic;
+    signal stallreq_from_ex_mem_i: std_logic;
     signal stallreq_from_ex_i: std_logic;
     signal stallreq_from_id_i: std_logic;
     signal stall: std_logic_vector(5 downto 0);
@@ -147,7 +163,10 @@ if_pc_i: in std_logic_vector(15 downto 0);
 if_inst_i: in std_logic_vector(15 downto 0);
 
 id_pc_o: out std_logic_vector(15 downto 0);
-id_inst_o: out std_logic_vector(15 downto 0)
+id_inst_o: out std_logic_vector(15 downto 0);
+
+stallsignal_o: out std_logic;
+stallreq_o: out std_logic
 );
 end component;
 
@@ -236,6 +255,8 @@ id_wd_i: in std_logic_vector(3 downto 0);
 id_we_i: in std_logic;
 
 id_inst_i: in std_logic_vector(15 downto 0);
+
+stallsignal_i: in std_logic;
 -- id_current_inst_address is previously deleted.
 -- id_is_in_delayslot is previously deleted.
 -- id_link_addr is previously deleted.
@@ -247,11 +268,13 @@ ex_reg1_data_o: out std_logic_vector(15 downto 0);
 ex_reg2_data_o: out std_logic_vector(15 downto 0);
 ex_wd_o: out std_logic_vector(3 downto 0);
 ex_we_o: out std_logic;
-ex_inst_o: out std_logic_vector(15 downto 0)
+ex_inst_o: out std_logic_vector(15 downto 0);
 -- ex_current_inst_addr is previously deleted.
 -- ex_is_in_delayslot is previously deleted.
 -- ex_link_addr is previously deleted.
 -- is_in_delayslot_o is previously deleted.
+stallreq_o: out std_logic;
+stallsignal_o: out std_logic
 );
 end component;
 
@@ -306,6 +329,8 @@ ex_wd_i: in std_logic_vector(3 downto 0);
 ex_we_i: in std_logic;
 ex_wdata_i: in std_logic_vector(15 downto 0);
 ex_aluop_i: in std_logic_vector(7 downto 0);
+
+stallsignal_i: in std_logic;
 -- ex_current_inst_address is previously deleted.
 -- ex_is_in_delayslot is previously deleted.
 
@@ -318,9 +343,10 @@ mem_mem_wdata_o: out std_logic_vector(15 downto 0);
 mem_wd_o: out std_logic_vector(3 downto 0);
 mem_we_o: out std_logic;
 mem_wdata_o: out std_logic_vector(15 downto 0);
-mem_aluop_o: out std_logic_vector(7 downto 0)
+mem_aluop_o: out std_logic_vector(7 downto 0);
 -- mem_current_inst_address is previously deleted.
 -- mem_is_in_delayslot is previously deleted.
+stallreq_o: out std_logic
 );
 end component;
 
@@ -378,12 +404,15 @@ end component;
 component ctrl
 port(rst: in std_logic;
 
-stallreq_from_ex_i: in std_logic;
-stallreq_from_id_i: in std_logic;
+     stallreq_from_if_id_i: in std_logic;
+     stallreq_from_id_ex_i: in std_logic;
+     stallreq_from_ex_mem_i: in std_logic;
+     stallreq_from_id_i: in std_logic;
+     stallreq_from_ex_i: in std_logic;
 
-stall: out std_logic_vector(5 downto 0);
-flush: out std_logic
-);
+     stall_o: out std_logic_vector(5 downto 0);
+     flush_o: out std_logic
+     );
 end component;
 
 begin
@@ -411,7 +440,11 @@ begin
     if_inst_i => rom_data_i,
 
     id_pc_o => id_pc_o,
-    id_inst_o => id_inst_o);
+    id_inst_o => id_inst_o,
+
+    stallsignal_o => idex_stallsignal_o,
+    stallreq_o => ifid_ctrl_stallreq_o
+    );
     id_component: id port map(
     rst => rst,
     pc_i => id_pc_o,
@@ -457,6 +490,7 @@ begin
     id_wd_i => idex_wd_o,
     id_we_i => idex_we_o,
     id_inst_i => idex_inst_o,
+    stallsignal_i => idex_stallsignal_o,
 
     ex_aluop_o => ex_aluop_o,
     ex_alusel_o => ex_alusel_o,
@@ -464,7 +498,10 @@ begin
     ex_reg2_data_o => ex_reg2_data_o,
     ex_wd_o => ex_wd_o,
     ex_we_o => ex_we_o,
-    ex_inst_o => ex_inst_o);
+    ex_inst_o => ex_inst_o,
+    stallsignal_o => exmem_stallsignal_o,
+    stallreq_o => idex_ctrl_stallreq_o
+    );
     ex_component: ex port map(
     rst => rst,
     aluop_i => ex_aluop_o,
@@ -503,6 +540,7 @@ begin
     ex_we_i => exmem_we_o,
     ex_wdata_i => exmem_wdata_o,
     ex_aluop_i => exmem_aluop_o,
+    stallsignal_i => exmem_stallsignal_o,
 
     mem_mem_addr_o => mem_mem_addr_o,
     mem_mem_ce_o => mem_mem_ce_o,
@@ -513,7 +551,9 @@ begin
     mem_wd_o => mem_wd_o,
     mem_we_o => mem_we_o,
     mem_wdata_o => mem_wdata_o,
-    mem_aluop_o => mem_aluop_o);
+    mem_aluop_o => mem_aluop_o,
+    stallreq_o => exmem_ctrl_stallreq_o
+    );
     mem_component: mem port map(
     rst => rst,
     mem_data_i => ram_rdata_i,
@@ -554,10 +594,13 @@ begin
     wb_wdata_o => reg_wdata_o);
     ctrl_component: ctrl port map(
     rst => rst,
+    stallreq_from_if_id_i => stallreq_from_if_id_i,
+    stallreq_from_id_ex_i => stallreq_from_id_ex_i,
+    stallreq_from_ex_mem_i => stallreq_from_ex_mem_i,
     stallreq_from_ex_i => stallreq_from_ex_i,
     stallreq_from_id_i => stallreq_from_id_i,
-    stall => stall,
-    flush => flush);
+    stall_o => stall,
+    flush_o => flush);
     reg_component: reg port map(
     clk => clk,
     rst => rst,

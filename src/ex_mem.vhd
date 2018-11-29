@@ -22,6 +22,8 @@ entity ex_mem is
     ex_we_i: in std_logic; -- д�ؽ׶��Ƿ�д��
     ex_wdata_i: in std_logic_vector(15 downto 0); -- д�ؽ׶ε�д������
     ex_aluop_i: in std_logic_vector(7 downto 0);
+
+    stallsignal_i: in std_logic;
     -- ex_current_inst_address is previously deleted.
     -- ex_is_in_delayslot is previously deleted.
 
@@ -35,9 +37,11 @@ entity ex_mem is
     mem_wd_o: out std_logic_vector(3 downto 0);
     mem_we_o: out std_logic;
     mem_wdata_o: out std_logic_vector(15 downto 0);
-    mem_aluop_o: out std_logic_vector(7 downto 0)
+    mem_aluop_o: out std_logic_vector(7 downto 0);
     -- mem_current_inst_address is previously deleted.
     -- mem_is_in_delayslot is previously deleted.
+    -- stallsignal_o: out std_logic;
+    stallreq_o: out std_logic
     );
 end ex_mem;
 
@@ -56,6 +60,8 @@ architecture bhv of ex_mem is
                     mem_mem_we_o <= Disable;
                     mem_mem_wdata_o <= ZeroWord;
                     mem_aluop_o <= EXE_NOP_OP;
+                    -- stallsignal_o <= NoStop;
+                    stallreq_o <= NoStop;
                 else
                     mem_wd_o <= ex_wd_i;
                     mem_we_o <= ex_we_i;
@@ -66,6 +72,13 @@ architecture bhv of ex_mem is
                     mem_mem_we_o <= ex_mem_we_i;
                     mem_mem_wdata_o <= ex_mem_wdata_i;
                     mem_aluop_o <= ex_aluop_i;
+                    -- stallsignal_o <= NoStop;
+                    stallreq_o <= NoStop;
+
+                    if (stallsignal_i = Stop) then
+                      -- stallsignal_o <= Stop;
+                      stallreq_o <= Stop;
+                    end if;
                 end if;
             end if;
         end process;
