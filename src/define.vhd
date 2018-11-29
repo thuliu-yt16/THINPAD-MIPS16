@@ -4,6 +4,8 @@ use ieee.std_logic_1164.all;
 package define is
   constant Enable: std_logic := '1';
   constant Disable: std_logic := '0';
+  constant Stop: std_logic := '1';
+  constant NoStop: std_logic := '0';
   constant ZeroWord: std_logic_vector := "0000000000000000";
   constant OneWord: std_logic_vector := "0000000000000001";
   constant RegAddrZero : std_logic_vector(3  downto 0) := "0000";
