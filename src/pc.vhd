@@ -35,11 +35,13 @@ architecture bhv of pc is
         begin
             if(clk'event and clk = Enable) then
                 if (ce = Disable) then
-                    pc <= Zeroword;
-                elsif (branch_flag_i = Enable) then
-                    pc <= branch_target_address_i;
-                else
-                    pc <= pc + 1;
+                    pc <= ZeroWord;
+                elsif(stall(0) = NoStop) then
+                    if (branch_flag_i = Enable) then
+                        pc <= branch_target_address_i;
+                    else
+                        pc <= pc + 1;
+                    end if;
                 end if;
             end if;
         end process;
@@ -47,7 +49,7 @@ architecture bhv of pc is
         CE_PROCESS: process(clk)
         begin
             if(clk'event and clk = Enable) then
-                if (rst = Enable or stall(0) = Stop) then
+                if (rst = Enable) then
                     ce <= Disable;
                 else
                     ce <= Enable;

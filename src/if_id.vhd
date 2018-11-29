@@ -80,7 +80,7 @@ architecture bhv of if_id is
                     or if_inst_i(15 downto 11) = "00100" -- BEQZ
                     or if_inst_i(15 downto 11) = "00101" -- BNEZ
                     or if_inst_i(15 downto 8) = "01100000" -- BTEQZ
-                    or (if_inst_i(15 downto 11) = "11101" and if_inst_i(7 downto 5) = "000")
+                    or (if_inst_i(15 downto 11) = "11101" and if_inst_i(7 downto 5) = "000") -- JR
                     ) then
                       stallreq <= Stop;
                     end if;
