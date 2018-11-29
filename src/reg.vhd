@@ -30,7 +30,8 @@ end reg;
 
 architecture bhv of reg is
     type RegArray is array (0 to 15) of std_logic_vector(15 downto 0);
-    signal regs: RegArray := (others => ZeroWord);
+    signal regs: RegArray := (
+    others => ZeroWord);
     signal rdata1: std_logic_vector(15 downto 0);
     signal rdata2: std_logic_vector(15 downto 0);
 
@@ -58,7 +59,7 @@ architecture bhv of reg is
             elsif ((rd1_i = wd_i) and (we_i = Enable)) then
                 rdata1 <= wdata_i;
             else
-                rdata1 <= ZeroWord;
+                rdata1 <= regs(conv_integer(rd1_i));
             end if;
         end process;
 
@@ -66,12 +67,12 @@ architecture bhv of reg is
         begin
             if (rst = Enable) then
                 rdata2 <= ZeroWord;
-            elsif (re1_i = Disable) then
+            elsif (re2_i = Disable) then
                 rdata2 <= Zeroword;
-            elsif ((rd1_i = wd_i) and (we_i = Enable)) then
+            elsif ((rd2_i = wd_i) and (we_i = Enable)) then
                 rdata2 <= wdata_i;
             else
-                rdata2 <= ZeroWord;
+                rdata2 <= regs(conv_integer(rd2_i));
             end if;
         end process;
 

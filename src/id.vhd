@@ -25,8 +25,8 @@ use work.define.all;
 
 entity id is
     port(rst: in std_logic;
-    pc_i: in std_logic_vector(15 downto 0); --µ±Ç°pc µØÖ·
-    inst_i: in std_logic_vector(15 downto 0); -- µ±Ç°Ö¸Áî
+    pc_i: in std_logic_vector(15 downto 0); --ï¿½ï¿½Ç°pc ï¿½ï¿½Ö·
+    inst_i: in std_logic_vector(15 downto 0); -- ï¿½ï¿½Ç°Ö¸ï¿½ï¿½
     -- load command needs ex op
     -- TODO panglu
     ex_aluop_i: in std_logic_vector(7 downto 0);
@@ -39,36 +39,36 @@ entity id is
     mem_wdata_i: in std_logic_vector(15 downto 0);
     -- is_in_delayslot_i is previously deleted.
 
-    reg1_data_i: in std_logic_vector(15 downto 0); --  ´Óreg1¶ÁµÄÊý¾Ý
-    reg2_data_i: in std_logic_vector(15 downto 0); --  ´Óreg1¶ÁµÄÊý¾Ý
+    reg1_data_i: in std_logic_vector(15 downto 0); --  ï¿½ï¿½reg1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    reg2_data_i: in std_logic_vector(15 downto 0); --  ï¿½ï¿½reg1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    -- ID/EX ÓÃ
-    aluop_o: out std_logic_vector(7 downto 0); -- alu Ö´ÐÐµÄ²Ù×÷
+    -- ID/EX ï¿½ï¿½
+    aluop_o: out std_logic_vector(7 downto 0); -- alu Ö´ï¿½ÐµÄ²ï¿½ï¿½ï¿½
     -- nop control signals
-    alusel_o: out std_logic_vector(2 downto 0); -- alu Ö´ÐÐ²Ù×÷µÄÖÖÀà
+    alusel_o: out std_logic_vector(2 downto 0); -- alu Ö´ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    reg1_data_o: out std_logic_vector(15 downto 0); -- ´Óreg1¶ÁµÄÊý¾Ý
-    reg2_data_o: out std_logic_vector(15 downto 0); -- ´Óreg2¶ÁµÄÊý¾Ý
+    reg1_data_o: out std_logic_vector(15 downto 0); -- ï¿½ï¿½reg1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    reg2_data_o: out std_logic_vector(15 downto 0); -- ï¿½ï¿½reg2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    wd_o: out std_logic_vector(3 downto 0); -- ÒªÐ´ÈëµÄÄ¿µÄ¼Ä´æÆ÷Ë÷Òý
-    we_o: out std_logic; -- ÊÇ·ñÒªÐ´ÈëÄ¿µÄ¼Ä´æÆ÷
+    wd_o: out std_logic_vector(3 downto 0); -- ÒªÐ´ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ä¼Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    we_o: out std_logic; -- ï¿½Ç·ï¿½ÒªÐ´ï¿½ï¿½Ä¿ï¿½Ä¼Ä´ï¿½ï¿½ï¿½
 
-    inst_o: out std_logic_vector(15 downto 0); -- ´«µÝÖ¸ÁîÄÚÈÝ
+    inst_o: out std_logic_vector(15 downto 0); -- ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     -- current_inst_address_o is previously deleted.
     -- is_in_delayslot_o is previously deleted.
     -- link_addr_o is previously deleted.
     -- next_inst_in_delayslot_o is previously deleted.
 
-    -- ¼Ä´æÆ÷¶ÑÓÃ
+    -- ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     reg1_re_o: out std_logic;
     reg1_rd_o: out std_logic_vector(3 downto 0);
     reg2_re_o: out std_logic;
     reg2_rd_o: out std_logic_vector(3 downto 0);
 
-    -- ¿ØÖÆÓÃ
+    -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     stallreq: out std_logic;
 
-    -- PC ÓÃ
+    -- PC ï¿½ï¿½
     branch_flag_o: out std_logic; -- Diable -- Enable
     branch_target_address_o: out std_logic_vector(15 downto 0));
 end id;
@@ -77,7 +77,7 @@ architecture bhv of id is
     signal reg1_re, reg2_re, instvalid: std_logic; -- instuction is valid or not
     signal reg1_data, reg2_data, imm: std_logic_vector(15 downto 0);
     signal reg1_rd, reg2_rd: std_logic_vector(3 downto 0);
-    signal rx, ry, rz: std_logic_vector(3 downto 0);
+    -- signal rx, ry, rz: std_logic_vector(3 downto 0);
     signal op: std_logic_vector(15 downto 11);
 
     begin
@@ -86,7 +86,7 @@ architecture bhv of id is
         reg2_re_o <= reg2_re;
         reg1_rd_o <= reg1_rd;
         reg2_rd_o <= reg2_rd;
-        -- ÀûÓÃÅÔÂ·
+        -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·
         -- reg1_data <= reg1_data_i;
         -- reg2_data <= reg2_data_i;
 
@@ -265,7 +265,7 @@ architecture bhv of id is
                                 reg2_re <= Enable;
                                 reg1_rd <= rx;
                                 reg2_rd <= ry;
-                            when "00000" => --JR
+                            when "00000" => 
                                 case func7_5 is
                                     when "000" => -- JR
                                         instvalid <= Enable;

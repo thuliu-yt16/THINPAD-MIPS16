@@ -30,6 +30,8 @@ architecture bhv of ctrl is
     -- Stop = 1, NoStop = 0;
     if (stallreq_from_if_id_i = Stop) then
       stall <= "000011";
+    else
+      stall <= "000000";
     -- elsif (stallreq_from_id_ex_i = Stop) then
       -- stall <= "000011";
     -- elsif (stallreq_from_ex_mem_i = Stop) then

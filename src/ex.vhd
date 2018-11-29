@@ -1,7 +1,7 @@
 -- args: --ieee=synopsys -fexplicit
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+-- use ieee.numeric_std.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 use work.define.all;
@@ -99,31 +99,33 @@ architecture bhv of ex is
                         logicout <= reg1_data_i or reg2_data_i;
                     when EXE_SLL_OP =>
                         if(reg2_data_i = ZeroWord) then
-                            logicout <= std_logic_vector(shift_left(unsigned(reg1_data_i), 8));
-                            -- logicout <= std_logic_vector(to_bitvector(reg1_data_i) sll 8);
+                            --logicout <= std_logic_vector(shift_left(unsigned(reg1_data_i), 8));
+                            logicout <= to_stdlogicvector(to_bitvector(reg1_data_i) sll 8);
                         else
-                            logicout <= std_logic_vector(shift_left(unsigned(reg1_data_i), to_integer(unsigned(reg2_data_i))));
-                            -- logicout <= std_logic_vector(to_bitvector(reg1_data_i)conv_integer(reg2_data_i));
+                            -- logicout <= std_logic_vector(shift_left(unsigned(reg1_data_i), to_integer(unsigned(reg2_data_i))));
+                            logicout <= to_stdlogicvector(to_bitvector(reg1_data_i) sll conv_integer(reg2_data_i));
                         end if;
                     when EXE_SLT_OP =>
-                        if(to_integer(signed(reg1_data_i)) < to_integer(signed(reg2_data_i))) then
+                        if(conv_integer(signed(reg1_data_i)) < conv_integer(signed(reg2_data_i))) then
+                        -- if(to_integer(signed(reg1_data_i)) < to_integer(signed(reg2_data_i))) then
                             logicout <= OneWord;
                         else
                             logicout <= ZeroWord;
                         end if;
                     when EXE_SLTI_OP =>
-                        if(to_integer(signed(reg1_data_i)) < to_integer(signed(reg2_data_i))) then
+                        if(conv_integer(signed(reg1_data_i)) < conv_integer(signed(reg2_data_i))) then
+                        -- if(to_integer(signed(reg1_data_i)) < to_integer(signed(reg2_data_i))) then
                             logicout <= OneWord;
                         else
                             logicout <= ZeroWord;
                         end if;
                     when EXE_SRA_OP =>
                         if(reg2_data_i = ZeroWord) then
-                            logicout <= std_logic_vector(shift_right(signed(reg1_data_i), 8));
-                            -- logicout <= to_stdlogicvector(to_bitvector(reg1_data_i) sra 8);
+                            -- logicout <= std_logic_vector(shift_right(signed(reg1_data_i), 8));
+                            logicout <= to_stdlogicvector(to_bitvector(reg1_data_i) sra 8);
                         else
-                            logicout <= std_logic_vector(shift_right(signed(reg1_data_i), to_integer(unsigned(reg2_data_i))));
-                            -- logicout <= to_stdlogicvector(to_bitvector(reg1_data_i) sra conv_integer(reg2_data_i));
+                            -- logicout <= std_logic_vector(shift_right(signed(reg1_data_i), to_integer(unsigned(reg2_data_i))));
+                            logicout <= to_stdlogicvector(to_bitvector(reg1_data_i) sra conv_integer(reg2_data_i));
                         end if;
                     when EXE_SUBU_OP =>
                         logicout <= reg1_data_i - reg2_data_i;
