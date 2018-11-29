@@ -39,7 +39,7 @@ architecture bhv of cpu is
     -- if/id -> id/ex
     -- signal idex_stallsignal_o: std_logic;
     -- if/id -> ctrl
-    signal ifid_ctrl_stallreq_o: std_logic;
+    -- signal ifid_ctrl_stallreq_o: std_logic;
 
     -- id -> id/ex
     signal idex_aluop_o: std_logic_vector(7 downto 0); -- id_aluop_i
@@ -443,7 +443,7 @@ begin
     id_inst_o => id_inst_o,
 
     -- stallsignal_o => idex_stallsignal_o,
-    stallreq_o => ifid_ctrl_stallreq_o
+    stallreq_o => stallreq_from_if_id_i
     );
     id_component: id port map(
     rst => rst,

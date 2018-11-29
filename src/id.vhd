@@ -90,7 +90,7 @@ architecture bhv of id is
         -- reg1_data <= reg1_data_i;
         -- reg2_data <= reg2_data_i;
 
-        ID_PROCESS: process(rst, pc_i, inst_i)
+        ID_PROCESS: process(rst, pc_i, inst_i, reg1_data, reg2_data)
         variable op: std_logic_vector(4 downto 0);
         variable rx, ry, rz : STD_LOGIC_VECTOR(3 downto 0);
         variable imm3: std_logic_vector(2 downto 0);
@@ -199,7 +199,7 @@ architecture bhv of id is
                                 imm <= SXT(imm8, 16);
                                 if(reg1_data = ZeroWord) then
                                     branch_flag_o <= Enable;
-                                    branch_target_address_o <= cur_pc + imm;
+                                    branch_target_address_o <= cur_pc + SXT(imm8, 16);
                                 end if;
                             when "100" => -- MTSP
                                 aluop_o <= EXE_MTSP_OP;
@@ -308,7 +308,7 @@ architecture bhv of id is
                         instvalid <= Enable;
                         imm <= SXT(imm11, 16);
                         branch_flag_o <= Enable;
-                        branch_target_address_o <= cur_pc + imm;
+                        branch_target_address_o <= cur_pc + SXT(imm11, 16);
                     when "00100" => -- BEQZ
                         instvalid <= Enable;
                         reg1_re <= Enable;
@@ -316,7 +316,7 @@ architecture bhv of id is
                         imm <= SXT(imm8, 16);
                         if(reg1_data = ZeroWord) then
                             branch_flag_o <= Enable;
-                            branch_target_address_o <= cur_pc + imm;
+                            branch_target_address_o <= cur_pc + SXT(imm8, 16);
                         end if;
                     when "00101" => --BNEZ
                         instvalid <= Enable;
@@ -325,7 +325,7 @@ architecture bhv of id is
                         imm <= SXT(imm8, 16);
                         if(reg1_data /= ZeroWord) then
                             branch_flag_o <= Enable;
-                            branch_target_address_o <= cur_pc + imm;
+                            branch_target_address_o <= cur_pc + SXT(imm8, 16);
                         end if;
                     when "01101" => -- LI
                         aluop_o <= EXE_LI_OP;
