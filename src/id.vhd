@@ -86,8 +86,9 @@ architecture bhv of id is
         reg2_re_o <= reg2_re;
         reg1_rd_o <= reg1_rd;
         reg2_rd_o <= reg2_rd;
-        reg1_data <= reg1_data_i;
-        reg2_data <= reg2_data_i;
+        -- ÀûÓÃÅÔÂ·
+        -- reg1_data <= reg1_data_i;
+        -- reg2_data <= reg2_data_i;
 
         ID_PROCESS: process(rst, pc_i, inst_i)
         variable op: std_logic_vector(4 downto 0);
@@ -459,6 +460,36 @@ architecture bhv of id is
                 reg2_data_o <= imm;
             else
                 reg2_data_o <= ZeroWord;
+            end if;
+        end process;
+
+        REG1_FORWADING: process(rst, imm, reg1_data_i, reg1_re, reg1_rd, ex_wd_i, ex_we_i, ex_wdata_i, mem_we_i, mem_wd_i, mem_wdata_i)
+        begin
+            if(rst = Enable) then
+                reg1_data <= ZeroWord;
+            elsif (reg1_re = Enable and ex_we_i = Enable and reg1_rd = ex_wd_i) then
+                reg1_data <= ex_wdata_i;
+            elsif (reg1_re = Enable and mem_we_i = Enable and reg1_rd = mem_wd_i) then
+                reg1_data <= mem_wdata_i;
+            elsif (reg1_re = Enable) then
+                reg1_data <= reg1_data_i;
+            else
+                reg1_data <= ZeroWord;
+            end if;
+        end process;
+
+        REG2_FORWADING: process(rst, imm, reg2_data_i, reg2_re, reg2_rd, ex_wd_i, ex_we_i, ex_wdata_i, mem_we_i, mem_wd_i, mem_wdata_i)
+        begin
+            if(rst = Enable) then
+                reg2_data <= ZeroWord;
+            elsif (reg2_re = Enable and ex_we_i = Enable and reg2_rd = ex_wd_i) then
+                reg2_data <= ex_wdata_i;
+            elsif (reg2_re = Enable and mem_we_i = Enable and reg2_rd = mem_wd_i) then
+                reg2_data <= mem_wdata_i;
+            elsif (reg2_re = Enable) then
+                reg2_data <= reg2_data_i;
+            else
+                reg2_data <= ZeroWord;
             end if;
         end process;
     end bhv;
