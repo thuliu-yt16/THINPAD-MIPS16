@@ -10,8 +10,8 @@ entity ctrl is
   port(rst: in std_logic;
 
        stallreq_from_if_id_i: in std_logic;
-       stallreq_from_id_ex_i: in std_logic;
-       stallreq_from_ex_mem_i: in std_logic;
+       -- stallreq_from_id_ex_i: in std_logic;
+       -- stallreq_from_ex_mem_i: in std_logic;
        stallreq_from_id_i: in std_logic;
        stallreq_from_ex_i: in std_logic;
 
@@ -25,15 +25,15 @@ architecture bhv of ctrl is
   begin
   stall_o <= stall;
 
-  process(stallreq_from_if_id_i, stallreq_from_id_ex_i, stallreq_from_ex_mem_i)
+  process(stallreq_from_if_id_i) -- , stallreq_from_id_ex_i, stallreq_from_ex_mem_i)
   begin
     -- Stop = 1, NoStop = 0;
     if (stallreq_from_if_id_i = Stop) then
       stall <= "000011";
-    elsif (stallreq_from_id_ex_i = Stop) then
-      stall <= "000011";
-    elsif (stallreq_from_ex_mem_i = Stop) then
-      stall <= "000011";
+    -- elsif (stallreq_from_id_ex_i = Stop) then
+      -- stall <= "000011";
+    -- elsif (stallreq_from_ex_mem_i = Stop) then
+      -- stall <= "000011";
     end if;
   end process;
 end bhv;
