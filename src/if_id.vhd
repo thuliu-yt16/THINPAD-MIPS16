@@ -48,6 +48,7 @@ architecture bhv of if_id is
                     id_pc <= ZeroWord;
                     id_inst <= NopInst;
                     -- stallsignal <= NoStop;
+
                     stallreq <= NoStop;
                     if (stop_cnt = "01") then
                       stop_cnt <= "10";
@@ -59,6 +60,7 @@ architecture bhv of if_id is
                       stop_cnt <= "00";
                       stallreq <= NoStop;
                     end if;
+                    
                 elsif (stall(2) = NoStop) then
                     id_pc <= if_pc_i;
                     id_inst <= if_inst_i;

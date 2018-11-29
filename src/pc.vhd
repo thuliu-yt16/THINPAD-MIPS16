@@ -47,7 +47,7 @@ architecture bhv of pc is
         CE_PROCESS: process(clk)
         begin
             if(clk'event and clk = Enable) then
-                if (rst = Enable) then
+                if (rst = Enable or stall(0) = Stop) then
                     ce <= Disable;
                 else
                     ce <= Enable;
