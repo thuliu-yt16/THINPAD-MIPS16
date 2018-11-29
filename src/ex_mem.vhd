@@ -62,7 +62,17 @@ architecture bhv of ex_mem is
                     mem_aluop_o <= EXE_NOP_OP;
                     -- stallsignal_o <= NoStop;
                     -- stallreq_o <= NoStop;
-                else
+                elsif (stall(3) = Stop and stall(4) = NoStop) then
+                    mem_wd_o <= RegAddrZero;
+                    mem_we_o <= Disable;
+                    mem_wdata_o <= ZeroWord;
+                    mem_mem_addr_o <= ZeroWord;
+                    mem_mem_ce_o <= Disable;
+                    mem_mem_re_o <= Disable;
+                    mem_mem_we_o <= Disable;
+                    mem_mem_wdata_o <= ZeroWord;
+                    mem_aluop_o <= EXE_NOP_OP;
+                elsif (stall(3) = NoStop) then
                     mem_wd_o <= ex_wd_i;
                     mem_we_o <= ex_we_i;
                     mem_wdata_o <= ex_wdata_i;
