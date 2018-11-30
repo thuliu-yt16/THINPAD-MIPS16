@@ -72,6 +72,8 @@ _ngo/
 _xmsgs/
 isim/
 *.*
+!*.s
+!*.bin
 !*.vhd
 !*.png
 !*.xlsx
