@@ -40,8 +40,11 @@ entity mem is
 end mem;
 
 architecture bhv of mem is
+    signal ce: std_logic;
     begin
-        process(rst, mem_data_i, mem_addr_i, mem_ce_i, mem_we_i, mem_re_i, mem_wdata_i, wd_i, we_i, wdata_i, aluop_i)
+        mem_ce_o <= ce;
+        -- process(rst, mem_data_i, mem_addr_i, mem_ce_i, mem_we_i, mem_re_i, mem_wdata_i, wd_i, we_i, wdata_i, aluop_i)
+        process(rst, wd_i, we_i, wdata_i, mem_re_i, mem_we_i, mem_addr_i, mem_wdata_i, mem_data_i)
         begin
             if (rst = Enable) then
                 wd_o <= RegAddrZero;
@@ -50,26 +53,48 @@ architecture bhv of mem is
 
                 mem_we_o <= Disable;
                 mem_re_o <= Disable;
-                mem_ce_o <= Disable;
                 mem_wdata_o <= ZeroWord;
                 mem_addr_o <= ZeroWord;
+                ce <= Disable;
             else
-                wd_o <= wd_i;
-                we_o <= we_i;
+                we_o <= Disable;
+                wd_o <= RegAddrZero;
+                wdata_o <= ZeroWord;
 
-                mem_we_o <= mem_we_i;
                 mem_re_o <= mem_re_i;
-                mem_ce_o <= mem_ce_i;
-                mem_wdata_o <= mem_wdata_i;
-                mem_addr_o <= mem_addr_i;
-                case aluop_i is
-                    when EXE_LW_OP | EXE_LW_SP_OP=>
-                        wdata_o <= mem_data_i;
-                    when EXE_SW_OP | EXE_SW_RS_OP | EXE_SW_SP_OP =>
-                        wdata_o <= ZeroWord;
-                    when others =>
-                        wdata_o <= wdata_i;
-                end case;
+                mem_we_o <= mem_we_i;
+                if(mem_re_i = Enable) then
+                    we_o <= we_i;
+                    wd_o <= wd_i;
+                    wdata_o <= mem_data_i;
+                    mem_addr_o <= mem_addr_i;
+                    ce <= Enable;
+                elsif(mem_we_i = Enable) then
+                    mem_addr_o <= mem_addr_i;
+                    mem_wdata_o <= mem_wdata_i;
+                    ce <= Enable;
+                else
+                    we_o <= we_i;
+                    wd_o <= wd_i;
+                    wdata_o <= wdata_i;
+                    ce <= Disable;
+                end if;
+                -- wd_o <= wd_i;
+                -- we_o <= we_i;
+                --
+                -- mem_we_o <= mem_we_i;
+                -- mem_re_o <= mem_re_i;
+                -- mem_ce_o <= mem_ce_i;
+                -- mem_wdata_o <= mem_wdata_i;
+                -- mem_addr_o <= mem_addr_i;
+                -- case aluop_i is
+                --     when EXE_LW_OP | EXE_LW_SP_OP=>
+                --         wdata_o <= mem_data_i;
+                --     when EXE_SW_OP | EXE_SW_RS_OP | EXE_SW_SP_OP =>
+                --         wdata_o <= ZeroWord;
+                --     when others =>
+                --         wdata_o <= wdata_i;
+                -- end case;
             end if;
         end process;
     end bhv;

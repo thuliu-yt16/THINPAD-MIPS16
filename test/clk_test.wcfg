@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="D:/THINPAD-MIPS16/inst_test_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="define" />
+            <top_module name="inst_test" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="16" />
+   <wvobject fp_name="/inst_test/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/data_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data_ready</obj_property>
+      <obj_property name="ObjectShortName">data_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/tbre" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tbre</obj_property>
+      <obj_property name="ObjectShortName">tbre</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/tsre" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tsre</obj_property>
+      <obj_property name="ObjectShortName">tsre</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram1_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ram1_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ram1_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/rdn" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rdn</obj_property>
+      <obj_property name="ObjectShortName">rdn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/wrn" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wrn</obj_property>
+      <obj_property name="ObjectShortName">wrn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/led" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">led[15:0]</obj_property>
+      <obj_property name="ObjectShortName">led[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram1_oe" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ram1_oe</obj_property>
+      <obj_property name="ObjectShortName">ram1_oe</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram1_we" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ram1_we</obj_property>
+      <obj_property name="ObjectShortName">ram1_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram1_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ram1_en</obj_property>
+      <obj_property name="ObjectShortName">ram1_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/ram1_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ram1_addr[17:0]</obj_property>
+      <obj_property name="ObjectShortName">ram1_addr[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/clk_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/clk_2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_2</obj_property>
+      <obj_property name="ObjectShortName">clk_2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/inst_test/uut/clk_4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_4</obj_property>
+      <obj_property name="ObjectShortName">clk_4</obj_property>
+   </wvobject>
+</wave_config>

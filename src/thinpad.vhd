@@ -115,31 +115,49 @@ rdn: out std_logic;
 wrn: out std_logic
 );
 end component;
-
-component ram
-port(rst: in std_logic;
-clk: in std_logic;
-we_i: in std_logic;
-re_i: in std_logic;
-ce_i: in std_logic;
-addr_i: in std_logic_vector(15 downto 0);
-data_i: in std_logic_vector(15 downto 0);
--- sel_i: in std_logic_vector(2 downto 0);
-data_o: out std_logic_vector(15 downto 0);
-
-ram1_oe: out std_logic;
-ram1_we: out std_logic;
-ram1_en: out std_logic;
-ram1_data: inout std_logic_vector(15 downto 0);
-ram1_addr: out std_logic_vector(17 downto 0)
-);
-
-end component;
+--
+-- component ram
+-- port(rst: in std_logic;
+-- clk: in std_logic;
+-- we_i: in std_logic;
+-- re_i: in std_logic;
+-- ce_i: in std_logic;
+-- addr_i: in std_logic_vector(15 downto 0);
+-- data_i: in std_logic_vector(15 downto 0);
+-- -- sel_i: in std_logic_vector(2 downto 0);
+-- data_o: out std_logic_vector(15 downto 0);
+--
+-- ram1_oe: out std_logic;
+-- ram1_we: out std_logic;
+-- ram1_en: out std_logic;
+-- ram1_data: inout std_logic_vector(15 downto 0);
+-- ram1_addr: out std_logic_vector(17 downto 0)
+-- );
+--
+-- end component;
+signal clk_2: std_logic := '0';
+signal clk_4: std_logic := '0';
 begin
     rst_reversed <= not(rst);
     rst_cpu <= rst_reversed or not(inst_ready);
+
+    CLK2:process(clk)
+    begin
+        if(clk'event and clk='1')then
+            clk_2 <= not clk_2;
+        end if;
+    end process;
+
+    --
+    -- CLK4:process(clk_2)
+    -- begin
+    --     if(clk_2'event and clk_2 = '1')then
+    --         clk_4 <= not clk_4;
+    --     end if;
+    -- end process;
+
     mcpu: cpu port map(
-    clk => clk,
+    clk => clk_2,
     rst => rst_cpu,
     led => led,
 
@@ -177,7 +195,7 @@ begin
     --     ram1_addr => ram1_addr);
     mram: ram_new port map(
     rst => rst_reversed,
-    clk => clk,
+    clk => clk_2,
 
     ce_id => rom_ce_o,
     addr_id => rom_addr_o,
