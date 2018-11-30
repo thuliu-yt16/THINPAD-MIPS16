@@ -131,8 +131,10 @@ architecture bhv of cpu is
     signal stallreq_from_if_id_i: std_logic;
     -- signal stallreq_from_id_ex_i: std_logic;
     -- signal stallreq_from_ex_mem_i: std_logic;
+    signal stallreq_from_if_i: std_logic;
     signal stallreq_from_ex_i: std_logic;
     signal stallreq_from_id_i: std_logic;
+    signal stallreq_from_mem_i: std_logic;
     signal stall: std_logic_vector(5 downto 0);
     signal flush: std_logic;
 
@@ -233,6 +235,7 @@ we_i: in std_logic;
 wd_i: in std_logic_vector(3 downto 0);
 wdata_i: in std_logic_vector(15 downto 0);
 
+LED: out std_logic_vector(15 downto 0);
 -- ID ��
 rdata1_o: out std_logic_vector(15 downto 0);
 rdata2_o: out std_logic_vector(15 downto 0)
@@ -407,8 +410,10 @@ port(rst: in std_logic;
      stallreq_from_if_id_i: in std_logic;
      -- stallreq_from_id_ex_i: in std_logic;
      -- stallreq_from_ex_mem_i: in std_logic;
+     stallreq_from_if_i: in std_logic;
      stallreq_from_id_i: in std_logic;
      stallreq_from_ex_i: in std_logic;
+     stallreq_from_mem_i: in std_logic;
 
      stall_o: out std_logic_vector(5 downto 0);
      flush_o: out std_logic
@@ -417,6 +422,9 @@ end component;
 
 begin
     rom_addr_o <= ifid_pc_o;
+
+    stallreq_from_if_i <= not rom_ready_i;
+    stallreq_from_mem_i <= not ram_ready_i;
     pc_component: pc port map(
     stall => stall,
     flush => flush,
@@ -597,8 +605,10 @@ begin
     stallreq_from_if_id_i => stallreq_from_if_id_i,
     -- stallreq_from_id_ex_i => stallreq_from_id_ex_i,
     -- stallreq_from_ex_mem_i => stallreq_from_ex_mem_i,
+    stallreq_from_if_i => stallreq_from_if_i,
     stallreq_from_ex_i => stallreq_from_ex_i,
     stallreq_from_id_i => stallreq_from_id_i,
+    stallreq_from_mem_i => stallreq_from_mem_i,
     stall_o => stall,
     flush_o => flush);
     reg_component: reg port map(
@@ -612,6 +622,8 @@ begin
     we_i => reg_we_o,
     wd_i => reg_wd_o,
     wdata_i => reg_wdata_o,
+    
+    LED => led,
 
     rdata1_o => id_rdata1_o,
     rdata2_o => id_rdata2_o);

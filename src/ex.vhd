@@ -44,6 +44,7 @@ end ex;
 architecture bhv of ex is
     signal logicout: std_logic_vector(15 downto 0);
     begin
+        stallreq <= NoStop;
         aluop_o <= aluop_i;
         ARITH_PROCESS: process(rst, alusel_i, aluop_i, inst_i, reg1_data_i, reg2_data_i, wd_i, we_i)
         begin

@@ -492,4 +492,22 @@ architecture bhv of id is
                 reg2_data <= ZeroWord;
             end if;
         end process;
+
+        LOAD_STALL: process(ex_aluop_i,ex_wd_i,reg1_rd,reg1_re,reg2_rd,reg2_re)
+        variable pre_inst_is_load : STD_LOGIC;
+        begin
+            if(ex_aluop_i = EXE_LW_OP or ex_aluop_i = EXE_LW_SP_Op) then
+                pre_inst_is_load := '1';
+            else
+                pre_inst_is_load := '0';
+            end if;
+            stallreq <= NoStop;
+            if(pre_inst_is_load = '1' and ex_wd_i = reg1_rd and reg1_re = Enable) then
+                stallreq <= Stop;
+            end if;
+            
+            if(pre_inst_is_load = '1' and ex_wd_i = reg2_rd and reg2_re = Enable) then
+                stallreq <= Stop;
+            end if;
+        end process;
     end bhv;

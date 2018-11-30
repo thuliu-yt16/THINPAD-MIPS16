@@ -30,7 +30,11 @@ architecture bhv of mem_wb is
                     wb_wd_o <= RegAddrZero;
                     wb_we_o <= Disable;
                     wb_wdata_o <= ZeroWord;
-                else
+                elsif(stall(4) = Stop and stall(5) = NoStop) then
+                    wb_wd_o <= RegAddrZero;
+                    wb_we_o <= Disable;
+                    wb_wdata_o <= ZeroWord;
+                elsif(stall(4) = NoStop) then
                     wb_wd_o <= mem_wd_i;
                     wb_we_o <= mem_we_i;
                     wb_wdata_o <= mem_wdata_i;

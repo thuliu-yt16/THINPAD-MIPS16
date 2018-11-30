@@ -8,14 +8,20 @@ entity thinpad is
 port(
     rst: in std_logic;
     clk: in std_logic;
+    data_ready: in std_logic;
 
+    tbre: in std_logic;
+    tsre: in std_logic;
     led : out std_logic_vector(15 downto 0);
 
-    ram2_oe: out std_logic;
-    ram2_we: out std_logic;
-    ram2_en: out std_logic;
-    ram2_data: inout std_logic_vector(15 downto 0);
-    ram2_addr: out std_logic_vector(17 downto 0)
+    ram1_oe: out std_logic;
+    ram1_we: out std_logic;
+    ram1_en: out std_logic;
+    ram1_data: inout std_logic_vector(15 downto 0);
+    ram1_addr: out std_logic_vector(17 downto 0);
+
+    rdn: out std_logic;
+    wrn: out std_logic
 );
 
 end thinpad;
@@ -37,15 +43,24 @@ signal ram_wdata_o: std_logic_vector(15 downto 0);
 signal ram_ce_o: std_logic;
 signal ram_re_o: std_logic;
 
+signal ce_id:  std_logic;
+signal addr_id: std_logic_vector (15 downto 0);
+signal inst_id: std_logic_vector (15 downto 0);
+signal inst_ready: std_logic;
+signal rom_ready_o: std_logic;
+
+signal rst_cpu: std_logic;
 component cpu
     port(clk: in std_logic;
         rst: in std_logic;
 
+
+        -- inst
+        rom_ready_i : in std_logic;
+
         led : out std_logic_vector(15 downto 0);
 
-        rom_ready_i : in std_logic; -- if ready or not.
         rom_data_i : in std_logic_vector(15 downto 0); -- ȡ��ָ��
-
         rom_addr_o : out std_logic_vector(15 downto 0); -- ָ����ַ
         rom_ce_o : out std_logic; -- ָ���洢��ʹ��
 
@@ -60,71 +75,136 @@ component cpu
         ram_wdata_o : out std_logic_vector(15 downto 0);
         ram_ce_o : out std_logic
         );
+    end component;
+    component inst_rom
+    port(addr_i: in std_logic_vector(15 downto 0); -- Ҫȡָ���ĵ�ַ
+    ce_i: in std_logic; -- оƬʹ��
+    inst_o: out std_logic_vector(15 downto 0)); -- ��ȡָ��
 end component;
-component inst_rom
-  port(addr_i: in std_logic_vector(15 downto 0); -- Ҫȡָ���ĵ�ַ
-       ce_i: in std_logic; -- оƬʹ��
-       inst_o: out std_logic_vector(15 downto 0)); -- ��ȡָ��
+
+component ram_new
+port ( clk : in std_logic;
+rst : in std_logic;
+
+--id
+ce_id : in  std_logic;
+addr_id : in  std_logic_vector (15 downto 0);
+inst_id : out  std_logic_vector (15 downto 0);
+inst_ready : out std_logic;
+rom_ready_o : out std_logic;
+
+--mem
+re_i : in  std_logic;
+we_i : in  std_logic;
+addr_i : in  std_logic_vector (15 downto 0);
+data_i : in  std_logic_vector (15 downto 0);
+data_o : out  std_logic_vector (15 downto 0);
+ram_ready_o : out std_logic;
+
+--ram1
+data_ready: in std_logic;
+ram1_addr: out std_logic_vector(17 downto 0);
+ram1_data: inout std_logic_vector(15 downto 0);
+ram1_oe: out std_logic;
+ram1_we: out std_logic;
+ram1_en: out std_logic;
+
+tbre: in std_logic;
+tsre: in std_logic;
+rdn: out std_logic;
+wrn: out std_logic
+);
 end component;
 
 component ram
-  port(rst: in std_logic;
-        clk: in std_logic;
-       we_i: in std_logic;
-       re_i: in std_logic;
-       ce_i: in std_logic;
-       addr_i: in std_logic_vector(15 downto 0);
-       data_i: in std_logic_vector(15 downto 0);
-       -- sel_i: in std_logic_vector(2 downto 0);
-       data_o: out std_logic_vector(15 downto 0);
+port(rst: in std_logic;
+clk: in std_logic;
+we_i: in std_logic;
+re_i: in std_logic;
+ce_i: in std_logic;
+addr_i: in std_logic_vector(15 downto 0);
+data_i: in std_logic_vector(15 downto 0);
+-- sel_i: in std_logic_vector(2 downto 0);
+data_o: out std_logic_vector(15 downto 0);
 
-        ram2_oe: out std_logic;
-        ram2_we: out std_logic;
-        ram2_en: out std_logic;
-        ram2_data: inout std_logic_vector(15 downto 0);
-        ram2_addr: out std_logic_vector(17 downto 0)
-       );
+ram1_oe: out std_logic;
+ram1_we: out std_logic;
+ram1_en: out std_logic;
+ram1_data: inout std_logic_vector(15 downto 0);
+ram1_addr: out std_logic_vector(17 downto 0)
+);
 
 end component;
 begin
     rst_reversed <= not(rst);
+    rst_cpu <= rst_reversed or not(inst_ready);
     mcpu: cpu port map(
-        clk => clk,
-        rst => rst_reversed,
-        led => led,
+    clk => clk,
+    rst => rst_cpu,
+    led => led,
 
-        rom_ready_i => rom_ready_i,
-        rom_data_i => rom_data_i,
-        rom_addr_o => rom_addr_o,
-        rom_ce_o => rom_ce_o,
+    rom_ready_i => rom_ready_i,
+    rom_data_i => rom_data_i,
+    rom_addr_o => rom_addr_o,
+    rom_ce_o => rom_ce_o,
 
-        ram_ready_i => ram_ready_i,
-        ram_rdata_i => ram_rdata_i,
-        ram_we_o => ram_we_o,
-        ram_re_o => ram_re_o,
-        ram_addr_o => ram_addr_o,
-        ram_wdata_o => ram_wdata_o,
-        ram_ce_o => ram_ce_o);
-    mrom: inst_rom port map(
-        addr_i => rom_addr_o,
-        ce_i => rom_ce_o,
-        inst_o => rom_data_i);
-    mram: ram port map(
-        rst => rst_reversed,
-        clk => clk,
-        we_i => ram_we_o,
-        re_i => ram_re_o,
-        ce_i => ram_ce_o,
-        addr_i => ram_addr_o,
-        data_i => ram_wdata_o,
+    ram_ready_i => ram_ready_i,
+    ram_rdata_i => ram_rdata_i,
+    ram_we_o => ram_we_o,
+    ram_re_o => ram_re_o,
+    ram_addr_o => ram_addr_o,
+    ram_wdata_o => ram_wdata_o,
+    ram_ce_o => ram_ce_o);
+    -- mrom: inst_rom port map(
+    -- addr_i => rom_addr_o,
+    -- ce_i => rom_ce_o,
+    -- inst_o => rom_data_i);
 
-        data_o => ram_rdata_i,
-        ram2_oe => ram2_oe,
-        ram2_we => ram2_we,
-        ram2_en => ram2_en,
-        ram2_data => ram2_data,
-        ram2_addr => ram2_addr);
+    -- mram: ram port map(
+    --     rst => rst_reversed,
+    --     clk => clk,
+    --     we_i => ram_we_o,
+    --     re_i => ram_re_o,
+    --     ce_i => ram_ce_o,
+    --     addr_i => ram_addr_o,
+    --     data_i => ram_wdata_o,
+    --
+    --     data_o => ram_rdata_i,
+    --     ram1_oe => ram1_oe,
+    --     ram1_we => ram1_we,
+    --     ram1_en => ram1_en,
+    --     ram1_data => ram1_data,
+    --     ram1_addr => ram1_addr);
+    mram: ram_new port map(
+    rst => rst_reversed,
+    clk => clk,
 
+    ce_id => rom_ce_o,
+    addr_id => rom_addr_o,
+    inst_id => rom_data_i,
+    inst_ready => inst_ready,
+    rom_ready_o => rom_ready_i,
 
+    we_i => ram_we_o,
+    re_i => ram_re_o,
+    addr_i => ram_addr_o,
+    data_i => ram_wdata_o,
 
+    data_o => ram_rdata_i,
+
+    ram1_oe => ram1_oe,
+    ram1_we => ram1_we,
+    ram1_en => ram1_en,
+
+    ram1_data => ram1_data,
+    ram1_addr => ram1_addr,
+
+    ram_ready_o => ram_ready_i,
+    data_ready => data_ready,
+
+    tbre => tbre,
+    tsre => tsre,
+    rdn => rdn,
+    wrn => wrn
+    );
 end bhv;

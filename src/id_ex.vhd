@@ -62,14 +62,14 @@ architecture bhv of id_ex is
                     ex_inst_o <= NopInst;
                     -- stallreq_o <= NoStop;
                     -- stallsignal_o <= NoStop;
-                -- elsif (stall(2) = Stop and stall(3) = NoStop) then
-                --     ex_alusel_o <= EXE_RES_NOP;
-                --     ex_aluop_o <= EXE_NOP_OP;
-                --     ex_reg1_data_o <= ZeroWord;
-                --     ex_reg2_data_o <= ZeroWord;
-                --     ex_wd_o <= RegAddrZero;
-                --     ex_we_o <= Disable;
-                --     ex_inst_o <= NopInst;
+                elsif(stall(2) = Stop and stall(3) = NoStop) then
+                    ex_alusel_o <= EXE_RES_NOP;
+                    ex_aluop_o <= EXE_NOP_OP;
+                    ex_reg1_data_o <= ZeroWord;
+                    ex_reg2_data_o <= ZeroWord;
+                    ex_wd_o <= RegAddrZero;
+                    ex_we_o <= Disable;
+                    ex_inst_o <= NopInst;
                 elsif (stall(2) = NoStop) then
                     ex_aluop_o <= id_aluop_i;
                     ex_alusel_o <= id_alusel_i;
