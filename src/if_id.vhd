@@ -101,6 +101,27 @@ architecture bhv of if_id is
                 elsif (stall(1) = NoStop) then
                     id_pc <= if_pc_i;
                     id_inst <= if_inst_i;
+                    -- -- stallsignal <= NoStop;
+                    -- stallreq <= NoStop;
+                    -- stop_cnt <= "00";
+                    --
+                    -- if (if_inst_i(15 downto 11) = "11011" -- sw
+                    -- or if_inst_i(15 downto 11) = "11010" -- SW_SP
+                    -- or if_inst_i(15 downto 8) = "01100010" -- SW_RS
+                    -- ) then
+                    --     stop_cnt <= "01";
+                    --     stallreq <= Stop;
+                    -- end if;
+
+                    -- if (if_inst_i(15 downto 11) = "00010" -- B
+                    -- or if_inst_i(15 downto 11) = "00100" -- BEQZ
+                    -- or if_inst_i(15 downto 11) = "00101" -- BNEZ
+                    -- or if_inst_i(15 downto 8) = "01100000" -- BTEQZ
+                    -- or (if_inst_i(15 downto 11) = "11101" and if_inst_i(7 downto 5) = "000") -- JR
+                    -- ) then
+                    --   stallreq <= Stop;
+                    -- end if;
+
                 end if;
             end if;
         end process;
