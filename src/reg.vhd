@@ -22,6 +22,7 @@ entity reg is
     wd_i: in std_logic_vector(3 downto 0);
     wdata_i: in std_logic_vector(15 downto 0);
 
+    LED: out std_logic_vector(15 downto 0);
     -- ID ��
     rdata1_o: out std_logic_vector(15 downto 0);
     rdata2_o: out std_logic_vector(15 downto 0)
@@ -36,9 +37,18 @@ architecture bhv of reg is
     signal rdata2: std_logic_vector(15 downto 0);
 
     begin
+        LED(15 downto 14) <= regs(7)(1 downto 0);
+        LED(13 downto 12) <= regs(6)(1 downto 0);
+        LED(11 downto 10) <= regs(5)(1 downto 0);
+        LED(9 downto 8) <= regs(4)(1 downto 0);
+        LED(7 downto 6) <= regs(3)(1 downto 0);
+        LED(5 downto 4) <= regs(2)(1 downto 0);
+        LED(3 downto 2) <= regs(1)(1 downto 0);
+        LED(1 downto 0) <= regs(0)(1 downto 0);
+
+
         rdata1_o <= rdata1;
         rdata2_o <= rdata2;
-
         WRITE_PROCESS: process(clk)
         begin
             if(clk'event and clk = Enable) then

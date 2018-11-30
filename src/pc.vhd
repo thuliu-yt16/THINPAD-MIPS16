@@ -18,6 +18,7 @@ entity pc is
     branch_target_address_i: std_logic_vector(15 downto 0);
     -- new_pc_i: in std_logic_vector(15 downto 0);
 
+    -- LED: out std_logic_vector(15 downto 0);
     pc_o: out std_logic_vector(15 downto 0);
     ce_o: out std_logic
     );
@@ -29,6 +30,8 @@ architecture bhv of pc is
     begin
         ce_o <= ce;
         pc_o <= pc;
+        -- LED <= pc;
+
 
         -- TODO ������ת
         PC_PROCESS: process(clk)

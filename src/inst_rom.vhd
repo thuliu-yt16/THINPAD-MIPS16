@@ -13,7 +13,6 @@ entity inst_rom is
 
        inst_o: out std_logic_vector(15 downto 0)); -- ��ȡָ��
 end inst_rom;
-
 architecture bhv of inst_rom is
 type InstructionArray is array(0 to 1000) of std_logic_vector(15 downto 0);
 signal insts: InstructionArray := (
@@ -25,11 +24,15 @@ signal insts: InstructionArray := (
      -- "1110100000101010", -- CMP R0 R1, R0 == R1 ? T = 0 : T = 1
      -- "1110101101000000", -- MFPC R3, R3 = PC
      -- "0111110001100000", -- MOVE R4 R3, R4 = R3
-     "0100100001000000", -- ADDIU R0 1000000
-     "0100100100010000", -- ADDIU R1 10000
-     "1110000000101011", -- R2 = R0 - R1
-     "0011000100001011", -- R1 = R0 >> 2
-     NopInst,
+     -- "0100100001000000", -- ADDIU R0 1000000
+     -- "0100100100010000", -- ADDIU R1 10000
+     -- "1110000000101011", -- R2 = R0 - R1
+     -- "0011000100001011", -- R1 = R0 >> 2
+     "0100100000000111", -- ADDIU R0 111
+     "1101100100000001", -- SW R1 R0 1; MEM[R1 + 1] <- R0; MEM[1] <- 00111
+     "0100100000000001", -- ADDIU R0 1
+     "1101100100000010", -- SW R1 R0 2; MEM[R1 + 2] <- R0; MEM[2] <- 01000
+     "1001100101000001", -- LW R1 R2 1
      others => NopInst
     );
  begin
