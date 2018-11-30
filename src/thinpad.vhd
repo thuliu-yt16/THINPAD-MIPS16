@@ -1,3 +1,4 @@
+-- args: --ieee=synopsys -fexplicit
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -8,10 +9,11 @@ entity thinpad is
 port(
     rst: in std_logic;
     clk: in std_logic;
-    data_ready: in std_logic;
 
+    data_ready: in std_logic;
     tbre: in std_logic;
     tsre: in std_logic;
+
     led : out std_logic_vector(15 downto 0);
 
     ram1_oe: out std_logic;
@@ -54,12 +56,10 @@ component cpu
     port(clk: in std_logic;
         rst: in std_logic;
 
+        led : out std_logic_vector(15 downto 0);
 
         -- inst
         rom_ready_i : in std_logic;
-
-        led : out std_logic_vector(15 downto 0);
-
         rom_data_i : in std_logic_vector(15 downto 0); -- ȡ��ָ��
         rom_addr_o : out std_logic_vector(15 downto 0); -- ָ����ַ
         rom_ce_o : out std_logic; -- ָ���洢��ʹ��

@@ -9,7 +9,7 @@ use work.define.all;
 entity ctrl is
   port(rst: in std_logic;
 
-       stallreq_from_if_id_i: in std_logic;
+       -- stallreq_from_if_id_i: in std_logic;
        stallreq_from_if_i: in std_logic;
        -- stallreq_from_id_ex_i: in std_logic;
        -- stallreq_from_ex_mem_i: in std_logic;
