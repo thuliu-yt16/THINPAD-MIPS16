@@ -45,11 +45,7 @@ signal ram_wdata_o: std_logic_vector(15 downto 0);
 signal ram_ce_o: std_logic;
 signal ram_re_o: std_logic;
 
-signal ce_id:  std_logic;
-signal addr_id: std_logic_vector (15 downto 0);
-signal inst_id: std_logic_vector (15 downto 0);
 signal inst_ready: std_logic;
-signal rom_ready_o: std_logic;
 
 signal rst_cpu: std_logic;
 component cpu
@@ -157,7 +153,7 @@ begin
     -- end process;
 
     mcpu: cpu port map(
-    clk => clk_2,
+    clk => clk,
     rst => rst_cpu,
     led => led,
 
@@ -195,7 +191,7 @@ begin
     --     ram1_addr => ram1_addr);
     mram: ram_new port map(
     rst => rst_reversed,
-    clk => clk_2,
+    clk => clk,
 
     ce_id => rom_ce_o,
     addr_id => rom_addr_o,
