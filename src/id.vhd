@@ -78,7 +78,7 @@ architecture bhv of id is
     signal reg1_data, reg2_data, imm: std_logic_vector(15 downto 0);
     signal reg1_rd, reg2_rd: std_logic_vector(3 downto 0);
     -- signal rx, ry, rz: std_logic_vector(3 downto 0);
-    signal op: std_logic_vector(15 downto 11);
+    -- signal op: std_logic_vector(15 downto 11);
 
     begin
         inst_o <= inst_i;
@@ -505,7 +505,7 @@ architecture bhv of id is
             if(pre_inst_is_load = '1' and ex_wd_i = reg1_rd and reg1_re = Enable) then
                 stallreq <= Stop;
             end if;
-            
+
             if(pre_inst_is_load = '1' and ex_wd_i = reg2_rd and reg2_re = Enable) then
                 stallreq <= Stop;
             end if;
