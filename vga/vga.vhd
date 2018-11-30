@@ -18,56 +18,64 @@ end entity;
 architecture bhv of vga is
   signal w: Integer := 0;
   signal l: Integer := 0;
+  signal clk_2: std_logic := '0';
+
   begin
+      clk2: process(clk)
+      begin
+          if(clk'event and clk = '1') then
+              clk_2 <= not(clk_2);
+          end if;
+      end process;
 
-    set_signal: process(w, l)
-    begin
-      if (w > 655 and w < 753) then
-        H <= '0';
-      else
-        H <= '1';
-      end if;
+      set_signal: process(w, l)
+      begin
+          if (w > 655 and w < 752) then
+              H <= '0';
+          else
+              H <= '1';
+          end if;
 
-      if (l = 490 or l = 491) then
-        V <= '0';
-      else
-        V <= '1';
-      end if;
-    end process;
+          if (l = 490 or l = 491) then
+              V <= '0';
+          else
+              V <= '1';
+          end if;
+      end process;
 
-    set_rgb: process(w, l)
-    begin
-      if (w < 640 and l < 480) then
-        R <= "000";
-        G <= "000";
-        B <= "111";
-      else
-        R <= "000";
-        G <= "000";
-        B <= "000";
-      end if;
+      set_rgb: process(w, l)
+      begin
+          if (w < 640 and l < 480) then
+              R <= "000";
+              G <= "000";
+              B <= "111";
+          else
+              R <= "000";
+              G <= "000";
+              B <= "000";
+          end if;
 
-    end process;
+      end process;
 
-    w_update: process(clk)
-    begin
-      if (rising_edge(clk)) then
-        if (w = 799) then
-          w <= 0;
-        else
-          w <= w + 1;
-        end if;
-      end if;
-    end process;
+      w_update: process(clk_2)
+      begin
+          if (rising_edge(clk_2)) then
+              if (w = 799) then
+                  w <= 0;
+              else
+                  w <= w + 1;
+              end if;
+          end if;
+      end process;
 
-    l_update: process(clk)
-    begin
-      if (rising_edge(clk)) then
-        if (w = 799 and l = 524) then
-          l <= 0;
-        elsif (w = 799) then
-          l <= l + 1;
-        end if;
-      end if;
-    end process;
-end bhv;
+      l_update: process(clk_2)
+      begin
+          if (rising_edge(clk_2)) then
+              if (w = 799 and l = 524) then
+                  l <= 0;
+              elsif (w = 799) then
+                  l <= l + 1;
+              end if;
+          end if;
+      end process;
+  end bhv;
