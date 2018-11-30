@@ -83,12 +83,12 @@ architecture bhv of ex is
                         mem_ce_o <= Enable;
                         mem_re_o <= Enable;
                         mem_addr_o <= reg1_data_i + reg2_data_i;
-                        stallreq <= Stop;
+                        -- stallreq <= Stop;
                     when EXE_LW_SP_OP =>
                         mem_ce_o <= Enable;
                         mem_re_o <= Enable;
                         mem_addr_o <= reg1_data_i + reg2_data_i;
-                        stallreq <= Stop;
+                        -- stallreq <= Stop;
                     when EXE_MFIH_OP =>
                         logicout <= reg1_data_i;
                     when EXE_MFPC_OP =>

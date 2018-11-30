@@ -15,24 +15,24 @@ entity if_id is
     if_inst_i: in std_logic_vector(15 downto 0);
 
     id_pc_o: out std_logic_vector(15 downto 0);
-    id_inst_o: out std_logic_vector(15 downto 0);
+    id_inst_o: out std_logic_vector(15 downto 0)
 
     -- stallsignal_o: out std_logic;
-    stallreq_o: out std_logic
+    -- stallreq_o: out std_logic
     );
 end if_id;
 
 architecture bhv of if_id is
 
-    signal stop_cnt: std_logic_vector(1 downto 0);
+    -- signal stop_cnt: std_logic_vector(1 downto 0);
     signal id_pc: std_logic_vector(15 downto 0);
     signal id_inst: std_logic_vector(15 downto 0);
-    signal stallreq: std_logic;
-    signal stallsignal: std_logic;
+    -- signal stallreq: std_logic;
+    -- signal stallsignal: std_logic;
     begin
         id_pc_o <= id_pc;
         id_inst_o <= id_inst;
-        stallreq_o <= stallreq;
+        -- stallreq_o <= stallreq;
         -- stallsignal_o <= stallsignal;
 
         -- process(clk)

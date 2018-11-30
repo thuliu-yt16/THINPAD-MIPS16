@@ -128,7 +128,7 @@ architecture bhv of cpu is
     signal pc_branch_target_address_o: std_logic_vector(15 downto 0); -- branch_target_address_i
 
     --ctrl
-    signal stallreq_from_if_id_i: std_logic;
+    -- signal stallreq_from_if_id_i: std_logic;
     -- signal stallreq_from_id_ex_i: std_logic;
     -- signal stallreq_from_ex_mem_i: std_logic;
     signal stallreq_from_if_i: std_logic;
@@ -165,10 +165,10 @@ if_pc_i: in std_logic_vector(15 downto 0);
 if_inst_i: in std_logic_vector(15 downto 0);
 
 id_pc_o: out std_logic_vector(15 downto 0);
-id_inst_o: out std_logic_vector(15 downto 0);
+id_inst_o: out std_logic_vector(15 downto 0)
 
 -- stallsignal_o: out std_logic;
-stallreq_o: out std_logic
+-- stallreq_o: out std_logic
 );
 end component;
 
@@ -407,7 +407,7 @@ end component;
 component ctrl
 port(rst: in std_logic;
 
-     stallreq_from_if_id_i: in std_logic;
+     -- stallreq_from_if_id_i: in std_logic;
      -- stallreq_from_id_ex_i: in std_logic;
      -- stallreq_from_ex_mem_i: in std_logic;
      stallreq_from_if_i: in std_logic;
@@ -448,10 +448,10 @@ begin
     if_inst_i => rom_data_i,
 
     id_pc_o => id_pc_o,
-    id_inst_o => id_inst_o,
+    id_inst_o => id_inst_o
 
     -- stallsignal_o => idex_stallsignal_o,
-    stallreq_o => stallreq_from_if_id_i
+    -- stallreq_o => stallreq_from_if_id_i
     );
     id_component: id port map(
     rst => rst,
@@ -602,7 +602,7 @@ begin
     wb_wdata_o => reg_wdata_o);
     ctrl_component: ctrl port map(
     rst => rst,
-    stallreq_from_if_id_i => stallreq_from_if_id_i,
+    -- stallreq_from_if_id_i => stallreq_from_if_id_i,
     -- stallreq_from_id_ex_i => stallreq_from_id_ex_i,
     -- stallreq_from_ex_mem_i => stallreq_from_ex_mem_i,
     stallreq_from_if_i => stallreq_from_if_i,
@@ -622,7 +622,7 @@ begin
     we_i => reg_we_o,
     wd_i => reg_wd_o,
     wdata_i => reg_wdata_o,
-    
+
     LED => led,
 
     rdata1_o => id_rdata1_o,
