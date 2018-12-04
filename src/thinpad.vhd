@@ -153,7 +153,7 @@ begin
     -- end process;
 
     mcpu: cpu port map(
-    clk => clk,
+    clk => clk_2,
     rst => rst_cpu,
     led => led,
 
@@ -191,7 +191,7 @@ begin
     --     ram1_addr => ram1_addr);
     mram: ram_new port map(
     rst => rst_reversed,
-    clk => clk,
+    clk => clk_2,
 
     ce_id => rom_ce_o,
     addr_id => rom_addr_o,

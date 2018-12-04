@@ -35,7 +35,16 @@ entity ram_new is
     ram1_en: out std_logic;
 
     rdn: out std_logic;
-    wrn: out std_logic
+    wrn: out std_logic;
+
+    -- vga
+    H: out std_logic;
+    V: out std_logic;
+
+    R: out std_logic_vector(2 downto 0);
+    G: out std_logic_vector(2 downto 0);
+    B: out std_logic_vector(2 downto 0)
+
 
     --ram2
     -- Ram2Addr: out std_logic_vector(17 downto 0);
@@ -72,6 +81,8 @@ architecture Behavioral of ram_new is
     -- constant InstNum : integer := 100;
     constant kernelInstNum : integer := 1000;
     constant fullInstNum : integer := 5000;
+
+
     -- type InstArray is array (0 to InstNum) of std_logic_vector(15 downto 0);
     -- signal insts: InstArray := (
     -- others => NopInst);
@@ -84,6 +95,10 @@ architecture Behavioral of ram_new is
     signal read_prep, write_prep: std_logic;
     -- signal Ram2OE_tmp: std_logic;
     signal rom_ready,ram_ctrl: std_logic;
+    signal vga_data_t: std_logic_vector(15 downto 0);
+    signal vga_data_o: std_logic_vector(7 downto 0);
+    signal vga_start_pos_x: Integer := - 8;
+    signal vga_start_pos_y: Integer := 0;
     -- signal VGAPos_tmp: std_logic_vector(15 downto 0);
     -- signal hasReadASCII : std_logic;
     -- signal ASCIIout: std_logic_vector(15 downto 0);
@@ -107,7 +122,37 @@ architecture Behavioral of ram_new is
 --     );
 -- end component;
 
+component vga
+    port(clk: in std_logic;
+    rst: in std_logic;
+
+    vga_data_i: in std_logic_vector(7 downto 0);
+    vga_start_pos_x: in Integer;
+    vga_start_pos_y: in Integer;
+
+
+    H: out std_logic;
+    V: out std_logic;
+
+    R: out std_logic_vector(2 downto 0);
+    G: out std_logic_vector(2 downto 0);
+    B: out std_logic_vector(2 downto 0)
+    );
+end component;
 begin
+    vga_component: vga port map(
+        clk => clk,
+        rst => rst,
+        vga_data_i => vga_data_o,
+        vga_start_pos_x => vga_start_pos_x,
+        vga_start_pos_y => vga_start_pos_y,
+
+        H => H,
+        V => V,
+        R => R,
+        G => G,
+        B => B
+    );
     -- process(clk)	--����Ƶ
     -- begin
     --
@@ -116,14 +161,14 @@ begin
     --     end if;
     -- end process;
     --
-    -- process(clk_2)	--�ķ�Ƶ
+    -- process(clk_2)
     -- begin
     --     if clk_2'event and clk_2='1' then
     --         clk_4 <= not clk_4;
     --     end if;
     -- end process;
     --
-    -- process(clk_4)	--�˷�Ƶ
+    -- process(clk_4)
     -- begin
     --     if clk_4'event and clk_4='1' then
     --         clk_8 <= not clk_8;
@@ -171,6 +216,8 @@ begin
 
     ram_ready_o <= not(re_i and ram_ctrl);
     rom_ready_o <= rom_ready;
+
+    vga_data_o <= vga_data_t(7 downto 0);
 
     ram_ctrl_state: process(clk,rst,we_i,re_i)
     begin
@@ -242,6 +289,8 @@ begin
     -- Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, FlashDataOut, i)
     Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, i)
     -- Ram1_control: process(rst, addr_i, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, i)
+    variable cur_x: Integer := vga_start_pos_x;
+    variable cur_y: Integer := vga_start_pos_y;
     begin
         if (rst = Enable) then
             ram1_en <= '0';
@@ -273,6 +322,20 @@ begin
                         ram1_data <= data_i;
                         read_prep <= Disable;
                         write_prep <= Enable;
+                    elsif(addr_i = x"bf04") then
+                        ram1_en <= '0';
+                        ram1_oe <= '1';
+                        vga_data_t <= data_i;
+                        cur_x := cur_x + 8;
+                        if(cur_x >= 80) then
+                            cur_x := cur_x - 80;
+                            cur_y := cur_y + 1;
+                            if(cur_y >= 60) then
+                                cur_y := 0;
+                            end if;
+                        end if;
+                        vga_start_pos_x <= cur_x;
+                        vga_start_pos_y <= cur_y;
                     -- elsif (addr_i = x"bf04") then
                     --     --дVGA��ַ
                     --     ram1_en <= '0';

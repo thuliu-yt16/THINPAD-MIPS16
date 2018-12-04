@@ -7,7 +7,8 @@ entity vga is
     rst: in std_logic;
 
     vga_data_i: in std_logic_vector(7 downto 0);
-    vga_start_pos: in Integer;
+    vga_start_pos_x: in Integer;
+    vga_start_pos_y: in Integer;
 
 
     H: out std_logic;
@@ -23,20 +24,26 @@ architecture bhv of vga is
     signal w: Integer := 0;
     signal l: Integer := 0;
     signal clk_2: std_logic := '0';
-    type pixelArray is array(0 to 4800) of std_logic;
-    signal pixels: pixelArray := (others => '0');
+    constant pixelColNum : Integer:= 80;
+    type pixelArray is array(0 to pixelColNum) of std_logic_vector(0 to 63);
+    signal pixels: pixelArray := (others => "0000000000000000000000000000000000000000000000000000000000000000");
 
     begin
-        RECOLOR: process(vga_start_pos, vga_data_i)
+        RECOLOR: process(vga_start_pos_x, vga_start_pos_y)
+        variable x: Integer := vga_start_pos_x;
+        variable y: Integer := vga_start_pos_y;
         begin
-            pixels(vga_start_pos) <= vga_data_i(7);
-            pixels(vga_start_pos + 1) <= vga_data_i(6);
-            pixels(vga_start_pos + 2) <= vga_data_i(5);
-            pixels(vga_start_pos + 3) <= vga_data_i(4);
-            pixels(vga_start_pos + 4) <= vga_data_i(3);
-            pixels(vga_start_pos + 5) <= vga_data_i(2);
-            pixels(vga_start_pos + 6) <= vga_data_i(1);
-            pixels(vga_start_pos + 7) <= vga_data_i(0);
+            if(x >= 0 and x < 80 and y >= 0 and y < 64) then
+                pixels(x)(y) <= vga_data_i(7);
+                pixels(x + 1)(y) <= vga_data_i(6);
+                pixels(x + 2)(y) <= vga_data_i(5);
+                pixels(x + 3)(y) <= vga_data_i(4);
+                pixels(x + 4)(y) <= vga_data_i(3);
+                pixels(x + 5)(y) <= vga_data_i(2);
+                pixels(x + 6)(y) <= vga_data_i(1);
+                pixels(x + 7)(y) <= vga_data_i(0);
+            end if;
+
         end process;
 
         clk2: process(clk)
@@ -64,7 +71,7 @@ architecture bhv of vga is
         set_rgb: process(w, l)
         begin
             if (w < 640 and l < 480) then
-                if(pixels(w / 8  + l / 8 * 80) = '0') then
+                if(pixels(w/8)(l/8) = '0') then
                     R <= "111";
                     G <= "111";
                     B <= "111";
