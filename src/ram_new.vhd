@@ -61,7 +61,7 @@ entity ram_new is
     -- VGAData1: out std_logic_vector(15 downto 0);
     -- VGAMEMWE: out std_logic;
     --
-    -- --PS2
+    --PS2
     -- LED: out std_logic_vector(15 downto 0);
     -- keyboardASCII: in std_logic_vector(15 downto 0);
     -- keyboardOE : in std_logic
