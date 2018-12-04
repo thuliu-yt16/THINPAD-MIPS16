@@ -90,40 +90,40 @@ architecture Behavioral of ram_new is
     -- signal hasReadASCII : std_logic;
     -- signal ASCIIout: std_logic_vector(15 downto 0);
 
-    component flash
-      port(clk: in std_logic;
-           rst: in std_logic;
-           addr_in: in std_logic_vector(22 downto 1);
+    -- component flash
+    --   port(clk: in std_logic;
+    --        rst: in std_logic;
+    --        addr_in: in std_logic_vector(22 downto 1);
+    --
+    --        flash_byte: out std_logic;
+    --        flash_vpen: out std_logic;
+    --        flash_ce: out std_logic;
+    --        flash_oe: out std_logic;
+    --        flash_we: out std_logic;
+    --        flash_rp: out std_logic;
+    --
+    --        flash_addr: out std_logic_vector(22 downto 1);
+    --        flash_data: inout std_logic_vector(15 downto 0)
+    --        );
+    -- end component;
+    component flash_io
+    Port ( addr : in  std_logic_vector (22 downto 1);
+    data_out : out  std_logic_vector (15 downto 0);
+    clk : in std_logic;
+    reset : in std_logic;
 
-           flash_byte: out std_logic;
-           flash_vpen: out std_logic;
-           flash_ce: out std_logic;
-           flash_oe: out std_logic;
-           flash_we: out std_logic;
-           flash_rp: out std_logic;
+    flash_byte : out std_logic;
+    flash_vpen : out std_logic;
+    flash_ce : out std_logic;
+    flash_oe : out std_logic;
+    flash_we : out std_logic;
+    flash_rp : out std_logic;
+    flash_addr : out std_logic_vector(22 downto 1);
+    flash_data : inout std_logic_vector(15 downto 0);
 
-           flash_addr: out std_logic_vector(22 downto 1);
-           flash_data: inout std_logic_vector(15 downto 0)
-           );
-    end component;
---     component flash_io
---     Port ( addr : in  std_logic_vector (22 downto 1);
---     data_out : out  std_logic_vector (15 downto 0);
---     clk : in std_logic;
---     reset : in std_logic;
---
---     flash_byte : out std_logic;
---     flash_vpen : out std_logic;
---     flash_ce : out std_logic;
---     flash_oe : out std_logic;
---     flash_we : out std_logic;
---     flash_rp : out std_logic;
---     flash_addr : out std_logic_vector(22 downto 1);
---     flash_data : inout std_logic_vector(15 downto 0);
---
---     ctl_read : in  std_logic
---     );
--- end component;
+    ctl_read : in  std_logic
+    );
+end component;
 
 begin
     process(clk)	--����Ƶ
@@ -148,26 +148,26 @@ begin
         end if;
     end process;
 
-    -- flash_io_component: flash_io port map(addr=>FlashAddrIn, data_out=>FlashDataOut, clk=>clk_8, reset=>FlashReset,
-    -- flash_byte=>FlashByte, flash_vpen=>FlashVpen, flash_ce=>FlashCE, flash_oe=>FlashOE, flash_we=>FlashWE,
-    -- flash_rp=>FlashRP, flash_addr=>FlashAddr, flash_data=>FlashData, ctl_read=>FlashRead);
+    flash_io_component: flash_io port map(addr=>FlashAddrIn, data_out=>FlashDataOut, clk=>clk_8, reset=>FlashReset,
+    flash_byte=>FlashByte, flash_vpen=>FlashVpen, flash_ce=>FlashCE, flash_oe=>FlashOE, flash_we=>FlashWE,
+    flash_rp=>FlashRP, flash_addr=>FlashAddr, flash_data=>FlashData, ctl_read=>FlashRead);
+
+    -- flash_component: flash port map(
+    --   clk => clk_4,
+    --   rst => FlashReset,
+    --   addr_in => FlashAddrIn,
     --
-    flash_component: flash port map(
-      clk => clk_4,
-      rst => FlashReset,
-      addr_in => FlashAddrIn,
-
-      flash_byte=>FlashByte,
-      flash_vpen=>FlashVpen,
-      flash_ce=>FlashCE,
-      flash_oe=>FlashOE,
-      flash_we=>FlashWE,
-      flash_rp=>FlashRP,
-
-      flash_addr=>FlashAddr,
-      flash_data=>FlashData
-      -- ctl_read=>FlashRead
-    );
+    --   flash_byte=>FlashByte,
+    --   flash_vpen=>FlashVpen,
+    --   flash_ce=>FlashCE,
+    --   flash_oe=>FlashOE,
+    --   flash_we=>FlashWE,
+    --   flash_rp=>FlashRP,
+    --
+    --   flash_addr=>FlashAddr,
+    --   flash_data=>FlashData
+    --   -- ctl_read=>FlashRead
+    -- );
     -- hasRead_control: process(clk, re_i, addr_i, ASCIIout)
     -- begin
     --     if (clk'event and clk = '1') then
