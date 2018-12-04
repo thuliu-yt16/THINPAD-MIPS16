@@ -22,8 +22,13 @@ BEGIN:
     LI R6 0x00BF
     SLL R6 R6 0x0000
     LW R6 R1 0x0000
+    LI R6 0x00FF
+    AND R1 R6
     SLL R1 R1 0x0000 ; R1 get first byte
-
+    ; LI R5 0x00C0
+    ; SLL R5 R5 0x0000
+    ; SW R5 R1 0x0001 ; R1 -> 0xC001
+    ;
     MFPC R7
     ADDIU R7 0x0003
     NOP
@@ -32,7 +37,12 @@ BEGIN:
     LI R6 0x00BF
     SLL R6 R6 0x0000
     LW R6 R2 0x0000 ; R2 get second byte
+    LI R6 0x00FF
+    AND R2 R6
 
+    ; LI R5 0x00C0
+    ; SLL R5 R5 0x0000
+    ; SW R5 R2 0x0002 ; R2 -> 0xC002
     ADDU R1 R2 R1
     ;OR R1 R2 ; R1 complete inst
     LI R5 0x00BF
