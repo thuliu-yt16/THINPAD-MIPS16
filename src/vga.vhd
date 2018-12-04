@@ -36,13 +36,16 @@ architecture bhv of vga is
     set_rgb: process(w, l)
     begin
       if (w < 640 and l < 480) then
-        R <= "111";
-        G <= "111";
-        B <= "111";
-      else
         R <= data_i(8 downto 6);
         G <= data_i(5 downto 3);
         B <= data_i(2 downto 0);
+        R <= "000";
+        G <= "111";
+        B <= "000";
+      else
+        R <= "000";
+        G <= "000";
+        B <= "000";
       end if;
 
     end process;
