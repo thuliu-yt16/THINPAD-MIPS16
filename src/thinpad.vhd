@@ -25,6 +25,16 @@ port(
     rdn: out std_logic;
     wrn: out std_logic;
 
+    --flash
+    FlashByte: out std_logic;
+    FlashVpen: out std_logic;
+    FlashCE: out std_logic;
+    FlashOE: out std_logic;
+    FlashWE: out std_logic;
+    FlashRP: out std_logic;
+    FlashAddr: out std_logic_vector(22 downto 1);
+    FlashData: inout std_logic_vector(15 downto 0);
+
     -- vga
     H: out std_logic;
     V: out std_logic;
@@ -125,6 +135,16 @@ tbre: in std_logic;
 tsre: in std_logic;
 rdn: out std_logic;
 wrn: out std_logic;
+
+--flash
+FlashByte: out std_logic;
+FlashVpen: out std_logic;
+FlashCE: out std_logic;
+FlashOE: out std_logic;
+FlashWE: out std_logic;
+FlashRP: out std_logic;
+FlashAddr: out std_logic_vector(22 downto 1);
+FlashData: inout std_logic_vector(15 downto 0);
 
 -- vga
 --VGAAddr: in std_logic_vector(17 downto 0);
@@ -270,6 +290,16 @@ begin
     tsre => tsre,
     rdn => rdn,
     wrn => wrn,
+
+    --flash
+    FlashByte => FlashByte,
+    FlashVpen => FlashVpen,
+    FlashCE => FlashCE,
+    FlashOE => FlashOE,
+    FlashWE => FlashWE,
+    FlashRP => FlashRP,
+    FlashAddr => FlashAddr,
+    FlashData => FlashData,
 
     -- VGAAddr => vga_addr_i,
     VGAData => vga_data_o,

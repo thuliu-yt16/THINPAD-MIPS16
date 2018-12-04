@@ -43,16 +43,16 @@ entity ram_new is
     -- Ram2OE: out std_logic;
     -- Ram2WE: out std_logic;
     -- Ram2EN: out std_logic;
-    --
-    -- --flash
-    -- FlashByte: out std_logic;
-    -- FlashVpen: out std_logic;
-    -- FlashCE: out std_logic;
-    -- FlashOE: out std_logic;
-    -- FlashWE: out std_logic;
-    -- FlashRP: out std_logic;
-    -- FlashAddr: out std_logic_vector(22 downto 1);
-    -- FlashData: inout std_logic_vector(15 downto 0);
+
+    --flash
+    FlashByte: out std_logic;
+    FlashVpen: out std_logic;
+    FlashCE: out std_logic;
+    FlashOE: out std_logic;
+    FlashWE: out std_logic;
+    FlashRP: out std_logic;
+    FlashAddr: out std_logic_vector(22 downto 1);
+    FlashData: inout std_logic_vector(15 downto 0);
 
     --vga
     -- VGAAddr: in std_logic_vector(17 downto 0);
@@ -76,10 +76,10 @@ architecture Behavioral of ram_new is
     -- type InstArray is array (0 to InstNum) of std_logic_vector(15 downto 0);
     -- signal insts: InstArray := (
     -- others => NopInst);
-    -- signal clk_2,clk_4,clk_8: std_logic;
-    -- signal FlashRead, FlashReset: std_logic;
-    -- signal FlashDataOut: std_logic_vector(15 downto 0);
-    -- signal FlashAddrIn : std_logic_vector(22 downto 1);
+    signal clk_2,clk_4,clk_8: std_logic;
+    signal FlashRead, FlashReset: std_logic;
+    signal FlashDataOut: std_logic_vector(15 downto 0);
+    signal FlashAddrIn : std_logic_vector(22 downto 1);
     signal LoadComplete: std_logic:= '1';
     signal i: std_logic_vector(18 downto 0);
     signal read_prep, write_prep: std_logic;
@@ -93,6 +93,22 @@ architecture Behavioral of ram_new is
     -- signal hasReadASCII : std_logic;
     -- signal ASCIIout: std_logic_vector(15 downto 0);
 
+    component flash
+      port(clk: in std_logic;
+           rst: in std_logic;
+           addr_in: in std_logic_vector(22 downto 1);
+
+           flash_byte: out std_logic;
+           flash_vpen: out std_logic;
+           flash_ce: out std_logic;
+           flash_oe: out std_logic;
+           flash_we: out std_logic;
+           flash_rp: out std_logic;
+
+           flash_addr: out std_logic_vector(22 downto 1);
+           flash_data: inout std_logic_vector(15 downto 0)
+           );
+    end component;
 --     component flash_io
 --     Port ( addr : in  std_logic_vector (22 downto 1);
 --     data_out : out  std_logic_vector (15 downto 0);
@@ -113,32 +129,48 @@ architecture Behavioral of ram_new is
 -- end component;
 
 begin
-    -- process(clk)	--����Ƶ
-    -- begin
-    --
-    --     if clk'event and clk='1' then
-    --         clk_2 <= not clk_2;
-    --     end if;
-    -- end process;
-    --
-    -- process(clk_2)
-    -- begin
-    --     if clk_2'event and clk_2='1' then
-    --         clk_4 <= not clk_4;
-    --     end if;
-    -- end process;
-    --
-    -- process(clk_4)
-    -- begin
-    --     if clk_4'event and clk_4='1' then
-    --         clk_8 <= not clk_8;
-    --     end if;
-    -- end process;
-    --
+    process(clk)	--����Ƶ
+    begin
+
+        if clk'event and clk='1' then
+            clk_2 <= not clk_2;
+        end if;
+    end process;
+
+    process(clk_2)
+    begin
+        if clk_2'event and clk_2='1' then
+            clk_4 <= not clk_4;
+        end if;
+    end process;
+
+    process(clk_4)
+    begin
+        if clk_4'event and clk_4='1' then
+            clk_8 <= not clk_8;
+        end if;
+    end process;
+
     -- flash_io_component: flash_io port map(addr=>FlashAddrIn, data_out=>FlashDataOut, clk=>clk_8, reset=>FlashReset,
     -- flash_byte=>FlashByte, flash_vpen=>FlashVpen, flash_ce=>FlashCE, flash_oe=>FlashOE, flash_we=>FlashWE,
     -- flash_rp=>FlashRP, flash_addr=>FlashAddr, flash_data=>FlashData, ctl_read=>FlashRead);
     --
+    flash_component: flash port map(
+      clk => clk_4,
+      rst => FlashReset,
+      addr_in => FlashAddrIn,
+
+      flash_byte=>FlashByte,
+      flash_vpen=>FlashVpen,
+      flash_ce=>FlashCE,
+      flash_oe=>FlashOE,
+      flash_we=>FlashWE,
+      flash_rp=>FlashRP,
+
+      flash_addr=>FlashAddr,
+      flash_data=>FlashData
+      -- ctl_read=>FlashRead
+    );
     -- hasRead_control: process(clk, re_i, addr_i, ASCIIout)
     -- begin
     --     if (clk'event and clk = '1') then

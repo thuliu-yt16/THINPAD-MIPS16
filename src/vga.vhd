@@ -22,7 +22,8 @@ entity vga is
 end entity;
 
 architecture bhv of vga is
-  signal next_block_x, next_block_y: Integer;
+  signal next_block_x: Integer := 0;
+  signal next_block_y: Integer := 0;
   signal next_w: Integer := 0;
   signal next_l: Integer := 0;
   signal w: Integer := 0;
@@ -102,6 +103,8 @@ architecture bhv of vga is
         next_l <= 0;
       elsif (w = 799) then
         next_l <= l + 1;
+      else
+        next_l <= l;
       end if;
     end process;
 end bhv;
