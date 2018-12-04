@@ -80,15 +80,12 @@ architecture Behavioral of ram_new is
     signal FlashRead, FlashReset: std_logic;
     signal FlashDataOut: std_logic_vector(15 downto 0);
     signal FlashAddrIn : std_logic_vector(22 downto 1);
-    signal LoadComplete: std_logic:= '1';
+    -- signal LoadComplete: std_logic:= '1';
+    signal LoadComplete: std_logic;
     signal i: std_logic_vector(18 downto 0);
     signal read_prep, write_prep: std_logic;
     -- signal Ram2OE_tmp: std_logic;
     signal rom_ready,ram_ctrl: std_logic;
-    -- signal vga_data_t: std_logic_vector(15 downto 0);
-    -- signal vga_data_o: std_logic_vector(7 downto 0);
-    -- signal vga_start_pos_x: Integer := - 8;
-    -- signal vga_start_pos_y: Integer := 0;
     signal VGAPos_tmp: std_logic_vector(15 downto 0);
     -- signal hasReadASCII : std_logic;
     -- signal ASCIIout: std_logic_vector(15 downto 0);
@@ -209,8 +206,6 @@ begin
     ram_ready_o <= not(re_i and ram_ctrl);
     rom_ready_o <= rom_ready;
 
-    -- vga_data_o <= vga_data_t(7 downto 0);
-
     ram_ctrl_state: process(clk,rst,we_i,re_i)
     begin
         if (rst = Enable) then
@@ -239,8 +234,8 @@ begin
     begin
         if ((rst = Enable) or (re_i = Enable) or (addr_i = x"bf00") or (addr_i = x"bf01") or (addr_i = x"bf04") or (addr_i = x"bf05")) then
             ram1_we <= '1';
-        -- elsif (((LoadComplete = '1') and (we_i = Enable)) or ((LoadComplete = '0') and (i(18 downto 3) < kernelInstNum))) then
-        elsif (((LoadComplete = '1') and (we_i = Enable)) or (LoadComplete = '0')) then
+        elsif (((LoadComplete = '1') and (we_i = Enable)) or ((LoadComplete = '0') and (i(18 downto 3) < kernelInstNum))) then
+        -- elsif (((LoadComplete = '1') and (we_i = Enable)) or (LoadComplete = '0')) then
             ram1_we <= clk;
         else
             ram1_we <= '1';
@@ -278,8 +273,8 @@ begin
         end if;
     end process;
 
-    -- Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, FlashDataOut, i)
-    Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, i)
+    Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, FlashDataOut, i)
+    -- Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, i)
     begin
         if (rst = Enable) then
             ram1_en <= '0';
@@ -297,7 +292,6 @@ begin
                      ram1_addr <= "00" & addr_i;
                 end if;
                 if ((we_i = Disable) and (re_i = Disable)) then
-                    -- ��ָ��
                     read_prep <= Disable;
                     write_prep <= Disable;
                     ram1_en <= '0';
@@ -305,13 +299,14 @@ begin
                     ram1_data <= (others => 'Z');
                 elsif (we_i = Enable) then
                     if (addr_i = x"bf00") then
-                        -- д����
+                        -- write serial
                         ram1_en <= '1';
                         ram1_oe <= '1';
                         ram1_data <= data_i;
                         read_prep <= Disable;
                         write_prep <= Enable;
                     elsif(addr_i = x"bf04") then
+                        -- write vga data
                         ram1_en <= '0';
                         ram1_oe <= '1';
                         VGAData <= (others => data_i(15));
@@ -333,7 +328,7 @@ begin
                     --     read_prep <= Disable;
                     --     write_prep <= Disable;
                     else
-                        --д����
+                        --write real data
                         ram1_en <= '0';
                         ram1_oe <= '1';
                         ram1_data <= data_i;
@@ -342,7 +337,7 @@ begin
                     end if;
                 elsif (re_i = Enable) then
                     if (addr_i = x"bf00") then
-                        --������
+                        -- read serial
                         ram1_en <= '1';
                         ram1_oe <= '1';
                         ram1_data <= (others => 'Z');
@@ -356,27 +351,27 @@ begin
                     --     read_prep <= Disable;
                     --     write_prep <= Disable;
                     elsif (addr_i = x"bf01") then
-                        --׼������д����
+                        -- prepare to read or write serial
                         ram1_en <= '0';
                         ram1_oe <= '1';
                         read_prep <= Disable;
                         write_prep <= Disable;
 
                         if ((data_ready = '1') and (tbre = '1') and (tsre= '1')) then
-                            -- �������ݿɶ�д
+                            -- serial enable write read
                             ram1_data <= x"0003";
                         elsif ((tbre = '1') and (tsre= '1')) then
-                            --��������ֻ��д
+                            -- serial only write
                             ram1_data <= x"0001";
                         elsif (data_ready = '1') then
-                            --��������ֻ�ɶ�
+                            -- serial only read
                             ram1_data <= x"0002";
                         else
-                            --�������ݲ��ɶ�д
+                            -- serial cannot read write
                             ram1_data <= (others => '0');
                         end if;
                     else
-                        --������
+                        -- read real data
                         ram1_en <= '0';
                         ram1_oe <= '0';
                         ram1_data <= (others => 'Z');
@@ -384,7 +379,7 @@ begin
                         write_prep <= Disable;
                     end if;
                 else
-                    --��Ӧ��������
+                    -- shouldn't reach here
                     ram1_en <= '0';
                     ram1_oe <= '0';
                     ram1_data <= (others => 'Z');
@@ -392,9 +387,9 @@ begin
                     write_prep <= Disable;
                 end if;
             else
-                --��kernel
+                -- read  kernel
                 ram1_addr <= "00" & i(18 downto 3);
-                -- ram1_data <= FlashDataOut;
+                ram1_data <= FlashDataOut;
                 read_prep <= Disable;
                 write_prep <= Disable;
                 ram1_en <= '0';
@@ -456,33 +451,33 @@ begin
         end if;
     end process;
 
-    -- Flash_init: process(clk_8,clk,FlashDataOut,rst,i,LoadComplete)
-    -- begin
-    --     if (rst = Enable) then
-    --         FlashAddrIn <= (others => '0');
-    --         LoadComplete <= '0';
-    --         FlashReset <= '0';
-    --         i <= (others => '0');
-    --     else
-    --         if (LoadComplete = '1') then
-    --             FlashReset <= '0';
-    --         else
-    --             if (i(18 downto 3) = fullInstNum) then
-    --                 FlashReset <= '0';
-    --                 LoadComplete <= '1';
-    --                 FlashAddrIn <= (others => '0');
-    --             else
-    --                 FlashReset <= '1';
-    --                 FlashAddrIn <= "000000" & i(18 downto 3);
-    --                 if (clk_8'event and (clk_8 = '1')) then
-    --                     if (i(2 downto 0) = "001") then
-    --                         FlashRead <= not(FlashRead);
-    --                     end if;
-    --                     i <= i+1;
-    --                 end if;
-    --             end if;
-    --         end if;
-    --     end if;
-    -- end process;
-    --
+    Flash_init: process(clk_8,clk,FlashDataOut,rst,i,LoadComplete)
+    begin
+        if (rst = Enable) then
+            FlashAddrIn <= (others => '0');
+            LoadComplete <= '0';
+            FlashReset <= '0';
+            i <= (others => '0');
+        else
+            if (LoadComplete = '1') then
+                FlashReset <= '0';
+            else
+                if (i(18 downto 3) = fullInstNum) then
+                    FlashReset <= '0';
+                    LoadComplete <= '1';
+                    FlashAddrIn <= (others => '0');
+                else
+                    FlashReset <= '1';
+                    FlashAddrIn <= "000000" & i(18 downto 3);
+                    if (clk_8'event and (clk_8 = '1')) then
+                        if (i(2 downto 0) = "001") then
+                            FlashRead <= not(FlashRead);
+                        end if;
+                        i <= i + 1;
+                    end if;
+                end if;
+            end if;
+        end if;
+    end process;
+
 end Behavioral;
