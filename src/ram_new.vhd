@@ -35,7 +35,7 @@ entity ram_new is
     ram1_en: out std_logic;
 
     rdn: out std_logic;
-    wrn: out std_logic
+    wrn: out std_logic;
 
     --ram2
     -- Ram2Addr: out std_logic_vector(17 downto 0);
@@ -53,15 +53,14 @@ entity ram_new is
     -- FlashRP: out std_logic;
     -- FlashAddr: out std_logic_vector(22 downto 1);
     -- FlashData: inout std_logic_vector(15 downto 0);
-    --
-    -- --vga
+
+    --vga
     -- VGAAddr: in std_logic_vector(17 downto 0);
-    -- VGAData: out std_logic_vector(15 downto 0);
-    -- VGAPos: out std_logic_vector(11 downto 0);
-    -- VGAData1: out std_logic_vector(15 downto 0);
-    -- VGAMEMWE: out std_logic;
-    --
-    -- --PS2
+    VGAData: out std_logic_vector(15 downto 0);
+    VGAPos: out std_logic_vector(12 downto 0);
+    VGAMEMWE: out std_logic_vector(0 downto 0)
+
+    --PS2
     -- LED: out std_logic_vector(15 downto 0);
     -- keyboardASCII: in std_logic_vector(15 downto 0);
     -- keyboardOE : in std_logic
@@ -72,6 +71,8 @@ architecture Behavioral of ram_new is
     -- constant InstNum : integer := 100;
     constant kernelInstNum : integer := 1000;
     constant fullInstNum : integer := 5000;
+
+
     -- type InstArray is array (0 to InstNum) of std_logic_vector(15 downto 0);
     -- signal insts: InstArray := (
     -- others => NopInst);
@@ -84,7 +85,11 @@ architecture Behavioral of ram_new is
     signal read_prep, write_prep: std_logic;
     -- signal Ram2OE_tmp: std_logic;
     signal rom_ready,ram_ctrl: std_logic;
-    -- signal VGAPos_tmp: std_logic_vector(15 downto 0);
+    -- signal vga_data_t: std_logic_vector(15 downto 0);
+    -- signal vga_data_o: std_logic_vector(7 downto 0);
+    -- signal vga_start_pos_x: Integer := - 8;
+    -- signal vga_start_pos_y: Integer := 0;
+    signal VGAPos_tmp: std_logic_vector(15 downto 0);
     -- signal hasReadASCII : std_logic;
     -- signal ASCIIout: std_logic_vector(15 downto 0);
 
@@ -116,14 +121,14 @@ begin
     --     end if;
     -- end process;
     --
-    -- process(clk_2)	--�ķ�Ƶ
+    -- process(clk_2)
     -- begin
     --     if clk_2'event and clk_2='1' then
     --         clk_4 <= not clk_4;
     --     end if;
     -- end process;
     --
-    -- process(clk_4)	--�˷�Ƶ
+    -- process(clk_4)
     -- begin
     --     if clk_4'event and clk_4='1' then
     --         clk_8 <= not clk_8;
@@ -159,18 +164,20 @@ begin
     --     end if;
     -- end process;
     --
-    -- VGAPos_control: process(clk, VGAPos_tmp, we_i)
-    -- begin
-    --     if (clk'event and clk = '1' and we_i = Enable) then
-    --         VGAPos <= conv_std_logic_vector(conv_integer(VGAPos_tmp(15 downto 8))*80+conv_integer(VGAPos_tmp(7 downto 0)),12);
-    --     end if;
-    -- end process;
-    --
+    VGAPos_control: process(clk, VGAPos_tmp, we_i)
+    begin
+        if (clk'event and clk = Enable and we_i = Enable) then
+            VGAPos <= conv_std_logic_vector(conv_integer(VGAPos_tmp(12 downto 7)) * 80+conv_integer(VGAPos_tmp(6 downto 0)),13);
+        end if;
+    end process;
+
 
     inst_ready <= LoadComplete;
 
     ram_ready_o <= not(re_i and ram_ctrl);
     rom_ready_o <= rom_ready;
+
+    -- vga_data_o <= vga_data_t(7 downto 0);
 
     ram_ctrl_state: process(clk,rst,we_i,re_i)
     begin
@@ -229,19 +236,18 @@ begin
             rdn <= '1';
         end if;
     end process;
-    --
-    -- VGAWE_control: process(addr_i,we_i)
-    -- begin
-    --     if ((addr_i = x"bf05") and (we_i = Enable)) then
-    --         VGAMEMWE <= '1';
-    --     else
-    --         VGAMEMWE <= '0';
-    --     end if;
-    -- end process;
+
+    VGAWE_control: process(addr_i,we_i)
+    begin
+        if ((addr_i = x"bf04") and (we_i = Enable)) then
+            VGAMEMWE <= "1";
+        else
+            VGAMEMWE <= "0";
+        end if;
+    end process;
 
     -- Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, FlashDataOut, i)
     Ram1_control: process(rst, addr_i, addr_id, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, i)
-    -- Ram1_control: process(rst, addr_i, we_i, re_i, data_i, data_ready, tbre, tsre, LoadComplete, i)
     begin
         if (rst = Enable) then
             ram1_en <= '0';
@@ -273,6 +279,13 @@ begin
                         ram1_data <= data_i;
                         read_prep <= Disable;
                         write_prep <= Enable;
+                    elsif(addr_i = x"bf04") then
+                        ram1_en <= '0';
+                        ram1_oe <= '1';
+                        VGAData <= (others => data_i(15));
+                        VGAPos_tmp <= "000" & data_i(12 downto 0);
+                        read_prep <= Disable;
+                        write_prep <= Disable;
                     -- elsif (addr_i = x"bf04") then
                     --     --дVGA��ַ
                     --     ram1_en <= '0';
