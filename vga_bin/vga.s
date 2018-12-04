@@ -1,0 +1,31 @@
+BEGIN:
+    NOP
+    MFPC R7
+    ADDIU R7 0x0003
+    NOP
+    B TESTR
+    NOP
+    LI R6 0x00BF
+    SLL R6 R6 0x0000
+    LW R6 R1 0x0000
+
+    LI R5 0x00BF
+    SLL R5 R5 0x0000
+    SW R5 R1 0x0004
+
+LOOP:
+    B BEGIN
+    NOP
+
+TESTR:
+    NOP
+    LI R6 0x00BF
+    SLL R6 R6 0x0000
+    ADDIU R6 0x0001
+    LW R6 R0 0x0000
+    LI R6 0x0002
+    AND R0 R6
+    BEQZ R0 TESTR
+    NOP
+    JR R7
+    NOP
