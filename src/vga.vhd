@@ -30,8 +30,8 @@ architecture bhv of vga is
   begin
 
     next_block_x <= next_w / 8;
-    next_block_y <= next_l / 16;
-    pos_o <= conv_std_logic_vector(next_block_x + next_block_y * 80, 12);
+    next_block_y <= next_l / 8;
+    pos_o <= conv_std_logic_vector(next_block_x + next_block_y * 80, 13);
 
     set_rgb: process(w, l)
     begin
@@ -39,9 +39,9 @@ architecture bhv of vga is
         R <= data_i(8 downto 6);
         G <= data_i(5 downto 3);
         B <= data_i(2 downto 0);
-        R <= "000";
-        G <= "111";
-        B <= "000";
+        -- R <= "000";
+        -- G <= "111";
+        -- B <= "000";
       else
         R <= "000";
         G <= "000";
@@ -96,7 +96,7 @@ architecture bhv of vga is
       end if;
     end process;
 
-    get_next_l: process(l)
+    get_next_l: process(w, l)
     begin
       if (w = 799 and l = 524) then
         next_l <= 0;

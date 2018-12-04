@@ -57,7 +57,7 @@ signal inst_ready: std_logic;
 
 signal rst_cpu: std_logic;
 
-signal vga_addr_i: std_logic_vector(17 downto 0);
+-- signal vga_addr_i: std_logic_vector(17 downto 0);
 signal vga_data_o: std_logic_vector(15 downto 0);
 signal vga_pos_o: std_logic_vector(12 downto 0);
 signal vga_memwe_o: std_logic_vector(0 downto 0);
@@ -127,7 +127,7 @@ rdn: out std_logic;
 wrn: out std_logic;
 
 -- vga
-VGAAddr: in std_logic_vector(17 downto 0);
+--VGAAddr: in std_logic_vector(17 downto 0);
 VGAData: out std_logic_vector(15 downto 0);
 VGAPos: out std_logic_vector(12 downto 0);
 VGAMEMWE: out std_logic_vector(0 downto 0)
@@ -271,7 +271,7 @@ begin
     rdn => rdn,
     wrn => wrn,
 
-    VGAAddr => vga_addr_i,
+    -- VGAAddr => vga_addr_i,
     VGAData => vga_data_o,
     VGAPos => vga_pos_o,
     VGAMEMWE => vga_memwe_o
