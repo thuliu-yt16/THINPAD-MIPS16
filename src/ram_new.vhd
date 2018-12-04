@@ -58,12 +58,12 @@ entity ram_new is
     -- VGAAddr: in std_logic_vector(17 downto 0);
     VGAData: out std_logic_vector(15 downto 0);
     VGAPos: out std_logic_vector(12 downto 0);
-    VGAMEMWE: out std_logic_vector(0 downto 0)
+    VGAMEMWE: out std_logic_vector(0 downto 0);
 
     --PS2
     -- LED: out std_logic_vector(15 downto 0);
-    -- keyboardASCII: in std_logic_vector(15 downto 0);
-    -- keyboardOE : in std_logic
+    keyboardASCII: in std_logic_vector(15 downto 0);
+    keyboardOE : in std_logic
 );
 end ram_new;
 

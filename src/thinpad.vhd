@@ -41,7 +41,11 @@ port(
 
     R: out std_logic_vector(2 downto 0);
     G: out std_logic_vector(2 downto 0);
-    B: out std_logic_vector(2 downto 0)
+    B: out std_logic_vector(2 downto 0);
+
+    -- ps2
+    PS2_CLK : in std_logic;
+    PS2_DATA : in std_logic
 );
 
 end thinpad;
@@ -74,6 +78,11 @@ signal vga_memwe_o: std_logic_vector(0 downto 0);
 
 signal pos_o: std_logic_vector(12 downto 0);
 signal data_i: std_logic_vector(15 downto 0);
+
+signal PS2Code: std_logic_vector(7 downto 0);
+signal PS2OE: std_logic;
+signal kbdASCII: std_logic_vector(15 downto 0);
+signal kbdOE: std_logic;
 component cpu
     port(clk: in std_logic;
         rst: in std_logic;
@@ -150,7 +159,10 @@ FlashData: inout std_logic_vector(15 downto 0);
 --VGAAddr: in std_logic_vector(17 downto 0);
 VGAData: out std_logic_vector(15 downto 0);
 VGAPos: out std_logic_vector(12 downto 0);
-VGAMEMWE: out std_logic_vector(0 downto 0)
+VGAMEMWE: out std_logic_vector(0 downto 0);
+
+keyboardASCII: in std_logic_vector(15 downto 0);
+keyboardOE : in std_logic
 );
 end component;
 
@@ -180,6 +192,28 @@ port(clk: in std_logic;
      G: out std_logic_vector(2 downto 0);
      B: out std_logic_vector(2 downto 0)
      );
+end component;
+
+component ps2
+  port(clk_in: in std_logic;
+       rst: in std_logic;
+
+       ps2clk: in std_logic;
+       ps2data: in std_logic;
+
+       data_out: out std_logic_vector(7 downto 0);
+       oe: out std_logic
+       );
+end component;
+
+component keyboard
+port (
+	CLK_MAIN, RST: in std_logic;
+	PS2_CODE: in std_logic_vector(7 downto 0);
+	PS2_OE: in std_logic;
+	ASCII: out STD_LOGIC_VECTOR(15 downto 0);
+	KeyboardOE: out STD_LOGIC
+	) ;
 end component;
 --
 -- component ram
@@ -304,7 +338,10 @@ begin
     -- VGAAddr => vga_addr_i,
     VGAData => vga_data_o,
     VGAPos => vga_pos_o,
-    VGAMEMWE => vga_memwe_o
+    VGAMEMWE => vga_memwe_o,
+
+    keyboardASCII => kbdASCII,
+    keyboardOE => kbdOE
     );
 
     mscreen_mem: screen_mem port map(
@@ -330,5 +367,24 @@ begin
       R => R,
       G => G,
       B => B
+    );
+    mps2: ps2 port map(
+      clk_in => clk_2,
+      rst => rst,
+
+      ps2clk => PS2_CLK,
+      ps2data => PS2_DATA,
+
+      data_out => PS2Code,
+      oe => PS2OE
+    );
+
+    mkeyboard: keyboard port map(
+      CLK_MAIN => clk,
+      RST => rst,
+      PS2_CODE => PS2Code,
+      PS2_OE => PS2OE,
+      ASCII => kbdASCII,
+      KeyboardOE => kbdOE
     );
 end bhv;
