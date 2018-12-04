@@ -9,8 +9,8 @@ entity vga is
   port(clk: in std_logic;
        rst: in std_logic;
 
-       data_in: in std_logic_vector(15 downto 0);
-       pos_out: out std_logic_vector(12 downto 0);
+       data_i: in std_logic_vector(15 downto 0);
+       pos_o: out std_logic_vector(12 downto 0);
 
        H: out std_logic;
        V: out std_logic;
@@ -31,7 +31,7 @@ architecture bhv of vga is
 
     next_block_x <= next_w / 8;
     next_block_y <= next_l / 16;
-    pos_out <= conv_std_logic_vector(next_block_x + next_block_y * 80, 12);
+    pos_o <= conv_std_logic_vector(next_block_x + next_block_y * 80, 12);
 
     set_rgb: process(w, l)
     begin
@@ -40,9 +40,9 @@ architecture bhv of vga is
         G <= "111";
         B <= "111";
       else
-        R <= data_in(8 downto 6);
-        G <= data_in(5 downto 3);
-        B <= data_in(2 downto 0);
+        R <= data_i(8 downto 6);
+        G <= data_i(5 downto 3);
+        B <= data_i(2 downto 0);
       end if;
 
     end process;

@@ -23,7 +23,15 @@ port(
     ram1_addr: out std_logic_vector(17 downto 0);
 
     rdn: out std_logic;
-    wrn: out std_logic
+    wrn: out std_logic;
+
+    -- vga
+    H: out std_logic;
+    V: out std_logic;
+
+    R: out std_logic_vector(2 downto 0);
+    G: out std_logic_vector(2 downto 0);
+    B: out std_logic_vector(2 downto 0)
 );
 
 end thinpad;
@@ -48,6 +56,14 @@ signal ram_re_o: std_logic;
 signal inst_ready: std_logic;
 
 signal rst_cpu: std_logic;
+
+signal vga_addr_i: std_logic_vector(17 downto 0);
+signal vga_data_o: std_logic_vector(15 downto 0);
+signal vga_pos_o: std_logic_vector(12 downto 0);
+signal vga_memwe_o: std_logic_vector(0 downto 0);
+
+signal pos_o: std_logic_vector(12 downto 0);
+signal data_i: std_logic_vector(15 downto 0);
 component cpu
     port(clk: in std_logic;
         rst: in std_logic;
@@ -108,8 +124,42 @@ ram1_en: out std_logic;
 tbre: in std_logic;
 tsre: in std_logic;
 rdn: out std_logic;
-wrn: out std_logic
+wrn: out std_logic;
+
+-- vga
+VGAAddr: in std_logic_vector(17 downto 0);
+VGAData: out std_logic_vector(15 downto 0);
+VGAPos: out std_logic_vector(12 downto 0);
+VGAMEMWE: out std_logic_vector(0 downto 0)
 );
+end component;
+
+component screen_mem
+PORT (
+  clka : IN STD_LOGIC;
+  wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+  addra : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+  dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+  clkb : IN STD_LOGIC;
+  addrb : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+  doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+);
+end component;
+
+component vga
+port(clk: in std_logic;
+     rst: in std_logic;
+
+     data_i: in std_logic_vector(15 downto 0);
+     pos_o: out std_logic_vector(12 downto 0);
+
+     H: out std_logic;
+     V: out std_logic;
+
+     R: out std_logic_vector(2 downto 0);
+     G: out std_logic_vector(2 downto 0);
+     B: out std_logic_vector(2 downto 0)
+     );
 end component;
 --
 -- component ram
@@ -219,6 +269,36 @@ begin
     tbre => tbre,
     tsre => tsre,
     rdn => rdn,
-    wrn => wrn
+    wrn => wrn,
+
+    VGAAddr => vga_addr_i,
+    VGAData => vga_data_o,
+    VGAPos => vga_pos_o,
+    VGAMEMWE => vga_memwe_o
+    );
+
+    mscreen_mem: screen_mem port map(
+      clka => clk_2,
+      wea => vga_memwe_o,
+      addra => vga_pos_o,
+      dina => vga_data_o,
+      clkb => clk_2,
+      addrb => pos_o,
+      doutb => data_i
+    );
+
+    mvga: vga port map(
+      clk => clk_2,
+      rst => rst,
+
+      data_i => data_i,
+      pos_o => pos_o,
+
+      H => H,
+      V => V,
+
+      R => R,
+      G => G,
+      B => B
     );
 end bhv;

@@ -37,15 +37,6 @@ entity ram_new is
     rdn: out std_logic;
     wrn: out std_logic;
 
-    -- vga
-    H: out std_logic;
-    V: out std_logic;
-
-    R: out std_logic_vector(2 downto 0);
-    G: out std_logic_vector(2 downto 0);
-    B: out std_logic_vector(2 downto 0)
-
-
     --ram2
     -- Ram2Addr: out std_logic_vector(17 downto 0);
     -- Ram2Data: inout std_logic_vector(15 downto 0);
@@ -62,14 +53,13 @@ entity ram_new is
     -- FlashRP: out std_logic;
     -- FlashAddr: out std_logic_vector(22 downto 1);
     -- FlashData: inout std_logic_vector(15 downto 0);
-    --
-    -- --vga
-    -- VGAAddr: in std_logic_vector(17 downto 0);
-    -- VGAData: out std_logic_vector(15 downto 0);
-    -- VGAPos: out std_logic_vector(11 downto 0);
-    -- VGAData1: out std_logic_vector(15 downto 0);
-    -- VGAMEMWE: out std_logic;
-    --
+
+    --vga
+    VGAAddr: in std_logic_vector(17 downto 0);
+    VGAData: out std_logic_vector(15 downto 0);
+    VGAPos: out std_logic_vector(12 downto 0);
+    VGAMEMWE: out std_logic_vector(0 downto 0)
+
     --PS2
     -- LED: out std_logic_vector(15 downto 0);
     -- keyboardASCII: in std_logic_vector(15 downto 0);
@@ -122,37 +112,7 @@ architecture Behavioral of ram_new is
 --     );
 -- end component;
 
-component vga
-    port(clk: in std_logic;
-    rst: in std_logic;
-
-    vga_data_i: in std_logic_vector(7 downto 0);
-    vga_start_pos_x: in Integer;
-    vga_start_pos_y: in Integer;
-
-
-    H: out std_logic;
-    V: out std_logic;
-
-    R: out std_logic_vector(2 downto 0);
-    G: out std_logic_vector(2 downto 0);
-    B: out std_logic_vector(2 downto 0)
-    );
-end component;
 begin
-    vga_component: vga port map(
-        clk => clk,
-        rst => rst,
-        vga_data_i => vga_data_o,
-        vga_start_pos_x => vga_start_pos_x,
-        vga_start_pos_y => vga_start_pos_y,
-
-        H => H,
-        V => V,
-        R => R,
-        G => G,
-        B => B
-    );
     -- process(clk)	--����Ƶ
     -- begin
     --
