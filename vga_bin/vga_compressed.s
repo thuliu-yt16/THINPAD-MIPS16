@@ -17,6 +17,41 @@ INIT:
     LI R3 0x0050 ; 80
     LI R4 0x003b ; 59
 
+WRITE:
+    ADDIU R6 0x00ff
+
+    LI R2 0x00c0
+    SLL R2 R2 0x0000
+    ADD R2 R3 ; load x
+    SLL R4 R4 0x0007
+    ADD R2 R4 ; load y
+    SRA R4 R4 0x0007
+    LW R1 R2 0x0000
+
+    SLL R1 R1 0x0000
+    SLL R1 R1 0x0007
+    OR R1 R3 ; load x
+    SLL R4 R4 0x0007
+    OR R1 R4 ; load y
+    SRA R4 R4 0x0007
+
+    LI R5 0x00BF
+    SLL R5 R5 0x0000
+    SW R5 R1 0x0004
+
+    MFPC R7
+    ADDIU R7 0x0003
+    NOP
+    BEQZ R3 PRE_LL ; 0x0005 ; PRE_L
+    NOP
+
+    B WRITE
+    NOP
+
+START:
+    LI R3 0x0050 ; 80
+    LI R4 0x003b ; 59
+
 BEGIN:
     NOP
     MFPC R7
@@ -43,17 +78,15 @@ BYTE:
     LI R2 0x0001
     AND R2 R1
     SRA R1 R1 0x0001
-    SLL R2 R2 0x0000
-    SLL R2 R2 0x0007 ; get color bit and store in r2
 
-    OR R2 R3 ; load x
+    LI R5 0x00c0
+    SLL R5 R5 0x0000
+    ADD R5 R3 ; load x
     SLL R4 R4 0x0007
-    OR R2 R4 ; load y
+    ADD R5 R4 ; load y
     SRA R4 R4 0x0007
 
-    LI R5 0x00BF
-    SLL R5 R5 0x0000
-    SW R5 R2 0x0004
+    SW R5 R2 0x0000
 
     MFPC R7
     ADDIU R7 0x0003
@@ -73,6 +106,15 @@ PRE_L:
     BEQZ R4 INIT; 0x00d5 ; INIT ; end of one frame
     NOP
     LI R3 0x0050
+    ADDIU R4 0x00ff
+    JR R7
+    NOP
+
+PRE_LL:
+    NOP
+    BEQZ R4 START
+    NOP
+    LI R3 0x004f
     ADDIU R4 0x00ff
     JR R7
     NOP
