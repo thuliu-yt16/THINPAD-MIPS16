@@ -2,29 +2,29 @@
 #include <cstdlib>
 #include <winsock.h>
 #include <windows.h>
-#include<string.h>
+#include <string.h>
 #include <cstring>
 #include <conio.h>
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 #pragma comment(lib, "ws2_32.lib")
 
 HANDLE com = INVALID_HANDLE_VALUE;
+char com_name[] = "COM0";
 
 struct Tconsole
 {
-	Tconsole()
-	{
-    work_com(3);
+	Tconsole(){
+	    work_com(3);
 	}
 	void work_com(int );
-	void run(SOCKET &client,HANDLE& com,int isSIM);    //A����
+	void run(HANDLE& com);
 };
 
 void Tconsole::work_com(int com_num)
 {
-	com_name[3] = '0'+com_num;
+	com_name[3] = '0' + com_num;
 	DCB dcb;
 	com = CreateFileA(com_name,GENERIC_READ|GENERIC_WRITE,0,NULL,OPEN_EXISTING,0,NULL);
 	if (com == INVALID_HANDLE_VALUE)
@@ -38,7 +38,7 @@ void Tconsole::work_com(int com_num)
 	dcb.StopBits = ONESTOPBIT;
 	SetCommState(com,&dcb);
 	dcb.ByteSize = 8;
-	dcb.Parity = ODDPARITY;//��У��
+	dcb.Parity = ODDPARITY;
 	dcb.StopBits = ONESTOPBIT;
 	dcb.fBinary = TRUE;
 	dcb.fParity = FALSE;
@@ -46,25 +46,37 @@ void Tconsole::work_com(int com_num)
 
 	printf("\n   Ok..  Connected with com...\n");
 
-	int flag=0; //��־�Ƿ��Ǹս���kernel
-	while (true)
-	{
-		if (com == INVALID_HANDLE_VALUE)
-		{
-			printf("  COM lost...\n");
-			goto break_loop;
-		}
-    run(client, com);
-		flag=1;
+	int flag = 0;
+	if (com == INVALID_HANDLE_VALUE){
+		printf("  COM lost...\n");
+		return;
 	}
-break_loop:
-	return ;
+    run(com);
+	flag = 1;
+	return;
 }
 
-Tconsole::run(SOCKET &client,HANDLE& com) {
-		ch=0x52;
-		size=0;
-    WriteFile(com,&ch,1,&size,NULL);
+void Tconsole::run(HANDLE& com) {
+	char ch;
+	DWORD size;
+	int cnt = 0;
+	int num = 0;
+	char chararray[10000];
+
+	while(scanf("%d", &num)!= EOF){
+		chararray[cnt ++ ] = char(num);
+		//printf("num: %d\n", num);
+	}
+    // printf("cnt : %d\n", cnt);
+	WriteFile(com, chararray, cnt, &size, NULL);
+	// for(int i = 0; i < cnt; i ++){
+	// }
+	// ch = 0x90;
+	// size = 0;
+    // WriteFile(com, &ch, 1, &size, NULL);
+	// ch = 0x40;
+	// size = 0;
+    // WriteFile(com, &ch, 1, &size, NULL);
 }
 int main() {
 	Tconsole console;
