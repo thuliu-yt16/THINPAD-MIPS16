@@ -46,14 +46,14 @@ BYTE:
     SLL R2 R2 0x0000
     SLL R2 R2 0x0007 ; get color bit and store in r2
 
-    AND R2 R3 ; load x
+    OR R2 R3 ; load x
     SLL R4 R4 0x0007
-    AND R2 R4 ; load y
+    OR R2 R4 ; load y
     SRA R4 R4 0x0007
 
     LI R5 0x00BF
     SLL R5 R5 0x0000
-    SW R5 R1 0x0004
+    SW R5 R2 0x0004
 
     MFPC R7
     ADDIU R7 0x0003
@@ -72,7 +72,7 @@ PRE_L:
     NOP
     BEQZ R4 INIT; 0x00d5 ; INIT ; end of one frame
     NOP
-    LI R3 0x004f
+    LI R3 0x0050
     ADDIU R4 0x00ff
     JR R7
     NOP
