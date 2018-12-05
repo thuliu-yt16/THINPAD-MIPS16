@@ -83,3 +83,4 @@ isim/
 !charset/*
 !.gitignore
 !Final/*
+!*.cpp
