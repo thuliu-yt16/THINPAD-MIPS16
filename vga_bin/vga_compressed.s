@@ -103,11 +103,47 @@ TESTR:
     NOP
     LI R6 0x00BF
     SLL R6 R6 0x0000
+    ADDIU R6 0x0006
+    LW R6 R0 0x0000
+    BNEQZ R0 KEYBOARD
+    NOP
+
+    LI R6 0x00BF
+    SLL R6 R6 0x0000
     ADDIU R6 0x0001
     LW R6 R0 0x0000
     LI R6 0x0002
     AND R0 R6
     BEQZ R0 TESTR
+    NOP
+    JR R7
+    NOP
+
+KEYBOARD:
+    NOP
+    MFPC R7
+    ADDIU R7 0x0003
+    NOP
+    B TESTW
+    NOP
+
+    LI R1 0x00FF
+    LI R6 0x00BF
+    SLL R6 R6 0x0000
+    SW R6 R1 0x0000
+
+    B INIT
+    NOP
+
+TESTW:
+    NOP
+    LI R6 0x00BF
+    SLL R6 R6 0x000
+    ADDIU R6 0x0001
+    LW R6 R0 0x0000
+    LI R6 0x0001
+    AND R0 R6
+    BEQZ R0 TESTW
     NOP
     JR R7
     NOP

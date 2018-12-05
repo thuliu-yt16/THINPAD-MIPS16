@@ -88,7 +88,7 @@ architecture Behavioral of ram_new is
     signal rom_ready,ram_ctrl: std_logic;
     signal VGAPos_tmp: std_logic_vector(15 downto 0);
     -- signal hasReadASCII : std_logic;
-    -- signal ASCIIout: std_logic_vector(15 downto 0);
+    signal ASCIIout: std_logic_vector(15 downto 0);
 
     -- component flash
     --   port(clk: in std_logic;
@@ -178,21 +178,21 @@ begin
     --         end if;
     --     end if;
     -- end process;
-    --
-    -- display: process(keyboardASCII, keyboardOE, hasReadASCII)
-    -- begin
-    --     --		if (keyboardOE = Enable) then
-    --     --			ASCIIout <= keyboardASCII;
-    --     --			LED <= keyboardASCII;
-    --     --		elsif (hasReadASCII = Enable) then
-    --     --			ASCIIout <= (others => '0');
-    --     --		end if;
-    --     if (keyboardOE = Enable) then
-    --         ASCIIout <= keyboardASCII;
-    --         LED <= keyboardASCII;
-    --     end if;
-    -- end process;
-    --
+
+    display: process(keyboardASCII, keyboardOE) -- , hasReadASCII)
+    begin
+        --		if (keyboardOE = Enable) then
+        --			ASCIIout <= keyboardASCII;
+        --			LED <= keyboardASCII;
+        --		elsif (hasReadASCII = Enable) then
+        --			ASCIIout <= (others => '0');
+        --		end if;
+        if (keyboardOE = Enable) then
+            ASCIIout <= keyboardASCII;
+            -- LED <= keyboardASCII;
+        end if;
+    end process;
+
     VGAPos_control: process(clk, VGAPos_tmp, we_i)
     begin
         if (clk'event and clk = Enable and we_i = Enable) then
@@ -343,13 +343,13 @@ begin
                         ram1_data <= (others => 'Z');
                         read_prep <= Enable;
                         write_prep <= Disable;
-                    -- elsif (addr_i = x"bf06") then
-                    --     --������
-                    --     ram1_en <= '0';
-                    --     ram1_oe <= '1';
-                    --     ram1_data <= ASCIIout;
-                    --     read_prep <= Disable;
-                    --     write_prep <= Disable;
+                    elsif (addr_i = x"bf06") then
+                        --������
+                        ram1_en <= '0';
+                        ram1_oe <= '1';
+                        ram1_data <= ASCIIout;
+                        read_prep <= Disable;
+                        write_prep <= Disable;
                     elsif (addr_i = x"bf01") then
                         -- prepare to read or write serial
                         ram1_en <= '0';
