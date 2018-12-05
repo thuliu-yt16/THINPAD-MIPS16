@@ -61,12 +61,13 @@ void Tconsole::run(HANDLE& com) {
 	DWORD size;
 	int cnt = 0;
 	int num = 0;
-	char chararray[60000];
+	char chararray[440*600];
 
 	while(scanf("%d", &num)!= EOF){
 		chararray[cnt ++ ] = char(num);
 		//printf("num: %d\n", num);
 	}
+	// printf("cnt: %d\n", cnt);
 	WriteFile(com, chararray, cnt, &size, NULL);
 	// for(int i = 0; i < cnt; i ++){
 	// }
